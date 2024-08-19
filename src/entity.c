@@ -1,26 +1,30 @@
 #include "entity.h"
 #include "arraylist.h"
+#include "screens.h"
 #include "utils.h"
 #include <raylib.h>
 #include <stdlib.h>
 
 #define MSG_COULD_NOT_APPEND_ENTITY "Could not append entity to list"
 
-static ArrayList *entityList;
+static ArrayList *_entities;
+Font font;
 
-void InitEntities(void)
+void InitEnemies(void)
 {
-	entityList = CreateArrayList(sizeof(Entity), 0);
+	_entities = CreateArrayList(sizeof(Enemy), 0);
 }
 
-size_t CreateEntity()
+size_t CreateEnemy(char *value)
 {
-	size_t id = entityList->len;
+	size_t id = _entities->len;
+
+	TraceLog(LOG_INFO, "Creating Entity: %i", id);
 
 	// Find inactive Entity.
-	for (size_t i = 0; i < entityList->len; ++i)
+	for (size_t i = 0; i < _entities->len; ++i)
 	{
-		const Entity *entity = GetArrayListItem(entityList, i);
+		const Enemy *entity = GetArrayListItem(_entities, i);
 		if (!entity->isActive)
 		{
 			id = i;
@@ -28,35 +32,65 @@ size_t CreateEntity()
 		}
 	}
 
-	if (id == entityList->len)
+	if (id == _entities->len)
 	{
-		if (AddArrayListItem(entityList, &(Entity){ 0 }) == (size_t)-1)
+		if (AddArrayListItem(_entities, &(Enemy){ 0 }) == (size_t)-1)
 		{
 			E_PANIC(MSG_COULD_NOT_APPEND_ENTITY);
 		}
 	}
 
-	Entity *entity = GetEntity(id);
+	Enemy *entity = GetEnemy(id);
 
-	*entity = (Entity){
-		.isActive = true,
+	*entity = (Enemy){
+		.isActive = 1,
+		.value = value,
+		.position = (Vector2){
+		  .x = GetRandomValue(0, 512),
+		  .y = 0 },
+		.velocity = (Vector2){ .x = 0, .y = 10 }
 	};
 
 	return id;
 }
 
-void DestroyEntity(const size_t id)
+void DestroyEnemy(const size_t id)
 {
-	Entity *entity = GetEntity(id);
+	Enemy *entity = GetEnemy(id);
 	entity->isActive = false;
 }
 
-Entity *GetEntity(const size_t id)
+Enemy *GetEnemy(const size_t id)
 {
-	return GetArrayListItem(entityList, id);
+	return GetArrayListItem(_entities, id);
 }
 
-size_t GetEntityCount(void)
+size_t GetEnemyCount(void)
 {
-	return entityList->len;
+	return _entities->len;
+}
+
+void UpdateEnemies(void)
+{
+	for (size_t i = 0; i < _entities->len; ++i)
+	{
+		Enemy *entity = GetArrayListItem(_entities, i);
+		if (entity->isActive == 1)
+		{
+			entity->position.x += entity->velocity.x * GetFrameTime();
+			entity->position.y += entity->velocity.y * GetFrameTime();
+		}
+	}
+}
+
+void DrawEnemies(void)
+{
+	for (size_t i = 0; i < _entities->len; ++i)
+	{
+		const Enemy *entity = GetArrayListItem(_entities, i);
+		if (entity->isActive)
+		{
+			DrawTextEx(font, entity->value, entity->position, font.baseSize, 0, WHITE);
+		}
+	}
 }

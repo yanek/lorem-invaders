@@ -1,26 +1,32 @@
+#include "entity.h"
 #include "inputbox.h"
 #include "screens.h"
 #include <raylib.h>
 
-int frameCounter = 0;
-InputBox inputbox = { 0 };
+static int _framecounter = 0;
+static InputBox _inputbox = { 0 };
 
 void InitGameScreen(void)
 {
-	frameCounter = 0;
-	inputbox = InitInputBox((Rectangle){ 5, 448 - 32 - 5, 512 - 10, 32 }, &font);
+	_framecounter = 0;
+	_inputbox = InitInputBox((Rectangle){ 5, 448 - 32 - 5, 512 - 10, 32 }, &font);
+	InitEnemies();
+
+	CreateEnemy("Bonjour");
 	TraceLog(LOG_INFO, "Game screen initialized");
 }
 
 void UpdateGameScreen(void)
 {
-	frameCounter++;
-	UpdateInputBox(&inputbox);
+	++_framecounter;
+	UpdateEnemies();
+	UpdateInputBox(&_inputbox);
 }
 
 void DrawGameScreen(void)
 {
-	DrawInputBox(&inputbox, frameCounter);
+	DrawEnemies();
+	DrawInputBox(&_inputbox, _framecounter);
 }
 
 void UnloadGameScreen(void)

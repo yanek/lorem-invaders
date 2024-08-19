@@ -1,11 +1,9 @@
+#include "utils.h"
+#include "colors.h"
+#include "screens.h"
+#include <math.h>
 #include <raylib.h>
 #include <stdio.h>
-#include "screens.h"
-#include "utils.h"
-
-#include "colors.h"
-
-#include <math.h>
 #include <stdlib.h>
 
 char *IntegerToText(const int val)
@@ -31,7 +29,7 @@ void DrawDebugData(void)
 		.y = 1
 	};
 
-	DrawRectangle(pos.x - 1, pos.y,  txtsize + 1, font.baseSize, Fade(CLR_WHITE, 0.9f));
+	DrawRectangle(pos.x - 1, pos.y, txtsize + 1, font.baseSize, Fade(CLR_WHITE, 0.9f));
 	DrawTextEx(font, fps, pos, font.baseSize, 0, CLR_BLACK);
 
 	free(fps);
