@@ -1,23 +1,26 @@
-#include <raylib.h>
+#include "inputbox.h"
 #include "screens.h"
+#include <raylib.h>
+
+int frameCounter = 0;
+InputBox inputbox = { 0 };
 
 void InitGameScreen(void)
 {
+	frameCounter = 0;
+	inputbox = InitInputBox((Rectangle){ 5, 448 - 32 - 5, 512 - 10, 32 }, &font);
 	TraceLog(LOG_INFO, "Game screen initialized");
 }
 
 void UpdateGameScreen(void)
 {
-	if (IsKeyPressed(KEY_ENTER))
-	{
-		ChangeToScreen(SCR_TITLE);
-	}
+	frameCounter++;
+	UpdateInputBox(&inputbox);
 }
 
 void DrawGameScreen(void)
 {
-	DrawText("Lorem Invader", 10, 50, 40, RAYWHITE);
-	DrawText("234", 10, 50, 60, RAYWHITE);
+	DrawInputBox(&inputbox, frameCounter);
 }
 
 void UnloadGameScreen(void)

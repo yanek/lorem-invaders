@@ -10,6 +10,7 @@ typedef enum GameScreen
 } GameScreen;
 
 extern GameScreen currentScreen;
+extern int frameCounter;
 extern Font font;
 
 void ChangeToScreen(int newScreen); // Change to a new screen without transition
