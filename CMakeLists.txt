@@ -1,12 +1,11 @@
 cmake_minimum_required(VERSION 3.22)
-project(ray_lorem_invader VERSION 0.1.0 LANGUAGES C)
+project(ray_lorem_invader VERSION 0.1.0 LANGUAGES C CXX)
 
 # Enable CMake to generate compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_C_STANDARD 11)
+set(CMAKE_CPP_STANDARD 17)
 set(VCPKG_LIBRARY_LINKAGE static)
-
-
 
 find_package(raylib CONFIG REQUIRED)
 

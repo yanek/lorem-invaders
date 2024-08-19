@@ -1,11 +1,11 @@
 #include "resources.h"
 
-void LoadResources(void)
+void LoadResources()
 {
 	res_font16 = LoadFont("resources/ibm-16.fnt");
 }
 
-void UnloadResources(void)
+void UnloadResources()
 {
 	UnloadFont(res_font16);
 }

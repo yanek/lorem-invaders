@@ -1,26 +1,25 @@
+#include "colors.h"
+#include "resources.h"
+#include "screens.h"
+#include "utils.h"
 #include <raylib.h>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten/emscripten.h>
 #endif
 
-#include "colors.h"
-#include "resources.h"
-#include "screens.h"
-#include "utils.h"
-
-const int virtualScreenWidth = 512;
-const int virtualScreenHeight = 448;
-const int screenWidth = 1024;
-const int screenHeight = 768;
+constexpr int virtualScreenWidth = 512;
+constexpr int virtualScreenHeight = 448;
+constexpr int screenWidth = 1024;
+constexpr int screenHeight = 768;
 float virtualRatio = 0.0f;
-RenderTexture2D target = { 0 };
-Rectangle sourceRec = { 0 };
-Rectangle destRec = { 0 };
+RenderTexture2D target = {};
+Rectangle sourceRec = {};
+Rectangle destRec = {};
 
-void UpdateDrawFrame(void);
+void UpdateDrawFrame();
 
-int main(void)
+int main()
 {
 	SetTraceLogLevel(LOG_TRACE);
 	TraceLog(LOG_TRACE, "Starting game");
@@ -28,9 +27,9 @@ int main(void)
 	LoadResources();
 
 	target = LoadRenderTexture(virtualScreenWidth, virtualScreenHeight);
-	virtualRatio = (float)screenWidth / (float)virtualScreenWidth;
-	sourceRec = (Rectangle){ 0.0f, 0.0f, (float)target.texture.width, (float)-target.texture.height };
-	destRec = (Rectangle){ -virtualRatio, -virtualRatio, (float)screenWidth + virtualRatio * 2, (float)screenHeight + virtualRatio * 2 };
+	virtualRatio = static_cast<float>(screenWidth) / static_cast<float>(virtualScreenWidth);
+	sourceRec = Rectangle{ 0.0f, 0.0f, static_cast<float>(target.texture.width), static_cast<float>(-target.texture.height) };
+	destRec = Rectangle{ -virtualRatio, -virtualRatio, static_cast<float>(screenWidth) + virtualRatio * 2.0f, static_cast<float>(screenHeight) + virtualRatio * 2.0f };
 
 	SetTextLineSpacing(16);
 
@@ -59,7 +58,6 @@ int main(void)
 		TraceLog(LOG_ERROR, "Cannot unload unknown screen");
 		break;
 	}
-
 
 	UnloadResources();
 	UnloadRenderTexture(target);
@@ -98,14 +96,13 @@ void UpdateDrawFrame()
 			TraceLog(LOG_ERROR, "Cannot draw unknown screen");
 			break;
 		}
-
 	}
 	EndTextureMode();
 
 	BeginDrawing();
 	{
 		ClearBackground(BLACK);
-		const Vector2 origin = { 0.0f, 0.0f };
+		constexpr Vector2 origin{ 0.0f, 0.0f };
 		DrawTexturePro(target.texture, sourceRec, destRec, origin, 0.0f, WHITE);
 		DrawDebugData();
 	}

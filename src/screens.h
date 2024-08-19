@@ -9,16 +9,16 @@ typedef enum GameScreen
 
 extern GameScreen currentScreen;
 
-void ChangeToScreen(int newScreen); // Change to a new screen without transition
+void ChangeToScreen(GameScreen newScreen); // Change to a new screen without transition
 
 // SCR_TITLE
-void InitTitleScreen(void);
-void UpdateTitleScreen(void);
-void DrawTitleScreen(void);
-void UnloadTitleScreen(void);
+void InitTitleScreen();
+void UpdateTitleScreen();
+void DrawTitleScreen();
+void UnloadTitleScreen();
 
 // SCR_GAME
-void InitGameScreen(void);
-void UpdateGameScreen(void);
-void DrawGameScreen(void);
-void UnloadGameScreen(void);
+void InitGameScreen();
+void UpdateGameScreen();
+void DrawGameScreen();
+void UnloadGameScreen();

@@ -2,9 +2,8 @@
 #include "screens.h"
 
 GameScreen currentScreen = SCR_TITLE;
-Font res_font16 = { 0 };
 
-void ChangeToScreen(const int newScreen)
+void ChangeToScreen(const GameScreen newScreen)
 {
 	switch (currentScreen)
 	{

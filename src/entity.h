@@ -1,7 +1,7 @@
 #pragma once
 
 #include <raylib.h>
-#include <stdio.h>
+#include <iostream>
 
 typedef struct
 {
@@ -9,13 +9,13 @@ typedef struct
 	Vector2 position;
 	Vector2 velocity;
 	char *value;
-	unsigned char isActive : 1;
+	bool active;
 } Enemy;
 
-void InitEnemies(void);
+void InitEnemies();
 size_t CreateEnemy(char *value);
 void DestroyEnemy(size_t id);
 Enemy *GetEnemy(size_t id);
-size_t GetEnemyCount(void);
-void UpdateEnemies(void);
-void DrawEnemies(void);
+size_t GetEnemyCount();
+void UpdateEnemies();
+void DrawEnemies();

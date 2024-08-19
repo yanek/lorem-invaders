@@ -7,4 +7,4 @@
 #define E_PANIC(msg) TraceLog(LOG_FATAL, msg); exit(1)
 
 char* IntegerToText(int val); // Convert an integer to a string
-void DrawDebugData(void); // Draw the framerate in the topleft corner using a custom BMfont
+void DrawDebugData(); // Draw the framerate in the topleft corner using a custom BMfont
