@@ -4,8 +4,9 @@
 #include <emscripten/emscripten.h>
 #endif
 
-#include "screens.h"
 #include "colors.h"
+#include "resources.h"
+#include "screens.h"
 #include "utils.h"
 
 const int virtualScreenWidth = 512;
@@ -24,13 +25,13 @@ int main(void)
 	SetTraceLogLevel(LOG_TRACE);
 	TraceLog(LOG_TRACE, "Starting game");
 	InitWindow(screenWidth, screenHeight, "Lorem Invader");
+	LoadResources();
 
 	target = LoadRenderTexture(virtualScreenWidth, virtualScreenHeight);
 	virtualRatio = (float)screenWidth / (float)virtualScreenWidth;
 	sourceRec = (Rectangle){ 0.0f, 0.0f, (float)target.texture.width, (float)-target.texture.height };
 	destRec = (Rectangle){ -virtualRatio, -virtualRatio, (float)screenWidth + virtualRatio * 2, (float)screenHeight + virtualRatio * 2 };
 
-	font = LoadFont("resources/ibm-16.fnt");
 	SetTextLineSpacing(16);
 
 	currentScreen = SCR_TITLE;
@@ -59,8 +60,8 @@ int main(void)
 		break;
 	}
 
-	UnloadFont(font);
 
+	UnloadResources();
 	UnloadRenderTexture(target);
 	CloseWindow();
 	return 0;

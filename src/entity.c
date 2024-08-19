@@ -1,6 +1,6 @@
 #include "entity.h"
 #include "arraylist.h"
-#include "screens.h"
+#include "resources.h"
 #include "utils.h"
 #include <raylib.h>
 #include <stdlib.h>
@@ -8,7 +8,7 @@
 #define MSG_COULD_NOT_APPEND_ENTITY "Could not append entity to list"
 
 static ArrayList *_entities;
-Font font;
+Font res_font16;
 
 void InitEnemies(void)
 {
@@ -90,7 +90,7 @@ void DrawEnemies(void)
 		const Enemy *entity = GetArrayListItem(_entities, i);
 		if (entity->isActive)
 		{
-			DrawTextEx(font, entity->value, entity->position, font.baseSize, 0, WHITE);
+			DrawTextEx(res_font16, entity->value, entity->position, res_font16.baseSize, 0, WHITE);
 		}
 	}
 }

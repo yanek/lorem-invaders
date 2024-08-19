@@ -9,7 +9,7 @@ static InputBox _inputbox = { 0 };
 void InitGameScreen(void)
 {
 	_framecounter = 0;
-	_inputbox = InitInputBox((Rectangle){ 5, 448 - 32 - 5, 512 - 10, 32 }, &font);
+	_inputbox = InitInputBox((Rectangle){ 5, 448 - 32 - 5, 512 - 10, 32 });
 	InitEnemies();
 
 	CreateEnemy("Bonjour");

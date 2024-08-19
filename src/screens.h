@@ -1,7 +1,5 @@
 #pragma once
 
-#include <raylib.h>
-
 typedef enum GameScreen
 {
     SCR_UNKNOWN = -1,
@@ -10,7 +8,6 @@ typedef enum GameScreen
 } GameScreen;
 
 extern GameScreen currentScreen;
-extern Font font;
 
 void ChangeToScreen(int newScreen); // Change to a new screen without transition
 

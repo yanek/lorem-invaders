@@ -9,9 +9,8 @@ typedef struct InputBox
 	Rectangle rect;
 	char value[MAX_INPUT_CHARS + 1];
 	int letterCount;
-	Font* font;
 } InputBox;
 
-InputBox InitInputBox(Rectangle rect, const Font* font);
+InputBox InitInputBox(Rectangle rect);
 void UpdateInputBox(InputBox* inputbox);
 void DrawInputBox(const InputBox * inputbox, int framecount);

@@ -2,7 +2,7 @@
 #include "screens.h"
 
 GameScreen currentScreen = SCR_TITLE;
-Font font = { 0 };
+Font res_font16 = { 0 };
 
 void ChangeToScreen(const int newScreen)
 {

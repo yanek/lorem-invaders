@@ -1,13 +1,15 @@
 #include "inputbox.h"
 #include <raylib.h>
+#include "resources.h"
 
-InputBox InitInputBox(const Rectangle rect, Font *font)
+Font res_font16;
+
+InputBox InitInputBox(const Rectangle rect)
 {
 	return (InputBox){
 		.rect = rect,
 		.value = "\0",
 		.letterCount = 0,
-		.font = font
 	};
 }
 
@@ -44,7 +46,7 @@ void UpdateInputBox(InputBox *inputbox)
 
 void DrawInputBox(const InputBox *inputbox, const int framecount)
 {
-	const int txtlen = MeasureTextEx(*inputbox->font, inputbox->value, inputbox->font->baseSize, 0).x;
+	const int txtlen = MeasureTextEx(res_font16, inputbox->value, res_font16.baseSize, 0).x;
 	const Vector2 txtpos = {
 		512 / 2 - txtlen / 2,
 		(int)inputbox->rect.y + 8
@@ -53,8 +55,8 @@ void DrawInputBox(const InputBox *inputbox, const int framecount)
 	const Color bgclr = BLACK;
 
 	DrawRectangleRec(inputbox->rect, bgclr);
-	DrawTextEx(*inputbox->font, inputbox->value, (Vector2){ txtpos.x, txtpos.y }, inputbox->font->baseSize, 0, fgclr);
+	DrawTextEx(res_font16, inputbox->value, (Vector2){ txtpos.x, txtpos.y }, res_font16.baseSize, 0, fgclr);
 
 	if ((framecount / 20 % 2 == 0) && (inputbox->letterCount < MAX_INPUT_CHARS))
-		DrawText("|", txtpos.x + txtlen, txtpos.y, inputbox->font->baseSize, fgclr);
+		DrawText("|", txtpos.x + txtlen, txtpos.y, res_font16.baseSize, fgclr);
 }
