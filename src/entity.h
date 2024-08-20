@@ -1,5 +1,7 @@
 #pragma once
 
+#include "inputbox.h"
+
 #include <iostream>
 #include <raylib.h>
 #include <vector>
@@ -28,7 +30,7 @@ public:
 	Enemy &Get(size_t id);
 	void Despawn(size_t id);
 	size_t Count() const;
-	void UpdateAll();
+	void UpdateAll(InputBox *inputBox);
 	void DrawAll() const;
 
 private:

@@ -1,7 +1,7 @@
 #include "entity.h"
+#include "inputbox.h"
 #include "resources.h"
 #include "viewport.h"
-
 #include <raylib.h>
 #include <vector>
 
@@ -40,7 +40,7 @@ size_t EnemyPool::Spawn(const std::string &value)
 	Enemy &entity = this->pool[id];
 	entity.id = id;
 	entity.position = Vector2{ posx, 0.0f };
-	entity.velocity = Vector2{ 0, 10 };
+	entity.velocity = Vector2{ 0, 100 };
 	entity.value = value;
 	entity.active = true;
 
@@ -63,13 +63,18 @@ size_t EnemyPool::Count() const
 	return this->pool.size();
 }
 
-void EnemyPool::UpdateAll()
+void EnemyPool::UpdateAll(InputBox *inputBox)
 {
 	for (auto &entity : this->pool)
 	{
 		if (entity.active)
 		{
 			entity.Update();
+			if (inputBox->IsMatch(entity.value))
+			{
+				inputBox->Clear();
+				this->Despawn(entity.id);
+			}
 		}
 	}
 }
@@ -95,7 +100,7 @@ void Enemy::Update()
 {
 	this->position.x += this->velocity.x * GetFrameTime();
 	this->position.y += this->velocity.y * GetFrameTime();
-	if (this->position.y > Viewport::gameHeight)
+	if (this->position.y > Viewport::gameHeight - 32)
 	{
 		this->active = false;
 	}

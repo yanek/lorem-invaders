@@ -23,7 +23,7 @@ void GameScreen::Init()
 void GameScreen::Update()
 {
 	++framecounter;
-	this->enemyPool->UpdateAll();
+	this->enemyPool->UpdateAll(this->inputbox);
 	this->inputbox->Update();
 
 	if (framecounter % 120 == 0)

@@ -1,7 +1,6 @@
 #include "inputbox.h"
 #include "resources.h"
 #include "viewport.h"
-
 #include <raylib.h>
 
 static constexpr int maxInputChars = 32;
@@ -56,6 +55,7 @@ void InputBox::Draw(const int framecount) const
 	constexpr auto bgclr = BLACK;
 
 	DrawRectangleRec(this->rect, bgclr);
+	DrawRectangleLinesEx(this->rect, 2, fgclr);
 	DrawTextEx(res::font16, this->value.c_str(), Vector2{ txtpos.x, txtpos.y }, fntsize, 0, fgclr);
 
 	if ((framecount / 20 % 2 == 0) && (this->letterCount < maxInputChars))
@@ -64,4 +64,15 @@ void InputBox::Draw(const int framecount) const
 		const int y = static_cast<int>(txtpos.y);
 		DrawText("|", x, y, res::font16.baseSize, fgclr);
 	}
+}
+
+bool InputBox::IsMatch(const std::string &value) const
+{
+	return strcmp(this->value.c_str(), value.c_str()) == 0;
+}
+
+void InputBox::Clear()
+{
+	this->value = std::string{};
+	this->letterCount = 0;
 }
