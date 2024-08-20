@@ -1,8 +1,13 @@
 #pragma once
 
 #include <raylib.h>
+#include <string>
 
-extern Font res_font16;
+namespace res
+{
+	extern Font font16;
+	extern char *lipsum;
 
-void LoadResources();
-void UnloadResources();
+	void LoadResources();
+	void UnloadResources();
+}

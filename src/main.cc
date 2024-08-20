@@ -18,7 +18,7 @@ int main()
 	SetTraceLogLevel(LOG_TRACE);
 	TraceLog(LOG_TRACE, "Starting game");
 	viewport = new Viewport{};
-	LoadResources();
+	res::LoadResources();
 
 	viewport->InitRenderTexture();
 	SetTextLineSpacing(16);
@@ -36,7 +36,7 @@ int main()
 #endif
 
 	screenManager.Unload();
-	UnloadResources();
+	res::UnloadResources();
 
 	delete viewport;
 	return 0;

@@ -1,5 +1,7 @@
 #include "inputbox.h"
 #include "resources.h"
+#include "viewport.h"
+
 #include <raylib.h>
 
 static constexpr int maxInputChars = 32;
@@ -42,11 +44,11 @@ void InputBox::Update()
 
 void InputBox::Draw(const int framecount) const
 {
-	const auto fntsize = static_cast<float>(res_font16.baseSize);
-	const float txtlen = MeasureTextEx(res_font16, this->value.c_str(), fntsize, 0).x;
+	const auto fntsize = static_cast<float>(res::font16.baseSize);
+	const float txtlen = MeasureTextEx(res::font16, this->value.c_str(), fntsize, 0).x;
 
 	const Vector2 txtpos = {
-		512.0f / 2.0f - txtlen / 2.0f,
+		Viewport::gameWidth / 2.0f - txtlen / 2.0f,
 		this->rect.y + 8.0f,
 	};
 
@@ -54,12 +56,12 @@ void InputBox::Draw(const int framecount) const
 	constexpr auto bgclr = BLACK;
 
 	DrawRectangleRec(this->rect, bgclr);
-	DrawTextEx(res_font16, this->value.c_str(), Vector2{ txtpos.x, txtpos.y }, fntsize, 0, fgclr);
+	DrawTextEx(res::font16, this->value.c_str(), Vector2{ txtpos.x, txtpos.y }, fntsize, 0, fgclr);
 
 	if ((framecount / 20 % 2 == 0) && (this->letterCount < maxInputChars))
 	{
 		const int x = static_cast<int>(txtpos.x + txtlen);
 		const int y = static_cast<int>(txtpos.y);
-		DrawText("|", x, y, res_font16.baseSize, fgclr);
+		DrawText("|", x, y, res::font16.baseSize, fgclr);
 	}
 }

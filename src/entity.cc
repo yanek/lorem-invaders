@@ -1,10 +1,12 @@
 #include "entity.h"
 #include "resources.h"
+#include "viewport.h"
+
 #include <raylib.h>
 #include <vector>
 
 EnemyPool::EnemyPool()
-	: pool(std::vector<Enemy>(10))
+	: pool(std::vector<Enemy>())
 {
 }
 
@@ -31,9 +33,13 @@ size_t EnemyPool::Spawn(const std::string &value)
 		this->pool.emplace_back();
 	}
 
+	// Randomize horizontal position while making sure that the text does not overflow the viewport.
+	const float txtsize = MeasureTextEx(res::font16, value.c_str(), res::font16.baseSize, 0).x;
+	const float posx = GetRandomValue(0, Viewport::gameWidth - txtsize);
+
 	Enemy &entity = this->pool[id];
 	entity.id = id;
-	entity.position = Vector2{ static_cast<float>(GetRandomValue(0, 512)), 0 };
+	entity.position = Vector2{ posx, 0.0f };
 	entity.velocity = Vector2{ 0, 10 };
 	entity.value = value;
 	entity.active = true;
@@ -81,12 +87,16 @@ void EnemyPool::DrawAll() const
 
 void Enemy::Draw() const
 {
-	const auto fntsize = static_cast<float>(res_font16.baseSize);
-	DrawTextEx(res_font16, this->value.c_str(), this->position, fntsize, 0, WHITE);
+	const auto fntsize = static_cast<float>(res::font16.baseSize);
+	DrawTextEx(res::font16, this->value.c_str(), this->position, fntsize, 0, WHITE);
 }
 
 void Enemy::Update()
 {
 	this->position.x += this->velocity.x * GetFrameTime();
 	this->position.y += this->velocity.y * GetFrameTime();
+	if (this->position.y > Viewport::gameHeight)
+	{
+		this->active = false;
+	}
 }

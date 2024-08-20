@@ -1,11 +1,16 @@
 #include "resources.h"
 
-void LoadResources()
+Font res::font16;
+char* res::lipsum;
+
+void res::LoadResources()
 {
-	res_font16 = LoadFont("resources/ibm-16.fnt");
+	font16 = LoadFont("resources/ibm-16.fnt");
+	lipsum = LoadFileText("resources/lorem.txt");
 }
 
-void UnloadResources()
+void res::UnloadResources()
 {
-	UnloadFont(res_font16);
+	UnloadFont(font16);
+	UnloadFileText(lipsum);
 }

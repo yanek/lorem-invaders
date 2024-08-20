@@ -1,8 +1,9 @@
 #pragma once
 
-#include <string>
 #include "entity.h"
 #include "inputbox.h"
+#include "lipsum.h"
+#include <string>
 
 class Screen
 {
@@ -38,6 +39,7 @@ private:
 	int framecounter{ 0 };
 	EnemyPool *enemyPool{ nullptr };
 	InputBox *inputbox{ nullptr };
+	Lipsum lipsum{};
 };
 
 class ScreenManager
