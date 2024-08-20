@@ -9,6 +9,7 @@ class Enemy
 public:
 	void Update();
 	void Draw() const;
+
 	Vector2 position = { 0, 0 };
 	Vector2 velocity = { 0, 0 };
 	bool active = false;

@@ -4,12 +4,12 @@ ScreenManager screenManager = {};
 
 void ScreenManager::ChangeToScreen(Screen *newScreen)
 {
-	TraceLog(LOG_INFO, "Unloading screen %s", this->current->GetName());
+	TraceLog(LOG_INFO, "Unloading screen %s", this->current->GetName().c_str());
 	this->current->Unload();
 	delete this->current;
 	this->current = newScreen;
 	this->current->Init();
-	TraceLog(LOG_INFO, "Loading screen %s", this->current->GetName());
+	TraceLog(LOG_INFO, "Loading screen %s", this->current->GetName().c_str());
 }
 
 void ScreenManager::Update() const

@@ -33,8 +33,8 @@
     </clangFormatSettings>
     <files>
       <extensions>
+        <pair source="cc" header="h" fileNamingConvention="SNAKE_CASE" />
         <pair source="c" header="h" fileNamingConvention="SNAKE_CASE" />
-        <pair source="cpp" header="h" fileNamingConvention="NONE" />
         <pair source="cu" header="cuh" fileNamingConvention="NONE" />
         <pair source="ixx" header="" fileNamingConvention="NONE" />
         <pair source="mxx" header="" fileNamingConvention="NONE" />

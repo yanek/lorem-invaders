@@ -2,20 +2,14 @@
 #include "resources.h"
 #include "screens.h"
 #include "utils.h"
+#include "viewport.h"
 #include <raylib.h>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten/emscripten.h>
 #endif
 
-constexpr int virtualScreenWidth = 512;
-constexpr int virtualScreenHeight = 448;
-constexpr int screenWidth = 1024;
-constexpr int screenHeight = 768;
-float virtualRatio = 0.0f;
-RenderTexture2D target = {};
-Rectangle sourceRec = {};
-Rectangle destRec = {};
+static Viewport *viewport;
 
 void UpdateDrawFrame();
 
@@ -23,14 +17,10 @@ int main()
 {
 	SetTraceLogLevel(LOG_TRACE);
 	TraceLog(LOG_TRACE, "Starting game");
-	InitWindow(screenWidth, screenHeight, "Lorem Invader");
+	viewport = new Viewport{};
 	LoadResources();
 
-	target = LoadRenderTexture(virtualScreenWidth, virtualScreenHeight);
-	virtualRatio = static_cast<float>(screenWidth) / static_cast<float>(virtualScreenWidth);
-	sourceRec = Rectangle{ 0.0f, 0.0f, static_cast<float>(target.texture.width), static_cast<float>(-target.texture.height) };
-	destRec = Rectangle{ -virtualRatio, -virtualRatio, static_cast<float>(screenWidth) + virtualRatio * 2.0f, static_cast<float>(screenHeight) + virtualRatio * 2.0f };
-
+	viewport->InitRenderTexture();
 	SetTextLineSpacing(16);
 
 	screenManager.ChangeToScreen(new TitleScreen{});
@@ -47,8 +37,8 @@ int main()
 
 	screenManager.Unload();
 	UnloadResources();
-	UnloadRenderTexture(target);
-	CloseWindow();
+
+	delete viewport;
 	return 0;
 }
 
@@ -56,18 +46,17 @@ void UpdateDrawFrame()
 {
 	screenManager.Update();
 
-	BeginTextureMode(target);
+	viewport->BeginDrawing();
 	{
 		ClearBackground(CLR_BLACK);
 		screenManager.Draw();
 	}
-	EndTextureMode();
+	viewport->EndDrawing();
 
 	BeginDrawing();
 	{
 		ClearBackground(BLACK);
-		constexpr Vector2 origin{ 0.0f, 0.0f };
-		DrawTexturePro(target.texture, sourceRec, destRec, origin, 0.0f, WHITE);
+		viewport->DrawRenderTexture();
 		DrawDebugData();
 	}
 	EndDrawing();
