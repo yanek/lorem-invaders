@@ -1,24 +1,55 @@
 #pragma once
 
-typedef enum GameScreen
+#include <string>
+#include "entity.h"
+#include "inputbox.h"
+
+class Screen
 {
-    SCR_UNKNOWN = -1,
-    SCR_TITLE = 0,
-    SCR_GAME = 1
-} GameScreen;
+public:
+	virtual ~Screen() = default;
+	virtual void Init() = 0;
+	virtual void Update() = 0;
+	virtual void Draw() = 0;
+	virtual void Unload() = 0;
+	virtual std::string GetName() = 0;
+};
 
-extern GameScreen currentScreen;
+class TitleScreen final : public Screen
+{
+public:
+	void Init() override;
+	void Update() override;
+	void Draw() override;
+	void Unload() override;
+	std::string GetName() override { return "TitleScreen"; };
+};
 
-void ChangeToScreen(GameScreen newScreen); // Change to a new screen without transition
+class GameScreen final : public Screen
+{
+public:
+	void Init() override;
+	void Update() override;
+	void Draw() override;
+	void Unload() override;
+	std::string GetName() override { return "GameScreen"; };
 
-// SCR_TITLE
-void InitTitleScreen();
-void UpdateTitleScreen();
-void DrawTitleScreen();
-void UnloadTitleScreen();
+private:
+	int framecounter{ 0 };
+	EnemyPool *enemyPool{ nullptr };
+	InputBox *inputbox{ nullptr };
+};
 
-// SCR_GAME
-void InitGameScreen();
-void UpdateGameScreen();
-void DrawGameScreen();
-void UnloadGameScreen();
+class ScreenManager
+{
+public:
+	void ChangeToScreen(Screen *newScreen);
+	void Update() const;
+	void Draw() const;
+	void Unload() const;
+
+private:
+	Screen *current = new TitleScreen{};
+};
+
+extern ScreenManager screenManager;

@@ -33,8 +33,7 @@ int main()
 
 	SetTextLineSpacing(16);
 
-	currentScreen = SCR_TITLE;
-	InitTitleScreen();
+	screenManager.ChangeToScreen(new TitleScreen{});
 
 #ifdef __EMSCRIPTEN__
 	emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
@@ -46,19 +45,7 @@ int main()
 	}
 #endif
 
-	switch (currentScreen)
-	{
-	case SCR_TITLE:
-		UnloadTitleScreen();
-		break;
-	case SCR_GAME:
-		UnloadGameScreen();
-		break;
-	default:
-		TraceLog(LOG_ERROR, "Cannot unload unknown screen");
-		break;
-	}
-
+	screenManager.Unload();
 	UnloadResources();
 	UnloadRenderTexture(target);
 	CloseWindow();
@@ -67,35 +54,12 @@ int main()
 
 void UpdateDrawFrame()
 {
-	switch (currentScreen)
-	{
-	case SCR_TITLE:
-		UpdateTitleScreen();
-		break;
-	case SCR_GAME:
-		UpdateGameScreen();
-		break;
-	default:
-		TraceLog(LOG_ERROR, "Cannot update unknown screen");
-		break;
-	}
+	screenManager.Update();
 
 	BeginTextureMode(target);
 	{
 		ClearBackground(CLR_BLACK);
-
-		switch (currentScreen)
-		{
-		case SCR_TITLE:
-			DrawTitleScreen();
-			break;
-		case SCR_GAME:
-			DrawGameScreen();
-			break;
-		default:
-			TraceLog(LOG_ERROR, "Cannot draw unknown screen");
-			break;
-		}
+		screenManager.Draw();
 	}
 	EndTextureMode();
 

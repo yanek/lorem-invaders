@@ -1,35 +1,29 @@
-#include <raylib.h>
 #include "screens.h"
 
-GameScreen currentScreen = SCR_TITLE;
+ScreenManager screenManager = {};
 
-void ChangeToScreen(const GameScreen newScreen)
+void ScreenManager::ChangeToScreen(Screen *newScreen)
 {
-	switch (currentScreen)
-	{
-	case SCR_TITLE:
-		UnloadTitleScreen();
-		break;
-	case SCR_GAME:
-		UnloadGameScreen();
-		break;
-	default:
-		TraceLog(LOG_ERROR, "Cannot unload unknown screen");
-		break;
-	}
+	TraceLog(LOG_INFO, "Unloading screen %s", this->current->GetName());
+	this->current->Unload();
+	delete this->current;
+	this->current = newScreen;
+	this->current->Init();
+	TraceLog(LOG_INFO, "Loading screen %s", this->current->GetName());
+}
 
-	currentScreen = newScreen;
+void ScreenManager::Update() const
+{
+	this->current->Update();
+}
 
-	switch (currentScreen)
-	{
-	case SCR_TITLE:
-		InitTitleScreen();
-		break;
-	case SCR_GAME:
-		InitGameScreen();
-		break;
-	default:
-		TraceLog(LOG_ERROR, "Cannot load unknown screen");
-		break;
-	}
+void ScreenManager::Draw() const
+{
+	this->current->Draw();
+}
+
+void ScreenManager::Unload() const
+{
+	this->current->Unload();
+	delete this->current;
 }

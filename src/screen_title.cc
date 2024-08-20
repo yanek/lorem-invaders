@@ -3,34 +3,34 @@
 #include "screens.h"
 #include <raylib.h>
 
-void InitTitleScreen()
+void TitleScreen::Init()
 {
 	TraceLog(LOG_INFO, "Title screen initialized");
 }
 
-void UpdateTitleScreen()
+void TitleScreen::Update()
 {
 	if (IsKeyPressed(KEY_ENTER))
 	{
-		ChangeToScreen(SCR_GAME);
+		screenManager.ChangeToScreen(new GameScreen{});
 	}
 }
 
-void DrawTitleScreen()
+void TitleScreen::Draw()
 {
-	const float fontsize = (float)res_font16.baseSize;
-	const char *msg1 = "Lorem Invader";
-	const Vector2 textDimensions1 = MeasureTextEx(res_font16, msg1, fontsize * 2, 0);
+	const auto fntsize = static_cast<float>(res_font16.baseSize);
+	const auto msg1 = "Lorem Invader";
+	const Vector2 textDimensions1 = MeasureTextEx(res_font16, msg1, fntsize * 2, 0);
 	const float posX1 = 512.0f / 2.0f - textDimensions1.x / 2.0f;
-	DrawTextEx(res_font16, msg1, Vector2{ posX1, 72 }, fontsize * 2, 0, CLR_WHITE);
+	DrawTextEx(res_font16, msg1, Vector2{ posX1, 72 }, fntsize * 2, 0, CLR_WHITE);
 
-	const char *msg2 = "Press [ENTER] to start";
-	const Vector2 textDimensions2 = MeasureTextEx(res_font16, msg2, fontsize, 0);
+	const auto msg2 = "Press [ENTER] to start";
+	const Vector2 textDimensions2 = MeasureTextEx(res_font16, msg2, fntsize, 0);
 	const float posX2 = 512.0f / 2.0f - textDimensions2.x / 2.0f;
-	DrawTextEx(res_font16, msg2, Vector2{ posX2, 128 }, fontsize, 0, GRAY);
+	DrawTextEx(res_font16, msg2, Vector2{ posX2, 128 }, fntsize, 0, GRAY);
 }
 
-void UnloadTitleScreen()
+void TitleScreen::Unload()
 {
 	TraceLog(LOG_INFO, "Title screen unloaded");
 }
