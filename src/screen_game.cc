@@ -4,6 +4,26 @@
 #include "viewport.h"
 #include <raylib.h>
 
+GameScreen::GameScreen()
+	: Screen("game_screen")
+{
+}
+
+Player *GameScreen::GetPlayer() const
+{
+	return this->player;
+}
+
+EnemyPool *GameScreen::GetEnemyPool()
+{
+	return this->enemyPool;
+}
+
+InputBox *GameScreen::GetInputBox() const
+{
+	return this->inputbox;
+}
+
 void GameScreen::Init()
 {
 	framecounter = 0;
@@ -15,15 +35,16 @@ void GameScreen::Init()
 		32
 	};
 
+	this->player = new Player{};
 	this->inputbox = new InputBox{ rect };
 	this->enemyPool = new EnemyPool{};
-
 }
 
 void GameScreen::Update()
 {
+	const float delta = GetFrameTime();
 	++framecounter;
-	this->enemyPool->UpdateAll(this->inputbox);
+	this->enemyPool->UpdateAll(this, delta);
 	this->inputbox->Update();
 
 	if (framecounter % 120 == 0)
@@ -36,10 +57,12 @@ void GameScreen::Draw()
 {
 	this->enemyPool->DrawAll();
 	this->inputbox->Draw(framecounter);
+	this->player->DrawHud();
 }
 
 void GameScreen::Unload()
 {
+	delete player;
 	delete enemyPool;
 	delete inputbox;
 }

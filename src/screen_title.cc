@@ -5,6 +5,11 @@
 
 #include <raylib.h>
 
+TitleScreen::TitleScreen()
+	: Screen("title_screen")
+{
+}
+
 void TitleScreen::Init()
 {
 }

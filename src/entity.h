@@ -1,15 +1,14 @@
 #pragma once
 
-#include "inputbox.h"
-
+#include "screens.h"
+#include "utils.h"
 #include <iostream>
 #include <raylib.h>
-#include <vector>
 
-class Enemy
+class Enemy final
 {
 public:
-	void Update();
+	void Update(const GameScreen *screen, float delta);
 	void Draw() const;
 
 	Vector2 position = { 0, 0 };
@@ -17,20 +16,19 @@ public:
 	bool active = false;
 
 private:
-	size_t id = -1;
 	std::string value;
+	size_t id = 0;
 	friend class EnemyPool;
 };
 
-class EnemyPool
+class EnemyPool final
 {
 public:
-	EnemyPool();
 	size_t Spawn(const std::string &value);
 	Enemy &Get(size_t id);
 	void Despawn(size_t id);
 	size_t Count() const;
-	void UpdateAll(InputBox *inputBox);
+	void UpdateAll(const GameScreen *screen, float delta);
 	void DrawAll() const;
 
 private:

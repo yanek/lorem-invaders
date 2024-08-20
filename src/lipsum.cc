@@ -4,7 +4,7 @@
 
 Lipsum::Lipsum()
 {
-	this->words = SplitString(res::lipsum, " ");
+	this->words = SplitString(res::lipsum, "\n");
 	this->cursor = 0;
 }
 

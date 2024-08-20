@@ -1,14 +1,10 @@
 #include "entity.h"
 #include "inputbox.h"
 #include "resources.h"
+#include "screens.h"
 #include "viewport.h"
 #include <raylib.h>
 #include <vector>
-
-EnemyPool::EnemyPool()
-	: pool(std::vector<Enemy>())
-{
-}
 
 size_t EnemyPool::Spawn(const std::string &value)
 {
@@ -63,18 +59,13 @@ size_t EnemyPool::Count() const
 	return this->pool.size();
 }
 
-void EnemyPool::UpdateAll(InputBox *inputBox)
+void EnemyPool::UpdateAll(const GameScreen *screen, const float delta)
 {
 	for (auto &entity : this->pool)
 	{
 		if (entity.active)
 		{
-			entity.Update();
-			if (inputBox->IsMatch(entity.value))
-			{
-				inputBox->Clear();
-				this->Despawn(entity.id);
-			}
+			entity.Update(screen, delta);
 		}
 	}
 }
@@ -96,12 +87,23 @@ void Enemy::Draw() const
 	DrawTextEx(res::font16, this->value.c_str(), this->position, fntsize, 0, WHITE);
 }
 
-void Enemy::Update()
+void Enemy::Update(const GameScreen *screen, const float delta)
 {
-	this->position.x += this->velocity.x * GetFrameTime();
-	this->position.y += this->velocity.y * GetFrameTime();
+	InputBox *inputBox = screen->GetInputBox();
+	Player *player = screen->GetPlayer();
+
+	this->position.x += this->velocity.x * delta;
+	this->position.y += this->velocity.y * delta;
+
+	if (inputBox->IsMatch(this->value))
+	{
+		inputBox->Clear();
+		this->active = false;
+	}
+
 	if (this->position.y > Viewport::gameHeight - 32)
 	{
 		this->active = false;
+		player->Damage();
 	}
 }
