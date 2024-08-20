@@ -3,23 +3,22 @@
 #include <raylib.h>
 #include <vector>
 
-static std::vector<Enemy> entities;
-
-void InitEnemies()
+EnemyPool::EnemyPool()
+	: pool(std::vector<Enemy>(10))
 {
-	entities = std::vector<Enemy>();
 }
 
-size_t CreateEnemy(char *value)
+size_t EnemyPool::Spawn(const std::string &value)
 {
-	size_t id = entities.size();
+	const std::vector<Enemy> &pool = this->pool;
+	size_t id = pool.size();
 
-	TraceLog(LOG_INFO, "Creating Entity: %i", id);
+	TraceLog(LOG_INFO, "Creating enemy: %i", id);
 
 	// Find inactive Entity.
-	for (size_t i = 0; i < entities.size(); ++i)
+	for (size_t i = 0; i < pool.size(); ++i)
 	{
-		const Enemy entity = entities[i];
+		const Enemy &entity = pool[i];
 		if (!entity.active)
 		{
 			id = i;
@@ -27,62 +26,67 @@ size_t CreateEnemy(char *value)
 		}
 	}
 
-	if (id == entities.size())
+	if (id == pool.size())
 	{
-		entities.push_back(Enemy{ });
+		this->pool.emplace_back();
 	}
 
-	Enemy *entity = GetEnemy(id);
-
-	*entity = Enemy{
-		id,
-		Vector2{ static_cast<float>(GetRandomValue(0, 512)), 0 },
-		Vector2{ 0, 10 },
-		value,
-		true,
-	};
+	Enemy &entity = this->pool[id];
+	entity.id = id;
+	entity.position = Vector2{ static_cast<float>(GetRandomValue(0, 512)), 0 };
+	entity.velocity = Vector2{ 0, 10 };
+	entity.value = value;
+	entity.active = true;
 
 	return id;
 }
 
-void DestroyEnemy(const size_t id)
+void EnemyPool::Despawn(const size_t id)
 {
-	Enemy *entity = GetEnemy(id);
-	entity->active = false;
+	Enemy &entity = this->pool[id];
+	entity.active = false;
 }
 
-Enemy *GetEnemy(const size_t id)
+Enemy &EnemyPool::Get(const size_t id)
 {
-	return &entities[id];
+	return this->pool[id];
 }
 
-size_t GetEnemyCount()
+size_t EnemyPool::Count() const
 {
-	return entities.size();
+	return this->pool.size();
 }
 
-void UpdateEnemies()
+void EnemyPool::UpdateAll()
 {
-	for (size_t i = 0; i < entities.size(); ++i)
+	for (auto &entity : this->pool)
 	{
-		Enemy *entity = GetEnemy(i);
-		if (entity->active == 1)
+		if (entity.active)
 		{
-			entity->position.x += entity->velocity.x * GetFrameTime();
-			entity->position.y += entity->velocity.y * GetFrameTime();
+			entity.Update();
 		}
 	}
 }
 
-void DrawEnemies()
+void EnemyPool::DrawAll() const
 {
-	for (size_t i = 0; i < entities.size(); ++i)
+	for (const auto &entity : this->pool)
 	{
-		const Enemy *entity = GetEnemy(i);
-		if (entity->active)
+		if (entity.active)
 		{
-			const auto fntsize = static_cast<float>(res_font16.baseSize);
-			DrawTextEx(res_font16, entity->value, entity->position, fntsize, 0, WHITE);
+			entity.Draw();
 		}
 	}
+}
+
+void Enemy::Draw() const
+{
+	const auto fntsize = static_cast<float>(res_font16.baseSize);
+	DrawTextEx(res_font16, this->value.c_str(), this->position, fntsize, 0, WHITE);
+}
+
+void Enemy::Update()
+{
+	this->position.x += this->velocity.x * GetFrameTime();
+	this->position.y += this->velocity.y * GetFrameTime();
 }

@@ -3,33 +3,37 @@
 #include "screens.h"
 #include <raylib.h>
 
-static int framecounter = 0;
-static InputBox inputbox = { 0 };
+static int framecounter{0};
+static InputBox* inputbox{nullptr};
+static EnemyPool* enemyPool{nullptr};
 
 void InitGameScreen()
 {
 	framecounter = 0;
-	inputbox = InitInputBox(Rectangle{ 5, 448 - 32 - 5, 512 - 10, 32 });
-	InitEnemies();
+	constexpr Rectangle rect{ 5, 448 - 32 - 5, 512 - 10, 32 };
+	inputbox = new InputBox{ rect };
+	enemyPool = new EnemyPool{};
 
-	CreateEnemy("bonjour");
+	enemyPool->Spawn("bonjour");
 	TraceLog(LOG_INFO, "Game screen initialized");
 }
 
 void UpdateGameScreen()
 {
 	++framecounter;
-	UpdateEnemies();
-	UpdateInputBox(&inputbox);
+	enemyPool->UpdateAll();
+	inputbox->Update();
 }
 
 void DrawGameScreen()
 {
-	DrawEnemies();
-	DrawInputBox(&inputbox, framecounter);
+	enemyPool->DrawAll();
+	inputbox->Draw(framecounter);
 }
 
 void UnloadGameScreen()
 {
+	free(enemyPool);
+	free(inputbox);
 	TraceLog(LOG_INFO, "Game screen unloaded");
 }

@@ -8,7 +8,7 @@ Font res_font16;
 
 void DrawDebugData()
 {
-	const int val = MAX(1, MIN(GetFPS(), 999));
+	const int val = std::max(1, std::min(GetFPS(), 999));
 	const std::string fps = std::to_string(val);
 	const auto fntsize = static_cast<float>(res_font16.baseSize);
 	const auto vpwidth= static_cast<float>(GetScreenWidth());

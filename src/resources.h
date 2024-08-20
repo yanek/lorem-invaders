@@ -4,5 +4,5 @@
 
 extern Font res_font16;
 
-void LoadResources(void);
-void UnloadResources(void);
+void LoadResources();
+void UnloadResources();
