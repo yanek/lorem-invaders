@@ -42,7 +42,7 @@ void TitleScreen::Draw()
 	const float titleposX = Viewport::gameWidth / 2.0f - titlesize.x / 2.0f;
 	DrawTextEx(res::font16, title, Vector2{ titleposX, 72 }, fntsize * 2, 0, color::white);
 
-	const auto ver = "v0.4.0";
+	const auto ver = "v0.4.1";
 	const Vector2 versize = MeasureTextEx(res::font16, ver, fntsize, 0);
 	DrawRectangle(titleposX + titlesize.x - versize.x, 96, versize.x, versize.y, color::nearBlack);
 	DrawTextEx(res::font16, ver, Vector2{ titleposX + titlesize.x - versize.x, 96 }, fntsize, 0, color::blue);

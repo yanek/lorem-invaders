@@ -1,10 +1,11 @@
 #include "utils.h"
 #include "colors.h"
+#include "resources.h"
+#include "viewport.h"
+
 #include <raylib.h>
 #include <regex>
 #include <string>
-
-Font res_font16;
 
 std::vector<std::string> SplitString(const std::string &str, const std::string &delim)
 {
@@ -19,14 +20,14 @@ std::vector<std::string> SplitString(const std::string &str, const std::string &
 void DrawDebugData()
 {
 	const int val = std::max(1, std::min(GetFPS(), 999));
-	const std::string fps = std::to_string(val);
-	const auto fntsize = static_cast<float>(res_font16.baseSize);
-	const auto vpwidth = static_cast<float>(GetScreenWidth());
-	const float txtsize = MeasureTextEx(res_font16, fps.c_str(), fntsize, 0).x;
+	const std::string fps = TextFormat("%02iFPS", val);
+	const auto fntsize = static_cast<float>(res::font16.baseSize);
+	constexpr auto vpwidth = static_cast<float>(Viewport::windowWidth);
+	const float txtsize = MeasureTextEx(res::font16, fps.c_str(), fntsize, 0).x;
 
-	const Vector2 pos{ vpwidth - txtsize - 1, 1 };
+	const Vector2 pos{ vpwidth /2 - txtsize / 2, 1 };
 	const Rectangle rect{ pos.x - 1, pos.y, txtsize + 1, fntsize };
 
 	DrawRectangleRec(rect, Fade(color::white, 0.9f));
-	DrawTextEx(res_font16, fps.c_str(), pos, fntsize, 0, color::nearBlack);
+	DrawTextEx(res::font16, fps.c_str(), pos, fntsize, 0, color::nearBlack);
 }
