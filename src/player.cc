@@ -19,18 +19,19 @@ bool Player::IsDead() const
 void Player::DrawHud() const
 {
 	constexpr int size = 16;
+	constexpr int radius = size / 2;
 	constexpr int gap = 4;
 
 	DrawRectangle(0, 0, Viewport::gameWidth, size + gap * 2, color::black);
 
 	for (int i = 0; i < this->hitpoints; i++)
 	{
-		DrawRectangle(gap + i * (size + gap), gap, size, size, color::red);
+		DrawCircle(gap + i * (size + gap) + radius, gap + radius, radius, color::red);
 	}
 
 	for (int i = 0; i < this->maxHitpoints; i++)
 	{
-		DrawRectangleLines(gap + i * (size + gap), gap, size, size, color::white);
+		DrawCircleLines(gap + i * (size + gap) + radius, gap + radius, radius, color::white);
 	}
 
 	const int fntsize = res::font16.baseSize;

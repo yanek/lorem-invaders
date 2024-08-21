@@ -10,5 +10,6 @@ Lipsum::Lipsum()
 
 std::string Lipsum::Next()
 {
-	return this->words[this->cursor++];
+	const size_t i = GetRandomValue(0, this->words.size() - 1);
+	return this->words[i];
 }
