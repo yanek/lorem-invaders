@@ -9,11 +9,12 @@ public:
 	explicit InputBox(Rectangle rect);
 	void Update();
 	void Draw(int framecount) const;
-	bool IsMatch(const std::string &value) const;
+	int GetMatch(const std::string &value) const;
 	void Clear();
 
 private:
+	static constexpr int maxInputChars = 31;
 	Rectangle rect;
-	std::string value;
+	char value[maxInputChars + 1];
 	int letterCount;
 };

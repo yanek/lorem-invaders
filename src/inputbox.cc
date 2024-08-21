@@ -5,10 +5,8 @@
 #include "viewport.h"
 #include <raylib.h>
 
-static constexpr int maxInputChars = 32;
-
 InputBox::InputBox(const Rectangle rect)
-	: rect(rect), value(std::string{}), letterCount(0)
+	: rect(rect), value{}, letterCount(0)
 {
 }
 
@@ -20,7 +18,7 @@ void InputBox::Update()
 	{
 		if ((key >= 32) && (key <= 125) && (this->letterCount < maxInputChars))
 		{
-			this->value[this->letterCount] = static_cast<char>(key);
+			this->value[this->letterCount] = static_cast<unsigned char>(key);
 			this->value[this->letterCount + 1] = '\0';
 			this->letterCount++;
 		};
@@ -46,7 +44,7 @@ void InputBox::Update()
 void InputBox::Draw(const int framecount) const
 {
 	const auto fntsize = static_cast<float>(res::font16.baseSize);
-	const float txtlen = MeasureTextEx(res::font16, this->value.c_str(), fntsize, 0).x;
+	const float txtlen = MeasureTextEx(res::font16, this->value, fntsize, 0).x;
 
 	const Vector2 txtpos = {
 		Viewport::gameWidth / 2.0f - txtlen / 2.0f,
@@ -58,7 +56,7 @@ void InputBox::Draw(const int framecount) const
 
 	DrawRectangleRec(this->rect, bgclr);
 	DrawRectangleLinesEx(this->rect, 2, fgclr);
-	DrawTextEx(res::font16, this->value.c_str(), Vector2{ txtpos.x, txtpos.y }, fntsize, 0, fgclr);
+	DrawTextEx(res::font16, this->value, Vector2{ txtpos.x, txtpos.y }, fntsize, 0, fgclr);
 
 	if ((framecount / 20 % 2 == 0) && (this->letterCount < maxInputChars))
 	{
@@ -68,13 +66,26 @@ void InputBox::Draw(const int framecount) const
 	}
 }
 
-bool InputBox::IsMatch(const std::string &value) const
+int InputBox::GetMatch(const std::string &value) const
 {
-	return strcmp(this->value.c_str(), value.c_str()) == 0;
+	int matchCount = 0;
+	for (size_t i = 0; i < value.length() && i < this->letterCount; ++i)
+	{
+		if (value[i] == this->value[i])
+		{
+			matchCount++;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	return matchCount;
 }
 
 void InputBox::Clear()
 {
-	this->value = std::string{};
+	this->value[0] = '\0';
 	this->letterCount = 0;
 }

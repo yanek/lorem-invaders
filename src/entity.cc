@@ -1,5 +1,4 @@
 #include "entity.h"
-
 #include "colors.h"
 #include "inputbox.h"
 #include "resources.h"
@@ -45,12 +44,6 @@ size_t EnemyPool::Spawn(const std::string &value)
 	return id;
 }
 
-void EnemyPool::Despawn(const size_t id)
-{
-	Enemy &entity = this->pool[id];
-	entity.active = false;
-}
-
 Enemy &EnemyPool::Get(const size_t id)
 {
 	return this->pool[id];
@@ -83,10 +76,19 @@ void EnemyPool::DrawAll() const
 	}
 }
 
+void Enemy::Despawn()
+{
+	this->active = false;
+	this->highlightOffset = 0;
+	this->position = Vector2{ 0, 0 };
+	this->velocity = Vector2{ 0, 0 };
+}
+
 void Enemy::Draw() const
 {
 	const auto fntsize = static_cast<float>(res::font16.baseSize);
 	DrawTextEx(res::font16, this->value.c_str(), this->position, fntsize, 0, color::white);
+	DrawTextEx(res::font16, this->value.substr(0, this->highlightOffset).c_str(), this->position, fntsize, 0, color::red);
 }
 
 void Enemy::Update(const GameScreen *screen, const float delta)
@@ -97,16 +99,19 @@ void Enemy::Update(const GameScreen *screen, const float delta)
 	this->position.x += this->velocity.x * delta;
 	this->position.y += this->velocity.y * delta;
 
-	if (inputBox->IsMatch(this->value))
+	const int matchval = inputBox->GetMatch(this->value);
+	this->highlightOffset = matchval;
+
+	if (matchval >= this->value.length())
 	{
 		inputBox->Clear();
 		player->IncrementScore(this->value.length());
-		this->active = false;
+		Despawn();
 	}
 
 	if (this->position.y > Viewport::gameHeight - 32)
 	{
-		this->active = false;
 		player->Damage();
+		Despawn();
 	}
 }
