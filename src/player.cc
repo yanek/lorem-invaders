@@ -1,12 +1,15 @@
 #include "player.h"
 #include "colors.h"
 #include "resources.h"
-#include "screens.h"
+#include "screen.h"
+#include "screen_game.h"
+#include "screen_gameover.h"
 #include "viewport.h"
 #include <algorithm>
 #include <raylib.h>
 #include <string>
 
+class InputBox;
 void Player::Damage()
 {
 	this->hitpoints = std::max(this->hitpoints - 1, 0);

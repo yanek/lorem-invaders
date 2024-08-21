@@ -1,6 +1,7 @@
 #include "colors.h"
 #include "resources.h"
-#include "screens.h"
+#include "screen.h"
+#include "screen_title.h"
 #include "utils.h"
 #include "viewport.h"
 #include <raylib.h>

@@ -1,6 +1,7 @@
+#include "screen_gameover.h"
 #include "colors.h"
 #include "resources.h"
-#include "screens.h"
+#include "screen_title.h"
 #include "storage.h"
 #include "viewport.h"
 

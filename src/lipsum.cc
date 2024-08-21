@@ -1,6 +1,6 @@
 #include "lipsum.h"
 #include "resources.h"
-#include "screens.h"
+#include "screen.h"
 #include "utils.h"
 
 Lipsum::Lipsum(const GameMode mode)

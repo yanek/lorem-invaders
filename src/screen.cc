@@ -1,6 +1,6 @@
-#include "screens.h"
+#include "screen.h"
 
-ScreenManager screenManager = {};
+ScreenManager screenManager{};
 
 Screen::Screen(const std::string &name)
 	: name(name)
@@ -9,9 +9,13 @@ Screen::Screen(const std::string &name)
 
 void ScreenManager::ChangeToScreen(Screen *newScreen)
 {
-	TraceLog(LOG_INFO, "Unloading screen %s", this->current->name.c_str());
-	this->current->Unload();
-	delete this->current;
+	if (this->current != nullptr)
+	{
+		TraceLog(LOG_INFO, "Unloading screen %s", this->current->name.c_str());
+		this->current->Unload();
+		delete this->current;
+	}
+
 	this->current = newScreen;
 	this->current->Init();
 	TraceLog(LOG_INFO, "Loading screen %s", this->current->name.c_str());
