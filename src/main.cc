@@ -48,14 +48,14 @@ void UpdateDrawFrame()
 
 	viewport->BeginDrawing();
 	{
-		ClearBackground(CLR_BLACK);
+		ClearBackground(color::nearBlack);
 		screenManager.Draw();
 	}
 	viewport->EndDrawing();
 
 	BeginDrawing();
 	{
-		ClearBackground(BLACK);
+		ClearBackground(color::black);
 		viewport->DrawRenderTexture();
 		DrawDebugData();
 	}

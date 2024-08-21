@@ -27,6 +27,6 @@ void DrawDebugData()
 	const Vector2 pos{ vpwidth - txtsize - 1, 1 };
 	const Rectangle rect{ pos.x - 1, pos.y, txtsize + 1, fntsize };
 
-	DrawRectangleRec(rect, Fade(CLR_WHITE, 0.9f));
-	DrawTextEx(res_font16, fps.c_str(), pos, fntsize, 0, CLR_BLACK);
+	DrawRectangleRec(rect, Fade(color::white, 0.9f));
+	DrawTextEx(res_font16, fps.c_str(), pos, fntsize, 0, color::nearBlack);
 }

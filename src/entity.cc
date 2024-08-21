@@ -1,4 +1,6 @@
 #include "entity.h"
+
+#include "colors.h"
 #include "inputbox.h"
 #include "resources.h"
 #include "screens.h"
@@ -84,7 +86,7 @@ void EnemyPool::DrawAll() const
 void Enemy::Draw() const
 {
 	const auto fntsize = static_cast<float>(res::font16.baseSize);
-	DrawTextEx(res::font16, this->value.c_str(), this->position, fntsize, 0, WHITE);
+	DrawTextEx(res::font16, this->value.c_str(), this->position, fntsize, 0, color::white);
 }
 
 void Enemy::Update(const GameScreen *screen, const float delta)
@@ -98,6 +100,7 @@ void Enemy::Update(const GameScreen *screen, const float delta)
 	if (inputBox->IsMatch(this->value))
 	{
 		inputBox->Clear();
+		player->IncrementScore(this->value.length());
 		this->active = false;
 	}
 

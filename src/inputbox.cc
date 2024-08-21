@@ -1,4 +1,6 @@
 #include "inputbox.h"
+
+#include "colors.h"
 #include "resources.h"
 #include "viewport.h"
 #include <raylib.h>
@@ -51,8 +53,8 @@ void InputBox::Draw(const int framecount) const
 		this->rect.y + 8.0f,
 	};
 
-	constexpr auto fgclr = WHITE;
-	constexpr auto bgclr = BLACK;
+	constexpr auto fgclr = color::white;
+	constexpr auto bgclr = color::black;
 
 	DrawRectangleRec(this->rect, bgclr);
 	DrawRectangleLinesEx(this->rect, 2, fgclr);
