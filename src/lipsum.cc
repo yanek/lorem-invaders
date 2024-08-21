@@ -3,7 +3,7 @@
 #include "screens.h"
 #include "utils.h"
 
-Lipsum::Lipsum(GameMode mode)
+Lipsum::Lipsum(const GameMode mode)
 {
 	switch (mode)
 	{

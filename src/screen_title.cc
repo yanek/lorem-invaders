@@ -1,6 +1,7 @@
 #include "colors.h"
 #include "resources.h"
 #include "screens.h"
+#include "storage.h"
 #include "viewport.h"
 
 #include <raylib.h>
@@ -8,6 +9,8 @@
 TitleScreen::TitleScreen()
 	: Screen("title_screen")
 {
+	this->mode = static_cast<GameMode>(LoadStorageData(storage::StorageData::MODE));
+	this->hiscore = LoadStorageData(storage::StorageData::HISCORE);
 }
 
 void TitleScreen::Init()
@@ -18,12 +21,13 @@ void TitleScreen::Update()
 {
 	if (IsKeyPressed(KEY_ENTER))
 	{
-		screenManager.ChangeToScreen(new GameScreen{this->mode});
+		screenManager.ChangeToScreen(new GameScreen{ this->mode });
 	}
 
 	if (IsKeyPressed(KEY_M))
 	{
 		this->mode = static_cast<GameMode>((static_cast<int>(this->mode) + 1) % static_cast<int>(GameMode::MODE_COUNT));
+		SaveStorageData(storage::StorageData::MODE, static_cast<int>(this->mode));
 	}
 }
 
@@ -47,6 +51,9 @@ void TitleScreen::Draw()
 	const Vector2 actionsize = MeasureTextEx(res::font16, action, fntsize, 0);
 	const float actionposX = Viewport::gameWidth / 2.0f - actionsize.x / 2.0f;
 	DrawTextEx(res::font16, action, Vector2{ actionposX, 128 }, fntsize, 0, color::gray);
+
+	const auto hiscore = TextFormat("Hi-Score: %d", this->hiscore);
+	DrawTextEx(res::font16, hiscore, Vector2{ 8, Viewport::gameHeight - fntsize - 2 }, fntsize, 0, color::white);
 
 	std::string m;
 

@@ -39,6 +39,7 @@ public:
 
 private:
 	GameMode mode{ GameMode::LOREM };
+	int hiscore;
 };
 
 class GameScreen final : public Screen

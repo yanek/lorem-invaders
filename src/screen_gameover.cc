@@ -1,6 +1,7 @@
 #include "colors.h"
 #include "resources.h"
 #include "screens.h"
+#include "storage.h"
 #include "viewport.h"
 
 GameOverScreen::GameOverScreen(const unsigned long score)
@@ -10,6 +11,11 @@ GameOverScreen::GameOverScreen(const unsigned long score)
 
 void GameOverScreen::Init()
 {
+	const int hiscore = LoadStorageData(storage::StorageData::HISCORE);
+	if (this->score > hiscore)
+	{
+		SaveStorageData(storage::StorageData::HISCORE, this->score);
+	}
 }
 
 void GameOverScreen::Update()
@@ -37,7 +43,6 @@ void GameOverScreen::Draw()
 	const Vector2 actionsize = MeasureTextEx(res::font16, action, fntsize, 0);
 	const float actionposX = Viewport::gameWidth / 2.0f - actionsize.x / 2.0f;
 	DrawTextEx(res::font16, action, Vector2{ actionposX, 134 }, fntsize, 0, color::gray);
-
 }
 
 void GameOverScreen::Unload()
