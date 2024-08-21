@@ -3,12 +3,15 @@
 #include <string>
 #include <vector>
 
-class Lipsum {
+enum class GameMode;
+
+class Lipsum
+{
 public:
-	Lipsum();
+	explicit Lipsum(GameMode mode);
 	std::string Next();
+
 private:
 	std::vector<std::string> words;
 	int cursor;
 };
-

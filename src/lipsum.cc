@@ -1,10 +1,21 @@
 #include "lipsum.h"
 #include "resources.h"
+#include "screens.h"
 #include "utils.h"
 
-Lipsum::Lipsum()
+Lipsum::Lipsum(GameMode mode)
 {
-	this->words = SplitString(res::lipsum, "\n");
+	switch (mode)
+	{
+	case GameMode::LOREM:
+		this->words = SplitString(res::lipsum, "\n");
+		break;
+	case GameMode::ENGLISH:
+		this->words = SplitString(res::english, "\n");
+		break;
+	default:
+		E_PANIC("Invalid game mode");
+	}
 	this->cursor = 0;
 }
 

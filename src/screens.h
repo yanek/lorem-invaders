@@ -21,6 +21,13 @@ protected:
 	explicit Screen(const std::string &name);
 };
 
+enum class GameMode : int
+{
+	LOREM = 0,
+	ENGLISH,
+	MODE_COUNT
+};
+
 class TitleScreen final : public Screen
 {
 public:
@@ -29,12 +36,15 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Unload() override;
+
+private:
+	GameMode mode{ GameMode::LOREM };
 };
 
 class GameScreen final : public Screen
 {
 public:
-	GameScreen();
+	explicit GameScreen(GameMode mode);
 	void Init() override;
 	void Update() override;
 	void Draw() override;
@@ -48,7 +58,7 @@ private:
 	Player *player{ nullptr };
 	EnemyPool *enemyPool{ nullptr };
 	InputBox *inputbox{ nullptr };
-	Lipsum lipsum{};
+	Lipsum lipsum;
 };
 
 class ScreenManager

@@ -4,8 +4,8 @@
 #include "viewport.h"
 #include <raylib.h>
 
-GameScreen::GameScreen()
-	: Screen("game_screen")
+GameScreen::GameScreen(const GameMode mode)
+	: Screen("game_screen"), lipsum{ mode }
 {
 }
 
