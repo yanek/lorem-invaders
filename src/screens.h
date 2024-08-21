@@ -82,6 +82,7 @@ public:
 	void Update() const;
 	void Draw() const;
 	void Unload() const;
+	Screen *GetCurrent() const;
 
 private:
 	Screen *current = new TitleScreen{};

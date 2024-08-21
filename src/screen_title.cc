@@ -3,7 +3,6 @@
 #include "screens.h"
 #include "storage.h"
 #include "viewport.h"
-
 #include <raylib.h>
 
 TitleScreen::TitleScreen()
@@ -34,6 +33,7 @@ void TitleScreen::Update()
 void TitleScreen::Unload()
 {
 }
+
 void TitleScreen::Draw()
 {
 	const auto fntsize = static_cast<float>(res::font16.baseSize);

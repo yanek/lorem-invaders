@@ -45,7 +45,7 @@ void GameScreen::Update()
 	const float delta = GetFrameTime();
 	++framecounter;
 	this->enemyPool->UpdateAll(this, delta);
-	this->inputbox->Update();
+	this->inputbox->Update(delta);
 
 	if (framecounter % 120 == 0)
 	{

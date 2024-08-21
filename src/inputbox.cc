@@ -10,7 +10,7 @@ InputBox::InputBox(const Rectangle rect)
 {
 }
 
-void InputBox::Update()
+void InputBox::Update(const float delta)
 {
 	int key = GetCharPressed();
 
@@ -39,6 +39,34 @@ void InputBox::Update()
 		this->letterCount = 0;
 		this->value[0] = '\0';
 	}
+
+	if (flashTimeout > 0)
+	{
+		flashElapsed += delta;
+		if (flashElapsed >= flashTimeout)
+		{
+			flashElapsed = 0.0f;
+			flashTimeout = 0.0f;
+			flashColor = color::transparent;
+		}
+	}
+
+	if (shakeTimeout > 0)
+	{
+		shakeElapsed += delta;
+		const float mag = this->shakeMagnitude;
+		shakeOffset = Vector2{
+			static_cast<float>(GetRandomValue(-mag, mag)),
+			static_cast<float>(GetRandomValue(-mag, mag))
+		};
+
+		if (shakeElapsed >= shakeTimeout)
+		{
+			shakeElapsed = 0.0f;
+			shakeTimeout = 0.0f;
+			shakeOffset = { 0, 0 };
+		}
+	}
 }
 
 void InputBox::Draw(const int framecount) const
@@ -54,9 +82,17 @@ void InputBox::Draw(const int framecount) const
 	constexpr auto fgclr = color::white;
 	constexpr auto bgclr = color::black;
 
-	DrawRectangleRec(this->rect, bgclr);
-	DrawRectangleLinesEx(this->rect, 2, fgclr);
+	const Rectangle rect{
+		this->rect.x + shakeOffset.x,
+		this->rect.y + shakeOffset.y,
+		this->rect.width,
+		this->rect.height
+	};
+
+	DrawRectangleRec(rect, bgclr);
+	DrawRectangleLinesEx(rect, 2, fgclr);
 	DrawTextEx(res::font16, this->value, Vector2{ txtpos.x, txtpos.y }, fntsize, 0, fgclr);
+	DrawRectangleRec(rect, this->flashColor);
 
 	if ((framecount / 20 % 2 == 0) && (this->letterCount < maxInputChars))
 	{
@@ -88,4 +124,18 @@ void InputBox::Clear()
 {
 	this->value[0] = '\0';
 	this->letterCount = 0;
+}
+
+void InputBox::Flash(const Color color, const int msduration)
+{
+	flashElapsed = 0.0f;
+	flashTimeout = msduration / 1000.0f;
+	flashColor = color;
+}
+
+void InputBox::Shake(const float magnitude, const int msduration)
+{
+	shakeElapsed = 0.0f;
+	shakeTimeout = msduration / 1000.0f;
+	shakeMagnitude = magnitude;
 }

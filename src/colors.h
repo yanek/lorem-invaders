@@ -4,6 +4,7 @@
 
 namespace color
 {
+	constexpr Color transparent = { 0, 0, 0, 0 };
 	constexpr Color black = { 0, 0, 0, 255 };
 	constexpr Color nearBlack = { 20, 20, 20, 255 };
 	constexpr Color gray = { 130, 130, 130, 255 };
