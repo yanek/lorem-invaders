@@ -14,7 +14,7 @@ Player *GameScreen::GetPlayer() const
 	return this->player;
 }
 
-EnemyPool *GameScreen::GetEnemyPool()
+EnemyPool *GameScreen::GetEnemyPool() const
 {
 	return this->enemyPool;
 }

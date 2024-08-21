@@ -1,6 +1,7 @@
 #include "player.h"
 #include "colors.h"
 #include "resources.h"
+#include "screens.h"
 #include "viewport.h"
 #include <algorithm>
 #include <raylib.h>
@@ -9,6 +10,10 @@
 void Player::Damage()
 {
 	this->hitpoints = std::max(this->hitpoints - 1, 0);
+	if (this->IsDead())
+	{
+		screenManager.ChangeToScreen(new GameOverScreen{ this->score });
+	}
 }
 
 bool Player::IsDead() const

@@ -50,7 +50,7 @@ public:
 	void Draw() override;
 	void Unload() override;
 	Player *GetPlayer() const;
-	EnemyPool *GetEnemyPool();
+	EnemyPool *GetEnemyPool() const;
 	InputBox *GetInputBox() const;
 
 private:
@@ -59,6 +59,19 @@ private:
 	EnemyPool *enemyPool{ nullptr };
 	InputBox *inputbox{ nullptr };
 	Lipsum lipsum;
+};
+
+class GameOverScreen final : public Screen
+{
+public:
+	explicit GameOverScreen(unsigned long score);
+	void Init() override;
+	void Update() override;
+	void Draw() override;
+	void Unload() override;
+
+private:
+	unsigned long score;
 };
 
 class ScreenManager

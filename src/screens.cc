@@ -7,6 +7,7 @@ Screen::Screen(const std::string &name)
 {
 }
 
+
 void ScreenManager::ChangeToScreen(Screen *newScreen)
 {
 	TraceLog(LOG_INFO, "Unloading screen %s", this->current->name.c_str());
