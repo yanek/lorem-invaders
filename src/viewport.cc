@@ -5,7 +5,7 @@
 
 Viewport::Viewport()
 {
-	InitWindow(sWindowWidth, sWindowHeight, "Lorem Invader");
+	InitWindow(kWindowWidth, kWindowHeight, "Lorem Invader");
 }
 
 Viewport::~Viewport()
@@ -16,20 +16,20 @@ Viewport::~Viewport()
 
 void Viewport::InitRenderTexture()
 {
-	mRenderTex = LoadRenderTexture(sGameWidth, sGameHeight);
-	mVirtualRatio = static_cast<float>(sWindowWidth) / static_cast<float>(sGameWidth);
+	mRenderTex = LoadRenderTexture(kGameWidth, kGameHeight);
+	mVirtualRatio = static_cast<float>(kWindowWidth) / static_cast<float>(kGameWidth);
 
 	const float srcw = static_cast<float>(mRenderTex.texture.width);
 	const float srch = static_cast<float>(-mRenderTex.texture.height);
 	mSourceRec = Rectangle{ 0.0f, 0.0f, srcw, srch };
 
-	const float scale = std::min(GetScreenWidth() / sGameWidth, GetScreenHeight() / sGameHeight);
-	const float dstw = static_cast<float>(sGameWidth) * scale;
-	const float dsth = static_cast<float>(sGameHeight) * scale;
+	const float scale = std::min(GetScreenWidth() / kGameWidth, GetScreenHeight() / kGameHeight);
+	const float dstw = static_cast<float>(kGameWidth) * scale;
+	const float dsth = static_cast<float>(kGameHeight) * scale;
 
 	this->mDestRec = Rectangle{
-		(GetScreenWidth() - (static_cast<float>(sGameWidth) * scale)) * 0.5f,
-		(GetScreenHeight() - (static_cast<float>(sGameHeight) * scale)) * 0.5f,
+		(GetScreenWidth() - (static_cast<float>(kGameWidth) * scale)) * 0.5f,
+		(GetScreenHeight() - (static_cast<float>(kGameHeight) * scale)) * 0.5f,
 		dstw,
 		dsth
 	};

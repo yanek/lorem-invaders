@@ -1,3 +1,4 @@
+#include "audio.h"
 #include "colors.h"
 #include "resources.h"
 #include "screen.h"
@@ -19,6 +20,7 @@ int main()
 	SetTraceLogLevel(LOG_TRACE);
 	TraceLog(LOG_TRACE, "Starting game");
 	viewport = new Viewport{};
+	Audio::init();
 	res::LoadResources();
 
 	viewport->InitRenderTexture();
@@ -39,6 +41,7 @@ int main()
 	}
 #endif
 
+	Audio::close();
 	screenManager.Unload();
 	res::UnloadResources();
 
@@ -49,6 +52,7 @@ int main()
 void UpdateDrawFrame()
 {
 	screenManager.Update();
+	Audio::update();
 
 	viewport->BeginDrawing();
 	{

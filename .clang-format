@@ -33,6 +33,7 @@ FixNamespaceComments: false
 NamespaceIndentation: All
 Cpp11BracedListStyle: false
 AllowShortLambdasOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: WithoutElse
 LambdaBodyIndentation: OuterScope
 BreakBeforeTernaryOperators: true
 AlignOperands: AlignAfterOperator

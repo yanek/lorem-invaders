@@ -1,4 +1,6 @@
 #include "screen_title.h"
+
+#include "audio.h"
 #include "colors.h"
 #include "resources.h"
 #include "screen_game.h"
@@ -21,18 +23,15 @@ void TitleScreen::Update()
 {
 	if (IsKeyPressed(KEY_ENTER))
 	{
+		Audio::play(res::SoundId::CLICK);
 		screenManager.ChangeToScreen(new GameScreen{ mMode });
 	}
 
 	if (IsKeyPressed(KEY_M))
 	{
+		Audio::play(res::SoundId::CLICK);
 		mMode = static_cast<GameMode>((static_cast<int>(mMode) + 1) % static_cast<int>(GameMode::MODE_COUNT));
 		SaveStorageData(storage::StorageData::MODE, static_cast<int>(mMode));
-	}
-
-	if (IsKeyPressed(KEY_ESCAPE))
-	{
-
 	}
 }
 
@@ -43,12 +42,12 @@ void TitleScreen::Unload()
 void TitleScreen::Draw()
 {
 	const auto fntsize = static_cast<float>(res::font16.baseSize);
-	constexpr float halfwidth = Viewport::sGameWidth / 2.0f;
+	constexpr float halfwidth = Viewport::kGameWidth / 2.0f;
 
 	const Texture2D *banner = &res::textureBanner;
 	DrawTexture(*banner, halfwidth - banner->width / 2.0f, 32, color::white);
 
-	const auto ver = "v0.4.2";
+	const auto ver = "v0.5.0";
 	const Vector2 versize = MeasureTextEx(res::font16, ver, fntsize, 0);
 	DrawRectangle(355, 162, versize.x, versize.y, color::background);
 	DrawTextEx(res::font16, ver, Vector2{ 355, 162 }, fntsize, 0, color::accent);
@@ -78,6 +77,6 @@ void TitleScreen::Draw()
 
 	const auto mode = TextFormat("- %s MODE - ", m.c_str());
 	const Vector2 modesize = MeasureTextEx(res::font16, mode, fntsize, 0);
-	const float modeposX = Viewport::sGameWidth / 2.0f - modesize.x / 2.0f;
+	const float modeposX = Viewport::kGameWidth / 2.0f - modesize.x / 2.0f;
 	DrawTextEx(res::font16, mode, Vector2{ modeposX, 264 }, fntsize, 0, color::primary);
 }

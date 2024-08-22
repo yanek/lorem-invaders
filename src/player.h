@@ -9,7 +9,7 @@ public:
 	void DrawHud() const;
 	void Damage();
 	bool IsDead() const;
-	void IncrementScore(unsigned long value);
+	void IncrementScore(unsigned long baseValue, float enemyVerticalPosition);
 
 private:
 	unsigned long mScore{ 0 };

@@ -11,10 +11,10 @@ public:
 	void EndDrawing() const;
 	void DrawRenderTexture() const;
 
-	static constexpr int sGameWidth = 512;
-	static constexpr int sGameHeight = 448;
-	static constexpr int sWindowWidth = 1024;
-	static constexpr int sWindowHeight = 896;
+	static constexpr int kGameWidth = 512;
+	static constexpr int kGameHeight = 448;
+	static constexpr int kWindowWidth = 1024;
+	static constexpr int kWindowHeight = 896;
 
 private:
 	float mVirtualRatio = 0.0f;

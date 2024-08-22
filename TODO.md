@@ -2,11 +2,10 @@
 - ~~FX~~
   - ~~Shaker~~
   - ~~Flasher~~
-- Refactorisation
+- ~~Refactorisation~~
 - ~~Pause~~
 - ~~Restart / back to menu~~
 - Keyboard AZERTY
-- Scrolling background
 
 ## 0.5.X
 - Difficulty level

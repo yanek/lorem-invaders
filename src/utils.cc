@@ -22,7 +22,7 @@ void DrawDebugData()
 	const int val = std::max(1, std::min(GetFPS(), 999));
 	const std::string fps = TextFormat("%02iFPS", val);
 	const auto fntsize = static_cast<float>(res::font16.baseSize);
-	constexpr auto vpwidth = static_cast<float>(Viewport::sWindowWidth);
+	constexpr auto vpwidth = static_cast<float>(Viewport::kWindowWidth);
 	const float txtsize = MeasureTextEx(res::font16, fps.c_str(), fntsize, 0).x;
 
 	const Vector2 pos{ vpwidth /2 - txtsize / 2, 1 };

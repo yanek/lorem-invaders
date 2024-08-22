@@ -1,4 +1,6 @@
 #include "player.h"
+
+#include "audio.h"
 #include "colors.h"
 #include "fx_flash.h"
 #include "fx_shake.h"
@@ -31,7 +33,7 @@ void Player::DrawHud() const
 	constexpr int size = 16;
 	constexpr int gap = 4;
 
-	DrawRectangle(0, 0, Viewport::sGameWidth, size + gap * 2, color::black);
+	DrawRectangle(0, 0, Viewport::kGameWidth, size + gap * 2, color::black);
 
 	for (int i = 0; i < mMaxHitpoints; i++)
 	{
@@ -55,9 +57,9 @@ void Player::DrawHud() const
 	for (int i = 0; i < 10 - score.length(); i++)
 		scorePadding += "0";
 
-	DrawTextEx(res::font16, scorePadding.c_str(), { Viewport::sGameWidth - 90 - gap, gap + 2 }, size, 0, color::background);
-	DrawTextEx(res::font16, score.c_str(), { Viewport::sGameWidth - scoreDimensions.x - gap, gap + 2 }, size, 0, color::primary);
-	DrawTextEx(res::font16, "SCORE", { Viewport::sGameWidth - gap - 140, gap + 2 }, size, 0, color::secondary);
+	DrawTextEx(res::font16, scorePadding.c_str(), { Viewport::kGameWidth - 90 - gap, gap + 2 }, size, 0, color::background);
+	DrawTextEx(res::font16, score.c_str(), { Viewport::kGameWidth - scoreDimensions.x - gap, gap + 2 }, size, 0, color::primary);
+	DrawTextEx(res::font16, "SCORE", { Viewport::kGameWidth - gap - 140, gap + 2 }, size, 0, color::secondary);
 }
 
 void Player::Damage()
@@ -68,6 +70,7 @@ void Player::Damage()
 	inputbox->mFlash = new Flash(color::accent, 30);
 	inputbox->mShake = new Shake(4.0f, 100);
 	mShake = new Shake(2.0f, 100);
+	Audio::play(res::SoundId::HURT);
 
 	if (IsDead())
 	{
@@ -80,7 +83,19 @@ bool Player::IsDead() const
 	return mHitpoints == 0;
 }
 
-void Player::IncrementScore(const unsigned long value)
+void Player::IncrementScore(const unsigned long baseValue, const float enemyVerticalPosition)
 {
-	mScore += value;
+	float multiplier = 1.0f;
+
+	if (enemyVerticalPosition > GameScreen::kScoreZone1)
+	{
+		multiplier = 1.5f;
+	}
+	else if (enemyVerticalPosition < GameScreen::kScoreZone2)
+	{
+		multiplier = 0.5f;
+	}
+
+	const float fscore = static_cast<float>(baseValue) * multiplier;
+	mScore += static_cast<unsigned long>(fscore);
 }

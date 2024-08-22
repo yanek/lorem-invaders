@@ -1,7 +1,6 @@
 #pragma once
 
 #include "screen_game.h"
-#include "utils.h"
 #include <iostream>
 #include <raylib.h>
 
@@ -22,19 +21,6 @@ private:
 	size_t mHighlightOffset;
 	unsigned char mAlpha = 255;
 	bool mIsDying = false;
-	Shake* mShake;
+	Shake *mShake;
 	friend class EnemyPool;
-};
-
-class EnemyPool final
-{
-public:
-	size_t Spawn(const std::string &value);
-	Enemy &Get(size_t id);
-	size_t Count() const;
-	void UpdateAll(const GameScreen *screen, float delta);
-	void DrawAll() const;
-
-private:
-	std::vector<Enemy> mPool;
 };

@@ -1,8 +1,12 @@
 target_sources(
         ${PROJECT_NAME} PRIVATE
+        audio.h
+        audio.cc
         colors.h
-        entity.h
-        entity.cc
+        enemy.h
+        enemy.cc
+        enemy_pool.h
+        enemy_pool.cc
         fx_base.h
         fx_base.cc
         fx_shake.h
@@ -13,6 +17,7 @@ target_sources(
         inputbox.cc
         lipsum.h
         lipsum.cc
+        messages.h
         player.h
         player.cc
         resources.h

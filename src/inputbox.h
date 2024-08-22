@@ -17,8 +17,8 @@ public:
 	void Clear();
 
 private:
-	static constexpr int sMaxInputChars = 31;
+	static constexpr int kMaxInputChars = 31;
 	Rectangle mRect;
-	char mValue[sMaxInputChars + 1];
+	char mValue[kMaxInputChars + 1];
 	int mLetterCount;
 };

@@ -1,5 +1,3 @@
-#pragma once
-
 #include "fx_shake.h"
 
 Shake::Shake(const float magnitude, const int milliseconds)

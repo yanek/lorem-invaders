@@ -18,7 +18,7 @@ void InputBox::Update(const float delta)
 
 	while (key > 0)
 	{
-		if ((key >= 32) && (key <= 125) && (mLetterCount < sMaxInputChars))
+		if ((key >= 32) && (key <= 125) && (mLetterCount < kMaxInputChars))
 		{
 			mValue[mLetterCount] = static_cast<unsigned char>(key);
 			mValue[mLetterCount + 1] = '\0';
@@ -69,7 +69,7 @@ void InputBox::Draw(const int framecount) const
 	const float txtlen = MeasureTextEx(res::font16, mValue, fntsize, 0).x;
 
 	const Vector2 txtpos = {
-		Viewport::sGameWidth / 2.0f - txtlen / 2.0f,
+		Viewport::kGameWidth / 2.0f - txtlen / 2.0f,
 		mRect.y + 8.0f,
 	};
 
@@ -99,7 +99,7 @@ void InputBox::Draw(const int framecount) const
 	DrawTextEx(res::font16, mValue, Vector2{ txtpos.x, txtpos.y }, fntsize, 0, fgclr);
 	DrawRectangleRec(rect, flashColor);
 
-	if ((framecount / 20 % 2 == 0) && (mLetterCount < sMaxInputChars))
+	if ((framecount / 20 % 2 == 0) && (mLetterCount < kMaxInputChars))
 	{
 		const int x = static_cast<int>(txtpos.x + txtlen);
 		const int y = static_cast<int>(txtpos.y);
