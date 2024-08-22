@@ -15,9 +15,11 @@ public:
 	InputBox *GetInputBox() const;
 
 private:
-	int framecounter{ 0 };
-	Player *player{ nullptr };
-	EnemyPool *enemyPool{ nullptr };
-	InputBox *inputbox{ nullptr };
-	Lipsum lipsum;
+	int mFramecounter = 0;
+	bool mIsPaused = false;
+	Player *mPlayer{ nullptr };
+	EnemyPool *mEnemyPool{ nullptr };
+	InputBox *mInputBox{ nullptr };
+	Lipsum mLipsum;
+	GameMode mMode;
 };

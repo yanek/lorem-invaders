@@ -22,6 +22,8 @@ int main()
 	res::LoadResources();
 
 	viewport->InitRenderTexture();
+
+	SetExitKey(0);
 	SetTextLineSpacing(16);
 
 	screenManager.ChangeToScreen(new TitleScreen{});
