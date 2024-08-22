@@ -1,5 +1,7 @@
 #include "player.h"
 #include "colors.h"
+#include "fx_flash.h"
+#include "fx_shake.h"
 #include "resources.h"
 #include "screen.h"
 #include "screen_game.h"
@@ -10,23 +12,18 @@
 #include <string>
 
 class InputBox;
-void Player::Damage()
+
+void Player::Update(const float delta)
 {
-	this->hitpoints = std::max(this->hitpoints - 1, 0);
-
-	InputBox *inputbox = static_cast<GameScreen *>(screenManager.GetCurrent())->GetInputBox();
-	inputbox->Flash(color::red, 30);
-	inputbox->Shake(4.0f, 100);
-
-	if (this->IsDead())
+	if (mShake != nullptr)
 	{
-		screenManager.ChangeToScreen(new GameOverScreen{ this->score });
+		mShake->Update(delta);
+		if (mShake->ShouldDie())
+		{
+			delete mShake;
+			mShake = nullptr;
+		}
 	}
-}
-
-bool Player::IsDead() const
-{
-	return this->hitpoints == 0;
 }
 
 void Player::DrawHud() const
@@ -38,14 +35,16 @@ void Player::DrawHud() const
 
 	for (int i = 0; i < this->maxHitpoints; i++)
 	{
-		const float x = gap + i * (size + gap);
-		DrawTexturePro(this->heartTexture, { 0, 0, size, size }, { x, gap, size, size }, { 0, 0 }, 0, WHITE);
-	}
+		Rectangle dest = { static_cast<float>(gap + i * (size + gap)), gap, size, size };
+		const Rectangle src = i < this->hitpoints ? Rectangle{ 16, 0, size, size } : Rectangle{ 0, 0, size, size };
 
-	for (int i = 0; i < this->hitpoints; i++)
-	{
-		const float x = gap + i * (size + gap);
-		DrawTexturePro(this->heartTexture, { 16, 0, size, size }, { x, gap, size, size }, { 0, 0 }, 0, WHITE);
+		if (mShake != nullptr)
+		{
+			dest.x += mShake->offset.x;
+			dest.y += mShake->offset.y;
+		}
+
+		DrawTexturePro(this->heartTexture, src, dest, { 0, 0 }, 0, WHITE);
 	}
 
 	const int fntsize = res::font16.baseSize;
@@ -59,6 +58,26 @@ void Player::DrawHud() const
 	DrawTextEx(res::font16, scorePadding.c_str(), { Viewport::gameWidth - 90 - gap, gap + 2 }, size, 0, color::nearBlack);
 	DrawTextEx(res::font16, score.c_str(), { Viewport::gameWidth - scoreDimensions.x - gap, gap + 2 }, size, 0, color::white);
 	DrawTextEx(res::font16, "SCORE", { Viewport::gameWidth - gap - 140, gap + 2 }, size, 0, color::gray);
+}
+
+void Player::Damage()
+{
+	this->hitpoints = std::max(this->hitpoints - 1, 0);
+
+	InputBox *inputbox = static_cast<GameScreen *>(screenManager.GetCurrent())->GetInputBox();
+	inputbox->flash = new Flash(color::red, 30);
+	inputbox->shake = new Shake(4.0f, 100);
+	mShake = new Shake(2.0f, 100);
+
+	if (this->IsDead())
+	{
+		screenManager.ChangeToScreen(new GameOverScreen{ this->score });
+	}
+}
+
+bool Player::IsDead() const
+{
+	return this->hitpoints == 0;
 }
 
 void Player::IncrementScore(const unsigned long value)

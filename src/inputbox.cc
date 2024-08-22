@@ -1,6 +1,8 @@
 #include "inputbox.h"
-
 #include "colors.h"
+#include "fx_base.h"
+#include "fx_flash.h"
+#include "fx_shake.h"
 #include "resources.h"
 #include "viewport.h"
 #include <raylib.h>
@@ -40,31 +42,23 @@ void InputBox::Update(const float delta)
 		this->value[0] = '\0';
 	}
 
-	if (flashTimeout > 0)
+	if (this->flash != nullptr)
 	{
-		flashElapsed += delta;
-		if (flashElapsed >= flashTimeout)
+		this->flash->Update(delta);
+		if (this->flash->ShouldDie())
 		{
-			flashElapsed = 0.0f;
-			flashTimeout = 0.0f;
-			flashColor = color::transparent;
+			delete this->flash;
+			this->flash = nullptr;
 		}
 	}
 
-	if (shakeTimeout > 0)
+	if (this->shake != nullptr)
 	{
-		shakeElapsed += delta;
-		const float mag = this->shakeMagnitude;
-		shakeOffset = Vector2{
-			static_cast<float>(GetRandomValue(-mag, mag)),
-			static_cast<float>(GetRandomValue(-mag, mag))
-		};
-
-		if (shakeElapsed >= shakeTimeout)
+		this->shake->Update(delta);
+		if (this->shake->ShouldDie())
 		{
-			shakeElapsed = 0.0f;
-			shakeTimeout = 0.0f;
-			shakeOffset = { 0, 0 };
+			delete this->shake;
+			this->shake = nullptr;
 		}
 	}
 }
@@ -82,17 +76,28 @@ void InputBox::Draw(const int framecount) const
 	constexpr auto fgclr = color::white;
 	constexpr auto bgclr = color::black;
 
-	const Rectangle rect{
-		this->rect.x + shakeOffset.x,
-		this->rect.y + shakeOffset.y,
+	Rectangle rect{
+		this->rect.x,
+		this->rect.y,
 		this->rect.width,
 		this->rect.height
 	};
 
+	if (this->shake != nullptr)
+	{
+		rect.x += this->shake->offset.x;
+		rect.y += this->shake->offset.y;
+	};
+
+	const Color flashColor =
+		this->flash != nullptr
+			? this->flash->color
+			: color::transparent;
+
 	DrawRectangleRec(rect, bgclr);
 	DrawRectangleLinesEx(rect, 2, fgclr);
 	DrawTextEx(res::font16, this->value, Vector2{ txtpos.x, txtpos.y }, fntsize, 0, fgclr);
-	DrawRectangleRec(rect, this->flashColor);
+	DrawRectangleRec(rect, flashColor);
 
 	if ((framecount / 20 % 2 == 0) && (this->letterCount < maxInputChars))
 	{
@@ -124,18 +129,4 @@ void InputBox::Clear()
 {
 	this->value[0] = '\0';
 	this->letterCount = 0;
-}
-
-void InputBox::Flash(const Color color, const int msduration)
-{
-	flashElapsed = 0.0f;
-	flashTimeout = msduration / 1000.0f;
-	flashColor = color;
-}
-
-void InputBox::Shake(const float magnitude, const int msduration)
-{
-	shakeElapsed = 0.0f;
-	shakeTimeout = msduration / 1000.0f;
-	shakeMagnitude = magnitude;
 }

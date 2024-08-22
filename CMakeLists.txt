@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(ray_lorem_invader VERSION 0.1.0 LANGUAGES C CXX)
+project(lorem_invader VERSION 0.4.2 LANGUAGES CXX)
 
 # Enable CMake to generate compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -10,7 +10,7 @@ set(VCPKG_LIBRARY_LINKAGE static)
 find_package(raylib CONFIG REQUIRED)
 
 # Our project
-add_executable(${PROJECT_NAME})
+add_executable(${PROJECT_NAME} src/main.cc)
 add_subdirectory(src)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES

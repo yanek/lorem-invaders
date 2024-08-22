@@ -1,3 +1,34 @@
-file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS *.c *.cc)
-
-target_sources(${PROJECT_NAME} PRIVATE ${SOURCE_FILES})
+target_sources(
+        ${PROJECT_NAME} PRIVATE
+        colors.h
+        entity.h
+        entity.cc
+        fx_base.h
+        fx_base.cc
+        fx_shake.h
+        fx_shake.cc
+        fx_flash.cc
+        fx_flash.h
+        inputbox.h
+        inputbox.cc
+        lipsum.h
+        lipsum.cc
+        player.h
+        player.cc
+        resources.h
+        resources.cc
+        screen.h
+        screen.cc
+        screen_game.h
+        screen_game.cc
+        screen_gameover.h
+        screen_gameover.cc
+        screen_title.h
+        screen_title.cc
+        storage.h
+        storage.cc
+        utils.h
+        utils.cc
+        viewport.h
+        viewport.cc
+)
