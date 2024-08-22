@@ -3,6 +3,7 @@
 #include "colors.h"
 #include "entity.h"
 #include "inputbox.h"
+#include "player.h"
 #include "resources.h"
 #include "screen_title.h"
 #include "viewport.h"

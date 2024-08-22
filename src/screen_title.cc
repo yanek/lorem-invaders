@@ -29,6 +29,11 @@ void TitleScreen::Update()
 		this->mode = static_cast<GameMode>((static_cast<int>(this->mode) + 1) % static_cast<int>(GameMode::MODE_COUNT));
 		SaveStorageData(storage::StorageData::MODE, static_cast<int>(this->mode));
 	}
+
+	if (IsKeyPressed(KEY_ESCAPE))
+	{
+
+	}
 }
 
 void TitleScreen::Unload()

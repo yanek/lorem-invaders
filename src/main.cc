@@ -11,8 +11,8 @@
 #endif
 
 static Viewport *viewport;
-
-void UpdateDrawFrame();
+static void UpdateDrawFrame();
+static bool ShouldClose();
 
 int main()
 {
@@ -32,7 +32,8 @@ int main()
 	emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
 #else
 	SetTargetFPS(60);
-	while (!WindowShouldClose())
+
+	while (!ShouldClose())
 	{
 		UpdateDrawFrame();
 	}
@@ -63,4 +64,9 @@ void UpdateDrawFrame()
 		DrawDebugData();
 	}
 	EndDrawing();
+}
+
+bool ShouldClose()
+{
+	return WindowShouldClose() || ((screenManager.GetCurrent()->name == "title_screen") && IsKeyPressed(KEY_ESCAPE));
 }

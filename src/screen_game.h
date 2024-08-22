@@ -2,6 +2,10 @@
 
 #include "screen.h"
 
+class Player;
+class EnemyPool;
+class InputBox;
+
 class GameScreen final : public Screen
 {
 public:
