@@ -8,7 +8,7 @@
 
 size_t EnemyPool::Spawn(const std::string &value)
 {
-	const std::vector<Enemy> &pool = this->pool;
+	const std::vector<Enemy> &pool = mPool;
 	size_t id = pool.size();
 
 	TraceLog(LOG_INFO, "Creating enemy: %i", id);
@@ -17,7 +17,7 @@ size_t EnemyPool::Spawn(const std::string &value)
 	for (size_t i = 0; i < pool.size(); ++i)
 	{
 		const Enemy &entity = pool[i];
-		if (!entity.active)
+		if (!entity.mActive)
 		{
 			id = i;
 			break;
@@ -26,38 +26,38 @@ size_t EnemyPool::Spawn(const std::string &value)
 
 	if (id == pool.size())
 	{
-		this->pool.emplace_back();
+		mPool.emplace_back();
 	}
 
 	// Randomize horizontal position while making sure that the text does not overflow the viewport.
 	const float txtsize = MeasureTextEx(res::font16, value.c_str(), res::font16.baseSize, 0).x;
 	const float posx = GetRandomValue(0, Viewport::gameWidth - txtsize);
 
-	Enemy &entity = this->pool[id];
-	entity.id = id;
-	entity.position = Vector2{ posx, 0.0f };
-	entity.velocity = Vector2{ 0, 100 };
-	entity.value = value;
-	entity.active = true;
+	Enemy &entity = mPool[id];
+	entity.mId = id;
+	entity.mPosition = Vector2{ posx, 0.0f };
+	entity.mVelocity = Vector2{ 0, 100 };
+	entity.mValue = value;
+	entity.mActive = true;
 
 	return id;
 }
 
 Enemy &EnemyPool::Get(const size_t id)
 {
-	return this->pool[id];
+	return mPool[id];
 }
 
 size_t EnemyPool::Count() const
 {
-	return this->pool.size();
+	return mPool.size();
 }
 
 void EnemyPool::UpdateAll(const GameScreen *screen, const float delta)
 {
-	for (auto &entity : this->pool)
+	for (auto &entity : mPool)
 	{
-		if (entity.active)
+		if (entity.mActive)
 		{
 			entity.Update(screen, delta);
 		}
@@ -66,9 +66,9 @@ void EnemyPool::UpdateAll(const GameScreen *screen, const float delta)
 
 void EnemyPool::DrawAll() const
 {
-	for (const auto &entity : this->pool)
+	for (const auto &entity : mPool)
 	{
-		if (entity.active)
+		if (entity.mActive)
 		{
 			entity.Draw();
 		}
@@ -77,38 +77,66 @@ void EnemyPool::DrawAll() const
 
 void Enemy::Despawn()
 {
-	this->active = false;
-	this->highlightOffset = 0;
-	this->position = Vector2{ 0, 0 };
-	this->velocity = Vector2{ 0, 0 };
+	mActive = false;
+	mIsDying = false;
+	mHighlightOffset = 0;
+	mAlpha = 255;
+	mPosition = Vector2{ 0, 0 };
+	mVelocity = Vector2{ 0, 0 };
 }
 
 void Enemy::Draw() const
 {
 	const auto fntsize = static_cast<float>(res::font16.baseSize);
-	DrawTextEx(res::font16, this->value.c_str(), this->position, fntsize, 0, color::primary);
-	DrawTextEx(res::font16, this->value.substr(0, this->highlightOffset).c_str(), this->position, fntsize, 0, color::accent);
+
+	Vector2 pos = mPosition;
+	if (mShake != nullptr)
+	{
+		pos.x += mShake->offset.x;
+		pos.y += mShake->offset.y;
+	}
+
+	DrawTextEx(res::font16, mValue.c_str(), pos, fntsize, 0, color::primary);
+	DrawTextEx(res::font16, mValue.substr(0, mHighlightOffset).c_str(), pos, fntsize, 0, color::accent);
 }
 
 void Enemy::Update(const GameScreen *screen, const float delta)
 {
+	// If the entity is shaking, it must be dying.
+	if (mShake != nullptr)
+	{
+		mShake->Update(delta);
+		if (mShake->ShouldDie())
+		{
+			delete mShake;
+			mShake = nullptr;
+			Despawn(); // Despawn the entity after the shake animation.
+		}
+	}
+
+	if (mIsDying)
+	{
+		return;
+	}
+
 	InputBox *inputBox = screen->GetInputBox();
 	Player *player = screen->GetPlayer();
 
-	this->position.x += this->velocity.x * delta;
-	this->position.y += this->velocity.y * delta;
+	mPosition.x += mVelocity.x * delta;
+	mPosition.y += mVelocity.y * delta;
 
-	const int matchval = inputBox->GetMatch(this->value);
-	this->highlightOffset = matchval;
+	const int matchval = inputBox->GetMatch(mValue);
+	mHighlightOffset = matchval;
 
-	if (matchval >= this->value.length())
+	if (matchval >= mValue.length())
 	{
 		inputBox->Clear();
-		player->IncrementScore(this->value.length());
-		Despawn();
+		player->IncrementScore(mValue.length());
+		mIsDying = true;
+		mShake = new Shake(2, 100);
 	}
 
-	if (this->position.y > Viewport::gameHeight - 32)
+	if (mPosition.y > Viewport::gameHeight - 32)
 	{
 		player->Damage();
 		Despawn();

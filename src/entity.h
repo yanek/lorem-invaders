@@ -12,14 +12,17 @@ public:
 	void Draw() const;
 	void Despawn();
 
-	Vector2 position = { 0, 0 };
-	Vector2 velocity = { 0, 0 };
-	bool active = false;
+	Vector2 mPosition = { 0, 0 };
+	Vector2 mVelocity = { 0, 0 };
+	bool mActive = false;
 
 private:
-	std::string value;
-	size_t highlightOffset;
-	size_t id = 0;
+	size_t mId = 0;
+	std::string mValue;
+	size_t mHighlightOffset;
+	unsigned char mAlpha = 255;
+	bool mIsDying = false;
+	Shake* mShake;
 	friend class EnemyPool;
 };
 
@@ -33,5 +36,5 @@ public:
 	void DrawAll() const;
 
 private:
-	std::vector<Enemy> pool;
+	std::vector<Enemy> mPool;
 };
