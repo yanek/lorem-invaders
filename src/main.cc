@@ -49,7 +49,7 @@ void UpdateDrawFrame()
 
 	viewport->BeginDrawing();
 	{
-		ClearBackground(color::nearBlack);
+		ClearBackground(color::background);
 		screenManager.Draw();
 	}
 	viewport->EndDrawing();

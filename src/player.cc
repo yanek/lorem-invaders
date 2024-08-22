@@ -33,10 +33,10 @@ void Player::DrawHud() const
 
 	DrawRectangle(0, 0, Viewport::gameWidth, size + gap * 2, color::black);
 
-	for (int i = 0; i < this->maxHitpoints; i++)
+	for (int i = 0; i < mMaxHitpoints; i++)
 	{
 		Rectangle dest = { static_cast<float>(gap + i * (size + gap)), gap, size, size };
-		const Rectangle src = i < this->hitpoints ? Rectangle{ 16, 0, size, size } : Rectangle{ 0, 0, size, size };
+		const Rectangle src = i < mHitpoints ? Rectangle{ 16, 0, size, size } : Rectangle{ 0, 0, size, size };
 
 		if (mShake != nullptr)
 		{
@@ -44,43 +44,43 @@ void Player::DrawHud() const
 			dest.y += mShake->offset.y;
 		}
 
-		DrawTexturePro(this->heartTexture, src, dest, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(res::textureHeart, src, dest, { 0, 0 }, 0, WHITE);
 	}
 
 	const int fntsize = res::font16.baseSize;
-	const std::string score = TextFormat("%lu", this->score);
+	const std::string score = TextFormat("%lu", mScore);
 	const Vector2 scoreDimensions = MeasureTextEx(res::font16, score.c_str(), fntsize, 0);
 
 	std::string scorePadding;
 	for (int i = 0; i < 10 - score.length(); i++)
 		scorePadding += "0";
 
-	DrawTextEx(res::font16, scorePadding.c_str(), { Viewport::gameWidth - 90 - gap, gap + 2 }, size, 0, color::nearBlack);
-	DrawTextEx(res::font16, score.c_str(), { Viewport::gameWidth - scoreDimensions.x - gap, gap + 2 }, size, 0, color::white);
-	DrawTextEx(res::font16, "SCORE", { Viewport::gameWidth - gap - 140, gap + 2 }, size, 0, color::gray);
+	DrawTextEx(res::font16, scorePadding.c_str(), { Viewport::gameWidth - 90 - gap, gap + 2 }, size, 0, color::background);
+	DrawTextEx(res::font16, score.c_str(), { Viewport::gameWidth - scoreDimensions.x - gap, gap + 2 }, size, 0, color::primary);
+	DrawTextEx(res::font16, "SCORE", { Viewport::gameWidth - gap - 140, gap + 2 }, size, 0, color::secondary);
 }
 
 void Player::Damage()
 {
-	this->hitpoints = std::max(this->hitpoints - 1, 0);
+	mHitpoints = std::max(mHitpoints - 1, 0);
 
 	InputBox *inputbox = static_cast<GameScreen *>(screenManager.GetCurrent())->GetInputBox();
-	inputbox->flash = new Flash(color::red, 30);
+	inputbox->flash = new Flash(color::accent, 30);
 	inputbox->shake = new Shake(4.0f, 100);
 	mShake = new Shake(2.0f, 100);
 
-	if (this->IsDead())
+	if (IsDead())
 	{
-		screenManager.ChangeToScreen(new GameOverScreen{ this->score });
+		screenManager.ChangeToScreen(new GameOverScreen{ mScore });
 	}
 }
 
 bool Player::IsDead() const
 {
-	return this->hitpoints == 0;
+	return mHitpoints == 0;
 }
 
 void Player::IncrementScore(const unsigned long value)
 {
-	this->score += value;
+	mScore += value;
 }

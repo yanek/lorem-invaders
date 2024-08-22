@@ -5,6 +5,7 @@
 namespace res
 {
 	extern Font font16;
+	extern Texture2D textureHeart;
 	extern char *lipsum;
 	extern char *english;
 

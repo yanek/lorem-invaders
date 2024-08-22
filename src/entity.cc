@@ -86,8 +86,8 @@ void Enemy::Despawn()
 void Enemy::Draw() const
 {
 	const auto fntsize = static_cast<float>(res::font16.baseSize);
-	DrawTextEx(res::font16, this->value.c_str(), this->position, fntsize, 0, color::white);
-	DrawTextEx(res::font16, this->value.substr(0, this->highlightOffset).c_str(), this->position, fntsize, 0, color::red);
+	DrawTextEx(res::font16, this->value.c_str(), this->position, fntsize, 0, color::primary);
+	DrawTextEx(res::font16, this->value.substr(0, this->highlightOffset).c_str(), this->position, fntsize, 0, color::accent);
 }
 
 void Enemy::Update(const GameScreen *screen, const float delta)

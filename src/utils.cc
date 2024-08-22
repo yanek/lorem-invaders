@@ -28,6 +28,6 @@ void DrawDebugData()
 	const Vector2 pos{ vpwidth /2 - txtsize / 2, 1 };
 	const Rectangle rect{ pos.x - 1, pos.y, txtsize + 1, fntsize };
 
-	DrawRectangleRec(rect, Fade(color::white, 0.9f));
-	DrawTextEx(res::font16, fps.c_str(), pos, fntsize, 0, color::nearBlack);
+	DrawRectangleRec(rect, Fade(color::primary, 0.9f));
+	DrawTextEx(res::font16, fps.c_str(), pos, fntsize, 0, color::background);
 }

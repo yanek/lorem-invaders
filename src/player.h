@@ -1,5 +1,4 @@
 #pragma once
-#include <raylib.h>
 
 class Shake;
 
@@ -13,10 +12,8 @@ public:
 	void IncrementScore(unsigned long value);
 
 private:
-	unsigned long score{ 0 };
-	unsigned char hitpoints{ 3 };
-	unsigned char maxHitpoints{ 3 };
-	Texture2D heartTexture{ LoadTexture("resources/heart.png") };
+	unsigned long mScore{ 0 };
+	unsigned char mHitpoints{ 3 };
+	unsigned char mMaxHitpoints{ 3 };
 	Shake *mShake{ nullptr };
-
 };

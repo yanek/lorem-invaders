@@ -73,7 +73,7 @@ void InputBox::Draw(const int framecount) const
 		this->rect.y + 8.0f,
 	};
 
-	constexpr auto fgclr = color::white;
+	constexpr auto fgclr = color::primary;
 	constexpr auto bgclr = color::black;
 
 	Rectangle rect{

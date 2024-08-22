@@ -1,7 +1,7 @@
 ## 0.4.X
-- FX
-  - Shaker
-  - Flasher
+- ~~FX~~
+  - ~~Shaker~~
+  - ~~Flasher~~
 - Refactorisation
 - Pause
 - Restart / back to menu
@@ -12,3 +12,7 @@
 - Score by game mode
 - Leaderboard
 - Better game over screen
+
+## 1.0
+- Sound
+- Better dictionnaries
