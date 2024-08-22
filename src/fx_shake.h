@@ -8,7 +8,7 @@ class Shake final : public FxBase
 public:
 	Shake(float magnitude, int milliseconds);
 	void Update(float delta) override;
-	Vector2 offset;
+	Vector2 mOffset;
 
 private:
 	float mMagnitude = 0;

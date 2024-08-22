@@ -8,8 +8,8 @@
 class InputBox
 {
 public:
-	Flash *flash{ nullptr };
-	Shake *shake{ nullptr };
+	Flash *mFlash{ nullptr };
+	Shake *mShake{ nullptr };
 	explicit InputBox(Rectangle rect);
 	void Update(float delta);
 	void Draw(int framecount) const;
@@ -17,8 +17,8 @@ public:
 	void Clear();
 
 private:
-	static constexpr int maxInputChars = 31;
-	Rectangle rect;
-	char value[maxInputChars + 1];
-	int letterCount;
+	static constexpr int sMaxInputChars = 31;
+	Rectangle mRect;
+	char mValue[sMaxInputChars + 1];
+	int mLetterCount;
 };

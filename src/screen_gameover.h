@@ -12,5 +12,5 @@ public:
 	void Unload() override;
 
 private:
-	unsigned long score;
+	unsigned long mScore;
 };

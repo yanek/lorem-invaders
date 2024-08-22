@@ -3,41 +3,41 @@
 ScreenManager screenManager{};
 
 Screen::Screen(const std::string &name)
-	: name(name)
+	: mName(name)
 {
 }
 
 void ScreenManager::ChangeToScreen(Screen *newScreen)
 {
-	if (this->current != nullptr)
+	if (mCurrent != nullptr)
 	{
-		TraceLog(LOG_INFO, "Unloading screen %s", this->current->name.c_str());
-		this->current->Unload();
-		delete this->current;
+		TraceLog(LOG_INFO, "Unloading screen %s", mCurrent->mName.c_str());
+		mCurrent->Unload();
+		delete mCurrent;
 	}
 
-	this->current = newScreen;
-	this->current->Init();
-	TraceLog(LOG_INFO, "Loading screen %s", this->current->name.c_str());
+	mCurrent = newScreen;
+	mCurrent->Init();
+	TraceLog(LOG_INFO, "Loading screen %s", mCurrent->mName.c_str());
 }
 
 void ScreenManager::Update() const
 {
-	this->current->Update();
+	mCurrent->Update();
 }
 
 void ScreenManager::Draw() const
 {
-	this->current->Draw();
+	mCurrent->Draw();
 }
 
 void ScreenManager::Unload() const
 {
-	this->current->Unload();
-	delete this->current;
+	mCurrent->Unload();
+	delete mCurrent;
 }
 
 Screen *ScreenManager::GetCurrent() const
 {
-	return this->current;
+	return mCurrent;
 }

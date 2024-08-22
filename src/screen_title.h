@@ -12,6 +12,6 @@ public:
 	void Unload() override;
 
 private:
-	GameMode mode{ GameMode::LOREM };
-	int hiscore;
+	GameMode mMode{ GameMode::LOREM };
+	int mHiscore;
 };

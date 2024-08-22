@@ -31,7 +31,7 @@ void Player::DrawHud() const
 	constexpr int size = 16;
 	constexpr int gap = 4;
 
-	DrawRectangle(0, 0, Viewport::gameWidth, size + gap * 2, color::black);
+	DrawRectangle(0, 0, Viewport::sGameWidth, size + gap * 2, color::black);
 
 	for (int i = 0; i < mMaxHitpoints; i++)
 	{
@@ -40,8 +40,8 @@ void Player::DrawHud() const
 
 		if (mShake != nullptr)
 		{
-			dest.x += mShake->offset.x;
-			dest.y += mShake->offset.y;
+			dest.x += mShake->mOffset.x;
+			dest.y += mShake->mOffset.y;
 		}
 
 		DrawTexturePro(res::textureHeart, src, dest, { 0, 0 }, 0, WHITE);
@@ -55,9 +55,9 @@ void Player::DrawHud() const
 	for (int i = 0; i < 10 - score.length(); i++)
 		scorePadding += "0";
 
-	DrawTextEx(res::font16, scorePadding.c_str(), { Viewport::gameWidth - 90 - gap, gap + 2 }, size, 0, color::background);
-	DrawTextEx(res::font16, score.c_str(), { Viewport::gameWidth - scoreDimensions.x - gap, gap + 2 }, size, 0, color::primary);
-	DrawTextEx(res::font16, "SCORE", { Viewport::gameWidth - gap - 140, gap + 2 }, size, 0, color::secondary);
+	DrawTextEx(res::font16, scorePadding.c_str(), { Viewport::sGameWidth - 90 - gap, gap + 2 }, size, 0, color::background);
+	DrawTextEx(res::font16, score.c_str(), { Viewport::sGameWidth - scoreDimensions.x - gap, gap + 2 }, size, 0, color::primary);
+	DrawTextEx(res::font16, "SCORE", { Viewport::sGameWidth - gap - 140, gap + 2 }, size, 0, color::secondary);
 }
 
 void Player::Damage()
@@ -65,8 +65,8 @@ void Player::Damage()
 	mHitpoints = std::max(mHitpoints - 1, 0);
 
 	InputBox *inputbox = static_cast<GameScreen *>(screenManager.GetCurrent())->GetInputBox();
-	inputbox->flash = new Flash(color::accent, 30);
-	inputbox->shake = new Shake(4.0f, 100);
+	inputbox->mFlash = new Flash(color::accent, 30);
+	inputbox->mShake = new Shake(4.0f, 100);
 	mShake = new Shake(2.0f, 100);
 
 	if (IsDead())

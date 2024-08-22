@@ -31,7 +31,7 @@ size_t EnemyPool::Spawn(const std::string &value)
 
 	// Randomize horizontal position while making sure that the text does not overflow the viewport.
 	const float txtsize = MeasureTextEx(res::font16, value.c_str(), res::font16.baseSize, 0).x;
-	const float posx = GetRandomValue(0, Viewport::gameWidth - txtsize);
+	const float posx = GetRandomValue(0, Viewport::sGameWidth - txtsize);
 
 	Enemy &entity = mPool[id];
 	entity.mId = id;
@@ -92,8 +92,8 @@ void Enemy::Draw() const
 	Vector2 pos = mPosition;
 	if (mShake != nullptr)
 	{
-		pos.x += mShake->offset.x;
-		pos.y += mShake->offset.y;
+		pos.x += mShake->mOffset.x;
+		pos.y += mShake->mOffset.y;
 	}
 
 	DrawTextEx(res::font16, mValue.c_str(), pos, fntsize, 0, color::primary);
@@ -136,7 +136,7 @@ void Enemy::Update(const GameScreen *screen, const float delta)
 		mShake = new Shake(2, 100);
 	}
 
-	if (mPosition.y > Viewport::gameHeight - 32)
+	if (mPosition.y > Viewport::sGameHeight - 32)
 	{
 		player->Damage();
 		Despawn();

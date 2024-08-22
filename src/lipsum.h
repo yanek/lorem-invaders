@@ -12,6 +12,6 @@ public:
 	std::string Next();
 
 private:
-	std::vector<std::string> words;
-	int cursor;
+	std::vector<std::string> mWords;
+	int mCursor;
 };

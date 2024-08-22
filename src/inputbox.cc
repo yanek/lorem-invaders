@@ -8,7 +8,7 @@
 #include <raylib.h>
 
 InputBox::InputBox(const Rectangle rect)
-	: rect(rect), value{}, letterCount(0)
+	: mRect(rect), mValue{}, mLetterCount(0)
 {
 }
 
@@ -18,11 +18,11 @@ void InputBox::Update(const float delta)
 
 	while (key > 0)
 	{
-		if ((key >= 32) && (key <= 125) && (this->letterCount < maxInputChars))
+		if ((key >= 32) && (key <= 125) && (mLetterCount < sMaxInputChars))
 		{
-			this->value[this->letterCount] = static_cast<unsigned char>(key);
-			this->value[this->letterCount + 1] = '\0';
-			this->letterCount++;
+			mValue[mLetterCount] = static_cast<unsigned char>(key);
+			mValue[mLetterCount + 1] = '\0';
+			mLetterCount++;
 		};
 
 		key = GetCharPressed();
@@ -30,35 +30,35 @@ void InputBox::Update(const float delta)
 
 	if (IsKeyPressed(KEY_BACKSPACE) || IsKeyPressedRepeat(KEY_BACKSPACE))
 	{
-		this->letterCount--;
-		if (this->letterCount < 0)
-			this->letterCount = 0;
-		this->value[this->letterCount] = '\0';
+		mLetterCount--;
+		if (mLetterCount < 0)
+			mLetterCount = 0;
+		mValue[mLetterCount] = '\0';
 	}
 
 	if (IsKeyPressed(KEY_ENTER))
 	{
-		this->letterCount = 0;
-		this->value[0] = '\0';
+		mLetterCount = 0;
+		mValue[0] = '\0';
 	}
 
-	if (this->flash != nullptr)
+	if (mFlash != nullptr)
 	{
-		this->flash->Update(delta);
-		if (this->flash->ShouldDie())
+		mFlash->Update(delta);
+		if (mFlash->ShouldDie())
 		{
-			delete this->flash;
-			this->flash = nullptr;
+			delete mFlash;
+			mFlash = nullptr;
 		}
 	}
 
-	if (this->shake != nullptr)
+	if (mShake != nullptr)
 	{
-		this->shake->Update(delta);
-		if (this->shake->ShouldDie())
+		mShake->Update(delta);
+		if (mShake->ShouldDie())
 		{
-			delete this->shake;
-			this->shake = nullptr;
+			delete mShake;
+			mShake = nullptr;
 		}
 	}
 }
@@ -66,40 +66,40 @@ void InputBox::Update(const float delta)
 void InputBox::Draw(const int framecount) const
 {
 	const auto fntsize = static_cast<float>(res::font16.baseSize);
-	const float txtlen = MeasureTextEx(res::font16, this->value, fntsize, 0).x;
+	const float txtlen = MeasureTextEx(res::font16, mValue, fntsize, 0).x;
 
 	const Vector2 txtpos = {
-		Viewport::gameWidth / 2.0f - txtlen / 2.0f,
-		this->rect.y + 8.0f,
+		Viewport::sGameWidth / 2.0f - txtlen / 2.0f,
+		mRect.y + 8.0f,
 	};
 
 	constexpr auto fgclr = color::primary;
 	constexpr auto bgclr = color::black;
 
 	Rectangle rect{
-		this->rect.x,
-		this->rect.y,
-		this->rect.width,
-		this->rect.height
+		mRect.x,
+		mRect.y,
+		mRect.width,
+		mRect.height
 	};
 
-	if (this->shake != nullptr)
+	if (mShake != nullptr)
 	{
-		rect.x += this->shake->offset.x;
-		rect.y += this->shake->offset.y;
+		rect.x += mShake->mOffset.x;
+		rect.y += mShake->mOffset.y;
 	};
 
 	const Color flashColor =
-		this->flash != nullptr
-			? this->flash->color
+		mFlash != nullptr
+			? mFlash->mColor
 			: color::transparent;
 
 	DrawRectangleRec(rect, bgclr);
 	DrawRectangleLinesEx(rect, 2, fgclr);
-	DrawTextEx(res::font16, this->value, Vector2{ txtpos.x, txtpos.y }, fntsize, 0, fgclr);
+	DrawTextEx(res::font16, mValue, Vector2{ txtpos.x, txtpos.y }, fntsize, 0, fgclr);
 	DrawRectangleRec(rect, flashColor);
 
-	if ((framecount / 20 % 2 == 0) && (this->letterCount < maxInputChars))
+	if ((framecount / 20 % 2 == 0) && (mLetterCount < sMaxInputChars))
 	{
 		const int x = static_cast<int>(txtpos.x + txtlen);
 		const int y = static_cast<int>(txtpos.y);
@@ -110,9 +110,9 @@ void InputBox::Draw(const int framecount) const
 int InputBox::GetMatch(const std::string &value) const
 {
 	int matchCount = 0;
-	for (size_t i = 0; i < value.length() && i < this->letterCount; ++i)
+	for (size_t i = 0; i < value.length() && i < mLetterCount; ++i)
 	{
-		if (value[i] == this->value[i])
+		if (value[i] == mValue[i])
 		{
 			matchCount++;
 		}
@@ -127,6 +127,6 @@ int InputBox::GetMatch(const std::string &value) const
 
 void InputBox::Clear()
 {
-	this->value[0] = '\0';
-	this->letterCount = 0;
+	mValue[0] = '\0';
+	mLetterCount = 0;
 }

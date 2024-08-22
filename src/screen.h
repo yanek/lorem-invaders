@@ -16,7 +16,7 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 	virtual void Unload() = 0;
-	const std::string name;
+	const std::string mName;
 
 protected:
 	explicit Screen(const std::string &name);
@@ -39,7 +39,7 @@ public:
 	Screen *GetCurrent() const;
 
 private:
-	Screen *current{ nullptr };
+	Screen *mCurrent{ nullptr };
 };
 
 extern ScreenManager screenManager;

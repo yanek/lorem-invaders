@@ -5,7 +5,7 @@
 #include "fx_flash.h"
 
 Flash::Flash(const Color color, const int milliseconds)
-	: FxBase(milliseconds), color(color)
+	: FxBase(milliseconds), mColor(color)
 {
 }
 

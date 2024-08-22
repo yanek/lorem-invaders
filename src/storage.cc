@@ -30,7 +30,7 @@ bool storage::SaveStorageData(StorageData pos, const int value)
 			else
 			{
 				// RL_REALLOC failed
-				TraceLog(LOG_WARNING, "FILEIO: [%s] Failed to realloc data (%u), position in bytes (%u) bigger than actual file size", storageFile, dataSize, position * sizeof(int));
+				TraceLog(LOG_WARNING, "FILEIO: [%s] Failed to realloc data (%u), position in bytes (%u) bigger than actual file size", storageFile.c_str(), dataSize, position * sizeof(int));
 
 				// We store the old size of the file
 				newFileData = fileData;
@@ -81,7 +81,7 @@ int storage::LoadStorageData(StorageData pos)
 	if (fileData != nullptr)
 	{
 		if (dataSize < position * 4)
-			TraceLog(LOG_WARNING, "FILEIO: [%s] Failed to find storage position: %i", storageFile, position);
+			TraceLog(LOG_WARNING, "FILEIO: [%s] Failed to find storage position: %i", storageFile.c_str(), position);
 		else
 		{
 			const int *dataPtr = reinterpret_cast<int *>(fileData);
@@ -89,7 +89,7 @@ int storage::LoadStorageData(StorageData pos)
 		}
 
 		UnloadFileData(fileData);
-		TraceLog(LOG_INFO, "FILEIO: [%s] Loaded storage value: %i", storageFile, value);
+		TraceLog(LOG_INFO, "FILEIO: [%s] Loaded storage value: %i", storageFile.c_str(), value);
 	}
 
 	return value;

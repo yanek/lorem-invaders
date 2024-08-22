@@ -35,8 +35,8 @@ void GameScreen::Init()
 
 	constexpr Rectangle rect{
 		5,
-		Viewport::gameHeight - 32 - 5,
-		Viewport::gameWidth - 10,
+		Viewport::sGameHeight - 32 - 5,
+		Viewport::sGameWidth - 10,
 		32
 	};
 
@@ -88,16 +88,16 @@ void GameScreen::Draw()
 
 	if (mIsPaused)
 	{
-		DrawRectangle(0, 0, Viewport::gameWidth, Viewport::gameHeight, Fade(color::black, 0.75f));
-		DrawRectangle(0, 200, Viewport::gameWidth, 32, color::black);
+		DrawRectangle(0, 0, Viewport::sGameWidth, Viewport::sGameHeight, Fade(color::black, 0.75f));
+		DrawRectangle(0, 200, Viewport::sGameWidth, 32, color::black);
 
 		const auto paused = "PAUSE";
 		const float psize = MeasureTextEx(res::font16, paused, 16, 0).x;
 		const auto actions = "[Esc] Resume, [R] Restart, [B] Back to main menu";
 		const float asize = MeasureTextEx(res::font16, actions, 16, 0).x;
 
-		DrawTextEx(res::font16, paused, Vector2{ Viewport::gameWidth / 2.0f - psize / 2.0f, 209 }, res::font16.baseSize, 0, color::white);
-		DrawTextEx(res::font16, actions, Vector2{ Viewport::gameWidth / 2.0f - asize / 2.0f, 240 }, res::font16.baseSize, 0, color::secondary);
+		DrawTextEx(res::font16, paused, Vector2{ Viewport::sGameWidth / 2.0f - psize / 2.0f, 209 }, res::font16.baseSize, 0, color::white);
+		DrawTextEx(res::font16, actions, Vector2{ Viewport::sGameWidth / 2.0f - asize / 2.0f, 240 }, res::font16.baseSize, 0, color::secondary);
 	}
 }
 

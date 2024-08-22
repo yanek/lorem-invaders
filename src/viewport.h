@@ -11,14 +11,14 @@ public:
 	void EndDrawing() const;
 	void DrawRenderTexture() const;
 
-	static constexpr int gameWidth = 512;
-	static constexpr int gameHeight = 448;
-	static constexpr int windowWidth = 1024;
-	static constexpr int windowHeight = 896;
+	static constexpr int sGameWidth = 512;
+	static constexpr int sGameHeight = 448;
+	static constexpr int sWindowWidth = 1024;
+	static constexpr int sWindowHeight = 896;
 
 private:
-	float virtualRatio = 0.0f;
-	RenderTexture2D rendertex = {};
-	Rectangle sourceRec = {};
-	Rectangle destRec = {};
+	float mVirtualRatio = 0.0f;
+	RenderTexture2D mRenderTex = {};
+	Rectangle mSourceRec = {};
+	Rectangle mDestRec = {};
 };

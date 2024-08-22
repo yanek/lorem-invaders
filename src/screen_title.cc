@@ -9,8 +9,8 @@
 TitleScreen::TitleScreen()
 	: Screen("title_screen")
 {
-	this->mode = static_cast<GameMode>(LoadStorageData(storage::StorageData::MODE));
-	this->hiscore = LoadStorageData(storage::StorageData::HISCORE);
+	mMode = static_cast<GameMode>(LoadStorageData(storage::StorageData::MODE));
+	mHiscore = LoadStorageData(storage::StorageData::HISCORE);
 }
 
 void TitleScreen::Init()
@@ -21,13 +21,13 @@ void TitleScreen::Update()
 {
 	if (IsKeyPressed(KEY_ENTER))
 	{
-		screenManager.ChangeToScreen(new GameScreen{ this->mode });
+		screenManager.ChangeToScreen(new GameScreen{ mMode });
 	}
 
 	if (IsKeyPressed(KEY_M))
 	{
-		this->mode = static_cast<GameMode>((static_cast<int>(this->mode) + 1) % static_cast<int>(GameMode::MODE_COUNT));
-		SaveStorageData(storage::StorageData::MODE, static_cast<int>(this->mode));
+		mMode = static_cast<GameMode>((static_cast<int>(mMode) + 1) % static_cast<int>(GameMode::MODE_COUNT));
+		SaveStorageData(storage::StorageData::MODE, static_cast<int>(mMode));
 	}
 
 	if (IsKeyPressed(KEY_ESCAPE))
@@ -43,7 +43,7 @@ void TitleScreen::Unload()
 void TitleScreen::Draw()
 {
 	const auto fntsize = static_cast<float>(res::font16.baseSize);
-	constexpr float halfwidth = Viewport::gameWidth / 2.0f;
+	constexpr float halfwidth = Viewport::sGameWidth / 2.0f;
 
 	const Texture2D *banner = &res::textureBanner;
 	DrawTexture(*banner, halfwidth - banner->width / 2.0f, 32, color::white);
@@ -62,12 +62,12 @@ void TitleScreen::Draw()
 	const Vector2 hiscoresize = MeasureTextEx(res::font16, hiscorelabel, fntsize, 0);
 	DrawTextEx(res::font16, hiscorelabel, Vector2{ halfwidth - hiscoresize.x / 2.0f, 400 }, fntsize, 0, color::secondary);
 
-	const auto hiscoreval = TextFormat("%d", this->hiscore);
+	const auto hiscoreval = TextFormat("%d", mHiscore);
 	const Vector2 hiscorevalsize = MeasureTextEx(res::font16, hiscoreval, fntsize, 0);
 	DrawTextEx(res::font16, hiscoreval, Vector2{ halfwidth - hiscorevalsize.x / 2.0f, 416 }, fntsize, 0, color::primary);
 
 	std::string m;
-	switch (this->mode)
+	switch (mMode)
 	{
 	case GameMode::ENGLISH:
 		m = "ENGLISH";
@@ -78,6 +78,6 @@ void TitleScreen::Draw()
 
 	const auto mode = TextFormat("- %s MODE - ", m.c_str());
 	const Vector2 modesize = MeasureTextEx(res::font16, mode, fntsize, 0);
-	const float modeposX = Viewport::gameWidth / 2.0f - modesize.x / 2.0f;
+	const float modeposX = Viewport::sGameWidth / 2.0f - modesize.x / 2.0f;
 	DrawTextEx(res::font16, mode, Vector2{ modeposX, 264 }, fntsize, 0, color::primary);
 }

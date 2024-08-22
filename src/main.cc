@@ -68,5 +68,5 @@ void UpdateDrawFrame()
 
 bool ShouldClose()
 {
-	return WindowShouldClose() || ((screenManager.GetCurrent()->name == "title_screen") && IsKeyPressed(KEY_ESCAPE));
+	return WindowShouldClose() || ((screenManager.GetCurrent()->mName == "title_screen") && IsKeyPressed(KEY_ESCAPE));
 }
