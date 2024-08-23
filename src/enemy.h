@@ -1,9 +1,11 @@
 #pragma once
 
+#include "enemy_pool.h"
 #include "screen_game.h"
 #include <iostream>
 #include <raylib.h>
 
+enum class EnemyPattern;
 class Shake;
 
 class Enemy final
@@ -23,5 +25,6 @@ private:
 	size_t highlightOffset_;
 	bool isActive_ = false;
 	bool isDying_ = false;
+	EnemyPattern pattern_ = (EnemyPattern)0;
 	Shake *shake_;
 };

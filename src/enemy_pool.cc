@@ -1,5 +1,6 @@
 #include "enemy_pool.h"
 
+#include "enemy.h"
 #include "resources.h"
 #include "viewport.h"
 #include <cassert>
@@ -36,16 +37,52 @@ Enemy *EnemyPool::spawn(const std::string &value)
 		}
 	}
 
-	TraceLog(LOG_INFO, "Creating enemy: %i", id);
+	assert(id != -1);
+	TraceLog(LOG_DEBUG, "Creating enemy: %i", id);
 
-	// Randomize horizontal position while making sure that the text does not overflow the viewport.
+	int patternId = GetRandomValue(0, (int)EnemyPattern::NUM_PATTERNS - 1);
+	const auto pattern = (EnemyPattern)patternId;
+
 	const float txtsize = MeasureTextEx(res::font16, value.c_str(), res::font16.baseSize, 0).x;
-	const float posx = GetRandomValue(0, Viewport::GAME_WIDTH - txtsize);
+	float posx = 0.0f;
+	float posy = 0.0f;
+
+	Vector2 velocity = {};
+	switch (pattern)
+	{
+	case EnemyPattern::SLOW:
+		// Randomize horizontal position while making sure that the text does not overflow the viewport.
+		posx = GetRandomValue(0, Viewport::GAME_WIDTH - txtsize);
+		velocity = Vector2{ 0, 80 };
+		break;
+	case EnemyPattern::FAST:
+		// Randomize horizontal position while making sure that the text does not overflow the viewport.
+		posx = GetRandomValue(0, Viewport::GAME_WIDTH - txtsize);
+		velocity = Vector2{ 0, 100 };
+		break;
+	case EnemyPattern::FASTER:
+		posx = GetRandomValue(0, Viewport::GAME_WIDTH - txtsize);
+		velocity = Vector2{ 0, 120 };
+		break;
+	case EnemyPattern::DIAGONAL_LEFT:
+		posx = Viewport::GAME_WIDTH - txtsize;
+		velocity = Vector2{ -40, 100 };
+		break;
+	case EnemyPattern::DIAGONAL_RIGHT:
+		posx = 0.0f;
+		velocity = Vector2{ 40, 100 };
+		break;
+	case EnemyPattern::BONUS:
+		posx = 0.0f;
+		velocity = Vector2{ 50, 0 };
+	default:
+		velocity = Vector2{ 0, 50 };
+	}
 
 	Enemy *enemy = pool_[id];
 	enemy->id_ = id;
-	enemy->position_ = Vector2{ posx, 0.0f };
-	enemy->velocity_ = Vector2{ 0, 100 };
+	enemy->position_ = Vector2{ posx, posy };
+	enemy->velocity_ = velocity;
 	enemy->value_ = value;
 	enemy->isActive_ = true;
 

@@ -1,6 +1,20 @@
 #pragma once
 
-#include "enemy.h"
+#include <string>
+
+class GameScreen;
+class Enemy;
+
+enum class EnemyPattern : int
+{
+	SLOW = 0,
+	FAST,
+	FASTER,
+	DIAGONAL_LEFT,
+	DIAGONAL_RIGHT,
+	BONUS,
+	NUM_PATTERNS
+};
 
 class EnemyPool
 {

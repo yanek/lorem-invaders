@@ -5,12 +5,11 @@ project(lorem_invader VERSION 0.4.2 LANGUAGES CXX)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CPP_STANDARD 17)
-set(VCPKG_LIBRARY_LINKAGE static)
-
-find_package(raylib CONFIG REQUIRED)
 
 # Our project
 add_executable(${PROJECT_NAME} src/main.cc)
+include_directories(lib/includes)
+add_subdirectory(lib/raylib)
 add_subdirectory(src)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -22,7 +21,7 @@ add_custom_command(
         DEPENDS ${PROJECT_NAME})
 
 #set(raylib_VERBOSE 1)
-target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
+target_link_libraries(${PROJECT_NAME} raylib)
 
 # Web Configurations
 if (EMSCRIPTEN)

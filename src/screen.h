@@ -19,7 +19,7 @@ enum class GameMode : int
 {
 	LOREM = 0,
 	ENGLISH,
-	MODE_COUNT
+	NUM_MODES
 };
 
 class ScreenManager

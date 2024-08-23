@@ -72,6 +72,7 @@ void updateDrawFrame()
 bool shouldClose()
 {
 	const Screen *currentScreen = ScreenManager::getCurrent();
-	const bool escKeyPressed = ((currentScreen != nullptr) && (currentScreen->getName() == "title_screen")) && IsKeyPressed(KEY_ESCAPE);
+	if (currentScreen == nullptr) return false;
+	const bool escKeyPressed = (strcmp(currentScreen->getName(), "title_screen") == 0) && IsKeyPressed(KEY_ESCAPE);
 	return WindowShouldClose() || escKeyPressed;
 }

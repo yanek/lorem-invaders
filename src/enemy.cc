@@ -2,6 +2,7 @@
 
 #include "audio.h"
 #include "colors.h"
+#include "enemy_pool.h"
 #include "event_listener.h"
 #include "inputbox.h"
 #include "player.h"
@@ -69,9 +70,10 @@ void Enemy::update(const GameScreen *screen, const float delta)
 		ScreenManager::getEventBus()->fire(EnemyKilledEvent(value_.length(), position_.y));
 	}
 
-	if (position_.y > Viewport::GAME_HEIGHT - 32)
+	if (position_.y > Viewport::GAME_HEIGHT - 32 || position_.x < 0 || position_.x > Viewport::GAME_WIDTH)
 	{
 		despawn();
-		ScreenManager::getEventBus()->fire(PlayerHurtEvent{});
+		if (pattern_ != EnemyPattern::BONUS)
+			ScreenManager::getEventBus()->fire(PlayerHurtEvent{});
 	}
 }

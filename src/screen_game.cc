@@ -111,3 +111,12 @@ float GameScreen::getDifficultyModifier() const
 {
 	return difficultyModifier_;
 }
+
+void GameScreen::notify(const Event &event)
+{
+	if (event.getEventType() == EventType::EnemyKilled)
+	{
+		difficultyModifier_ = std::min(difficultyModifier_ + 0.01f, 9.0f);
+		TraceLog(LOG_DEBUG, "Difficulty modifier: %f", difficultyModifier_);
+	}
+}

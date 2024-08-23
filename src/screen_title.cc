@@ -7,6 +7,7 @@
 #include "storage.h"
 #include "viewport.h"
 #include <raylib.h>
+#include <reasing.h>
 
 TitleScreen::TitleScreen()
 {
@@ -20,6 +21,12 @@ void TitleScreen::init()
 
 void TitleScreen::update()
 {
+	if (bannerPosition_ < BANNER_ENDPOS)
+	{
+		bannerPosition_ = EaseBounceOut(animTime_, BANNER_STARTPOS, BANNER_ENDPOS - BANNER_STARTPOS, 3.0f);
+		animTime_ += GetFrameTime();
+	}
+
 	if (IsKeyPressed(KEY_ENTER))
 	{
 		Audio::play(res::SoundId::CLICK);
@@ -29,7 +36,7 @@ void TitleScreen::update()
 	if (IsKeyPressed(KEY_M))
 	{
 		Audio::play(res::SoundId::CLICK);
-		mode_ = static_cast<GameMode>(((int)mode_ + 1) % (int)GameMode::MODE_COUNT);
+		mode_ = static_cast<GameMode>(((int)mode_ + 1) % (int)GameMode::NUM_MODES);
 		saveStorageData(storage::StorageData::MODE, (int)mode_);
 	}
 }
@@ -44,7 +51,7 @@ void TitleScreen::draw()
 	constexpr float halfwidth = Viewport::GAME_WIDTH / 2.0f;
 
 	const Texture2D *banner = &res::textureBanner;
-	DrawTexture(*banner, halfwidth - banner->width / 2.0f, 32, color::white);
+	DrawTexture(*banner, halfwidth - banner->width / 2.0f, bannerPosition_, color::white);
 
 	const auto ver = "v0.5.0";
 	const Vector2 versize = MeasureTextEx(res::font16, ver, fntsize, 0);
