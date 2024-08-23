@@ -35,5 +35,6 @@ public:
 
 private:
 	static Screen *current_;
+	static Screen *next_;
 	static EventBus *eventBus_;
 };

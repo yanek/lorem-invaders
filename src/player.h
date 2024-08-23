@@ -1,19 +1,26 @@
 #pragma once
 
+#include "event_bus.h"
+#include "event_listener.h"
+#include "screen.h"
+
 class Shake;
 
-class Player
+class Player final : EventListener
 {
 public:
-	void Update(float delta);
-	void DrawHud() const;
-	void Damage();
-	bool IsDead() const;
-	void IncrementScore(unsigned long baseValue, float enemyVerticalPosition);
+	Player() { EVENT_SUBSCRIBE }
+	~Player() override { EVENT_UNSUBSCRIBE }
+
+	void update(float delta);
+	void draw() const;
+	void damage();
+	bool isDead() const { return hitpoints_ == 0; }
+	void notify(const Event &event) override;
 
 private:
-	unsigned long mScore{ 0 };
-	unsigned char mHitpoints{ 3 };
-	unsigned char mMaxHitpoints{ 3 };
-	Shake *mShake{ nullptr };
+	unsigned long score_{ 0 };
+	unsigned char hitpoints_{ 3 };
+	unsigned char maxHitpoints_{ 3 };
+	Shake *shake_{ nullptr };
 };

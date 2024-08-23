@@ -64,14 +64,14 @@ void updateDrawFrame()
 	{
 		ClearBackground(color::black);
 		viewport->DrawRenderTexture();
-		DrawDebugData();
+		drawDebugData();
 	}
 	EndDrawing();
 }
 
 bool shouldClose()
 {
-	const char* currentScreen = ScreenManager::getCurrent()->getName();
-	const bool escKeyPressed = (currentScreen == "title_screen") && IsKeyPressed(KEY_ESCAPE);
+	const Screen *currentScreen = ScreenManager::getCurrent();
+	const bool escKeyPressed = ((currentScreen != nullptr) && (currentScreen->getName() == "title_screen")) && IsKeyPressed(KEY_ESCAPE);
 	return WindowShouldClose() || escKeyPressed;
 }

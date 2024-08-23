@@ -1,26 +1,33 @@
 #pragma once
 
+#include "event_bus.h"
+#include "event_listener.h"
 #include "fx_flash.h"
 #include "fx_shake.h"
+#include "screen.h"
 #include <raylib.h>
 #include <string>
 
-class InputBox
+class InputBox final : EventListener
 {
 public:
-	Flash *mFlash{ nullptr };
-	Shake *mShake{ nullptr };
-	explicit InputBox(Rectangle rect);
-	void Update(float delta);
-	void Draw(float delta);
-	int GetMatch(const std::string &value) const;
-	void Clear();
+	explicit InputBox(const Rectangle rect)
+		: rect_(rect) { EVENT_SUBSCRIBE };
+	~InputBox() override { EVENT_UNSUBSCRIBE }
+
+	void update(float delta);
+	void draw(float delta);
+	int getMatch(const std::string &value) const;
+	void clear();
+	void notify(const Event &event) override;
 
 private:
-	static constexpr int kMaxInputChars = 31;
+	static constexpr int MAX_INPUT_CHARS = 31;
 	static constexpr float CURSOR_BLINK_TIME = 0.5f;
-	Rectangle mRect;
-	char mValue[kMaxInputChars + 1];
-	int mLetterCount;
+	Rectangle rect_;
+	char value_[MAX_INPUT_CHARS + 1]{};
+	int letterCount_ = 0;
 	float cursorBlinkElapsed_ = 0.0f;
+	Flash *flashPtr_{ nullptr };
+	Shake *shakePtr_{ nullptr };
 };

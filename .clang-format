@@ -40,3 +40,4 @@ BreakBeforeTernaryOperators: true
 AlignOperands: AlignAfterOperator
 SortIncludes: CaseSensitive
 BracedInitializerIndentWidth: 2
+AlignConsecutiveMacros: Consecutive

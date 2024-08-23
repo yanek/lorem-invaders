@@ -8,19 +8,18 @@ Lipsum::Lipsum(const GameMode mode)
 	switch (mode)
 	{
 	case GameMode::LOREM:
-		mWords = SplitString(res::lipsum, "\n");
+		words_ = splitString(res::lipsum, "\n");
 		break;
 	case GameMode::ENGLISH:
-		mWords = SplitString(res::english, "\n");
+		words_ = splitString(res::english, "\n");
 		break;
 	default:
 		E_PANIC("Invalid game mode");
 	}
-	mCursor = 0;
 }
 
-std::string Lipsum::Next()
+std::string Lipsum::next()
 {
-	const size_t i = GetRandomValue(0, mWords.size() - 1);
-	return mWords[i];
+	const size_t i = GetRandomValue(0, words_.size() - 1);
+	return words_[i];
 }

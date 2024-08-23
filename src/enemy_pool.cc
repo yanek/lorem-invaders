@@ -5,7 +5,6 @@
 #include <cassert>
 
 Enemy *EnemyPool::pool_[MAX_POOLED];
-bool EnemyPool::isReady_ = false;
 
 void EnemyPool::init()
 {
@@ -25,8 +24,6 @@ void EnemyPool::close()
 
 Enemy *EnemyPool::spawn(const std::string &value)
 {
-	assert(isReady_);
-
 	int id = -1;
 
 	// Find inactive enemy.
@@ -62,7 +59,6 @@ Enemy *EnemyPool::getEnemy(const int id)
 
 void EnemyPool::updateAll(const GameScreen *screen, const float delta)
 {
-	assert(_isReady);
 	for (auto *entity : pool_)
 	{
 		if (entity->mActive) entity->Update(screen, delta);
@@ -71,7 +67,6 @@ void EnemyPool::updateAll(const GameScreen *screen, const float delta)
 
 void EnemyPool::drawAll()
 {
-	assert(_isReady);
 	for (const auto *entity : pool_)
 	{
 		if (entity->mActive) entity->Draw();

@@ -2,7 +2,7 @@
 
 #include "audio.h"
 #include "colors.h"
-#include "event_dispatcher.h"
+#include "event_listener.h"
 #include "inputbox.h"
 #include "player.h"
 #include "resources.h"
@@ -54,27 +54,25 @@ void Enemy::Update(const GameScreen *screen, const float delta)
 	}
 
 	InputBox *inputBox = screen->getInputBox();
-	Player *player = screen->getPlayer();
 
 	mPosition.x += mVelocity.x * delta;
 	mPosition.y += mVelocity.y * delta;
 
-	const int matchval = inputBox->GetMatch(mValue);
+	const int matchval = inputBox->getMatch(mValue);
 	mHighlightOffset = matchval;
 
 	if (matchval >= mValue.length())
 	{
-		inputBox->Clear();
-		player->IncrementScore(mValue.length() * 10, mPosition.y);
+		inputBox->clear();
 		mIsDying = true;
 		mShake = new Shake(2, 100);
-		ScreenManager::getEventBus()->fire(EnemyKilledEvent(mValue.length(), mPosition.y));
 		Audio::play(res::SoundId::HIT);
+		ScreenManager::getEventBus()->fire(EnemyKilledEvent(mValue.length(), mPosition.y));
 	}
 
 	if (mPosition.y > Viewport::kGameHeight - 32)
 	{
-		player->Damage();
 		Despawn();
+		ScreenManager::getEventBus()->fire(PlayerHurtEvent{});
 	}
 }

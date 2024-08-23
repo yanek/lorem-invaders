@@ -7,22 +7,17 @@
 #include "viewport.h"
 #include <raylib.h>
 
-InputBox::InputBox(const Rectangle rect)
-	: mRect(rect), mValue{}, mLetterCount(0)
-{
-}
-
-void InputBox::Update(const float delta)
+void InputBox::update(const float delta)
 {
 	int key = GetCharPressed();
 
 	while (key > 0)
 	{
-		if ((key >= 32) && (key <= 125) && (mLetterCount < kMaxInputChars))
+		if ((key >= 32) && (key <= 125) && (letterCount_ < MAX_INPUT_CHARS))
 		{
-			mValue[mLetterCount] = static_cast<unsigned char>(key);
-			mValue[mLetterCount + 1] = '\0';
-			mLetterCount++;
+			value_[letterCount_] = static_cast<unsigned char>(key);
+			value_[letterCount_ + 1] = '\0';
+			letterCount_++;
 		};
 
 		key = GetCharPressed();
@@ -30,105 +25,115 @@ void InputBox::Update(const float delta)
 
 	if (IsKeyPressed(KEY_BACKSPACE) || IsKeyPressedRepeat(KEY_BACKSPACE))
 	{
-		mLetterCount--;
-		if (mLetterCount < 0)
-			mLetterCount = 0;
-		mValue[mLetterCount] = '\0';
+		letterCount_--;
+		if (letterCount_ < 0)
+			letterCount_ = 0;
+		value_[letterCount_] = '\0';
 	}
 
 	if (IsKeyPressed(KEY_ENTER))
 	{
-		mLetterCount = 0;
-		mValue[0] = '\0';
+		letterCount_ = 0;
+		value_[0] = '\0';
 	}
 
-	if (mFlash != nullptr)
+	if (flashPtr_ != nullptr)
 	{
-		mFlash->Update(delta);
-		if (mFlash->ShouldDie())
+		flashPtr_->Update(delta);
+		if (flashPtr_->ShouldDie())
 		{
-			delete mFlash;
-			mFlash = nullptr;
+			delete flashPtr_;
+			flashPtr_ = nullptr;
 		}
 	}
 
-	if (mShake != nullptr)
+	if (shakePtr_ != nullptr)
 	{
-		mShake->Update(delta);
-		if (mShake->ShouldDie())
+		shakePtr_->Update(delta);
+		if (shakePtr_->ShouldDie())
 		{
-			delete mShake;
-			mShake = nullptr;
+			delete shakePtr_;
+			shakePtr_ = nullptr;
 		}
 	}
 }
 
-void InputBox::Draw(const float delta)
+void InputBox::draw(const float delta)
 {
 	const auto fntsize = static_cast<float>(res::font16.baseSize);
-	const float txtlen = MeasureTextEx(res::font16, mValue, fntsize, 0).x;
+	const float txtlen = MeasureTextEx(res::font16, value_, fntsize, 0).x;
 
 	const Vector2 txtpos = {
 		Viewport::kGameWidth / 2.0f - txtlen / 2.0f,
-		mRect.y + 8.0f,
+		rect_.y + 8.0f,
 	};
 
 	constexpr auto fgclr = color::primary;
 	constexpr auto bgclr = color::black;
 
 	Rectangle rect{
-		mRect.x,
-		mRect.y,
-		mRect.width,
-		mRect.height
+		rect_.x,
+		rect_.y,
+		rect_.width,
+		rect_.height
 	};
 
-	if (mShake != nullptr)
+	if (shakePtr_ != nullptr)
 	{
-		rect.x += mShake->mOffset.x;
-		rect.y += mShake->mOffset.y;
+		rect.x += shakePtr_->mOffset.x;
+		rect.y += shakePtr_->mOffset.y;
 	};
 
 	const Color flashColor =
-		mFlash != nullptr
-			? mFlash->mColor
+		flashPtr_ != nullptr
+			? flashPtr_->mColor
 			: color::transparent;
 
 	DrawRectangleRec(rect, bgclr);
 	DrawRectangleLinesEx(rect, 2, fgclr);
-	DrawTextEx(res::font16, mValue, Vector2{ txtpos.x, txtpos.y }, fntsize, 0, fgclr);
+	DrawTextEx(res::font16, value_, Vector2{ txtpos.x, txtpos.y }, fntsize, 0, fgclr);
 	DrawRectangleRec(rect, flashColor);
 
 	cursorBlinkElapsed_ += delta;
-	if (cursorBlinkElapsed_ > CURSOR_BLINK_TIME && (mLetterCount < kMaxInputChars))
+	if (cursorBlinkElapsed_ > CURSOR_BLINK_TIME && (letterCount_ < MAX_INPUT_CHARS))
+	{
+		const int x = (int)(txtpos.x + txtlen);
+		const int y = (int)(txtpos.y);
+		DrawText("|", x, y, res::font16.baseSize, fgclr);
+	}
+
+	if (cursorBlinkElapsed_ > CURSOR_BLINK_TIME * 2.0f)
 	{
 		cursorBlinkElapsed_ = 0.0f;
-		const int x = static_cast<int>(txtpos.x + txtlen);
-		const int y = static_cast<int>(txtpos.y);
-		DrawText("|", x, y, res::font16.baseSize, fgclr);
 	}
 }
 
-int InputBox::GetMatch(const std::string &value) const
+int InputBox::getMatch(const std::string &value) const
 {
 	int matchCount = 0;
-	for (size_t i = 0; i < value.length() && i < mLetterCount; ++i)
+	for (size_t i = 0; i < value.length() && i < letterCount_; ++i)
 	{
-		if (value[i] == mValue[i])
-		{
+		if (value[i] == value_[i])
 			matchCount++;
-		}
 		else
-		{
 			return 0;
-		}
 	}
 
 	return matchCount;
 }
 
-void InputBox::Clear()
+void InputBox::clear()
 {
-	mValue[0] = '\0';
-	mLetterCount = 0;
+	value_[0] = '\0';
+	letterCount_ = 0;
+}
+
+void InputBox::notify(const Event &event)
+{
+	TraceLog(LOG_DEBUG, "NOTIFY: %s", event.getName());
+	if (event.getEventType() == EventType::PlayerHurt)
+	{
+		flashPtr_ = new Flash(color::accent, 30);
+		shakePtr_ = new Shake(4.0f, 100);
+	}
 }

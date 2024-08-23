@@ -7,5 +7,5 @@
 
 using String = std::string;
 
-std::vector<String> SplitString(const String &str, const String& delim);
-void DrawDebugData(); // Draw the framerate in the topleft corner using a custom BMfont
+std::vector<String> splitString(const String &str, const String& delim);
+void drawDebugData(); // Draw the framerate in the topleft corner using a custom BMfont

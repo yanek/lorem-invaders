@@ -63,14 +63,14 @@ void GameScreen::update()
 	}
 
 	EnemyPool::updateAll(this, delta);
-	inputBox_->Update(delta);
-	player_->Update(delta);
+	inputBox_->update(delta);
+	player_->update(delta);
 
 	spawnElapsed_ += delta;
 	if (spawnElapsed_ > spawnTimeout_)
 	{
 		spawnElapsed_ = 0.0f;
-		EnemyPool::spawn(lipsum_.Next());
+		EnemyPool::spawn(lipsum_.next());
 	}
 }
 
@@ -82,8 +82,8 @@ void GameScreen::draw()
 	DrawRectangle(0, 0, Viewport::kGameWidth, SCORE_ZONE_1, Fade(color::secondary, 0.2f));
 
 	EnemyPool::drawAll();
-	inputBox_->Draw(delta);
-	player_->DrawHud();
+	inputBox_->draw(delta);
+	player_->draw();
 
 	if (isPaused_)
 	{

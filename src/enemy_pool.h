@@ -15,5 +15,4 @@ public:
 private:
 	static constexpr int MAX_POOLED = 16;
 	static Enemy *pool_[MAX_POOLED];
-	static bool isReady_;
 };

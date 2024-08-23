@@ -16,42 +16,42 @@
 
 class InputBox;
 
-void Player::Update(const float delta)
+void Player::update(const float delta)
 {
-	if (mShake != nullptr)
+	if (shake_ != nullptr)
 	{
-		mShake->Update(delta);
-		if (mShake->ShouldDie())
+		shake_->Update(delta);
+		if (shake_->ShouldDie())
 		{
-			delete mShake;
-			mShake = nullptr;
+			delete shake_;
+			shake_ = nullptr;
 		}
 	}
 }
 
-void Player::DrawHud() const
+void Player::draw() const
 {
 	constexpr int size = 16;
 	constexpr int gap = 4;
 
 	DrawRectangle(0, 0, Viewport::kGameWidth, size + gap * 2, color::black);
 
-	for (int i = 0; i < mMaxHitpoints; i++)
+	for (int i = 0; i < maxHitpoints_; i++)
 	{
 		Rectangle dest = { static_cast<float>(gap + i * (size + gap)), gap, size, size };
-		const Rectangle src = i < mHitpoints ? Rectangle{ 16, 0, size, size } : Rectangle{ 0, 0, size, size };
+		const Rectangle src = i < hitpoints_ ? Rectangle{ 16, 0, size, size } : Rectangle{ 0, 0, size, size };
 
-		if (mShake != nullptr)
+		if (shake_ != nullptr)
 		{
-			dest.x += mShake->mOffset.x;
-			dest.y += mShake->mOffset.y;
+			dest.x += shake_->mOffset.x;
+			dest.y += shake_->mOffset.y;
 		}
 
 		DrawTexturePro(res::textureHeart, src, dest, { 0, 0 }, 0, WHITE);
 	}
 
 	const int fntsize = res::font16.baseSize;
-	const std::string score = TextFormat("%lu", mScore);
+	const std::string score = TextFormat("%lu", score_);
 	const Vector2 scoreDimensions = MeasureTextEx(res::font16, score.c_str(), fntsize, 0);
 
 	std::string scorePadding;
@@ -63,40 +63,37 @@ void Player::DrawHud() const
 	DrawTextEx(res::font16, "SCORE", { Viewport::kGameWidth - gap - 140, gap + 2 }, size, 0, color::secondary);
 }
 
-void Player::Damage()
+void Player::damage()
 {
-	mHitpoints = std::max(mHitpoints - 1, 0);
-
-	InputBox *inputbox = static_cast<GameScreen *>(ScreenManager::getCurrent())->getInputBox();
-	inputbox->mFlash = new Flash(color::accent, 30);
-	inputbox->mShake = new Shake(4.0f, 100);
-	mShake = new Shake(2.0f, 100);
+	hitpoints_ = std::max(hitpoints_ - 1, 0);
+	shake_ = new Shake(2.0f, 100);
 	Audio::play(res::SoundId::HURT);
 
-	if (IsDead())
+	if (isDead())
 	{
-		ScreenManager::changeToScreen(new GameOverScreen{ mScore });
+		ScreenManager::changeToScreen(new GameOverScreen{ score_ });
 	}
 }
 
-bool Player::IsDead() const
+void Player::notify(const Event &event)
 {
-	return mHitpoints == 0;
-}
-
-void Player::IncrementScore(const unsigned long baseValue, const float enemyVerticalPosition)
-{
-	float multiplier = 1.0f;
-
-	if (enemyVerticalPosition > GameScreen::SCORE_ZONE_1)
+	if (event.getEventType() == EventType::EnemyKilled)
 	{
-		multiplier = 1.5f;
-	}
-	else if (enemyVerticalPosition < GameScreen::SCORE_ZONE_2)
-	{
-		multiplier = 0.5f;
+		const auto ev = (const EnemyKilledEvent &)event;
+
+		const float score = ev.letterCount * 10;
+		float positionMultiplier = 1.0f;
+
+		if (ev.verticalPosition > GameScreen::SCORE_ZONE_1)
+			positionMultiplier = 1.5f;
+		else if (ev.verticalPosition < GameScreen::SCORE_ZONE_2)
+			positionMultiplier = 0.5f;
+
+		score_ += (unsigned long)(score * positionMultiplier);
 	}
 
-	const float fscore = static_cast<float>(baseValue) * multiplier;
-	mScore += static_cast<unsigned long>(fscore);
+	if (event.getEventType() == EventType::PlayerHurt)
+	{
+		damage();
+	}
 }

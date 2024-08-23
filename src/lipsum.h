@@ -9,9 +9,8 @@ class Lipsum
 {
 public:
 	explicit Lipsum(GameMode mode);
-	std::string Next();
+	std::string next();
 
 private:
-	std::vector<std::string> mWords;
-	int mCursor;
+	std::vector<std::string> words_;
 };
