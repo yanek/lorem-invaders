@@ -2,15 +2,18 @@
 
 #include "enemy.h"
 
-class EnemyPool final
+class EnemyPool
 {
 public:
-	size_t Spawn(const std::string &value);
-	Enemy &Get(size_t id);
-	size_t Count() const;
-	void UpdateAll(const GameScreen *screen, float delta);
-	void DrawAll() const;
+	static void init();
+	static void close();
+	static Enemy *spawn(const std::string &value);
+	static Enemy *getEnemy(int id);
+	static void updateAll(const GameScreen *screen, float delta);
+	static void drawAll();
 
 private:
-	std::vector<Enemy> mPool;
+	static constexpr int MAX_POOLED = 16;
+	static Enemy *pool_[MAX_POOLED];
+	static bool isReady_;
 };

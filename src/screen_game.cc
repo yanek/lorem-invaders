@@ -11,30 +11,18 @@
 #include "viewport.h"
 #include <raylib.h>
 
-GameScreen::GameScreen(const GameMode mode)
-	: Screen("game_screen"), mLipsum{ mode }, mMode{ mode }
+Player *GameScreen::getPlayer() const
 {
+	return player_;
 }
 
-Player *GameScreen::GetPlayer() const
+InputBox *GameScreen::getInputBox() const
 {
-	return mPlayer;
+	return inputBox_;
 }
 
-EnemyPool *GameScreen::GetEnemyPool() const
+void GameScreen::init()
 {
-	return mEnemyPool;
-}
-
-InputBox *GameScreen::GetInputBox() const
-{
-	return mInputBox;
-}
-
-void GameScreen::Init()
-{
-	mFramecounter = 0;
-
 	constexpr Rectangle rect{
 		5,
 		Viewport::kGameHeight - 32 - 5,
@@ -42,59 +30,62 @@ void GameScreen::Init()
 		32
 	};
 
-	mPlayer = new Player{};
-	mInputBox = new InputBox{ rect };
-	mEnemyPool = new EnemyPool{};
+	player_ = new Player{};
+	inputBox_ = new InputBox{ rect };
+	EnemyPool::init();
 }
 
-void GameScreen::Update()
+void GameScreen::update()
 {
 	const float delta = GetFrameTime();
 
 	if (IsKeyPressed(KEY_ESCAPE))
 	{
-		mIsPaused = !mIsPaused;
+		isPaused_ = !isPaused_;
 		Audio::play(res::SoundId::PAUSE);
 	}
 
-	if (mIsPaused)
+	if (isPaused_)
 	{
 		if (IsKeyPressed(KEY_R))
 		{
 			Audio::play(res::SoundId::CLICK);
-			screenManager.ChangeToScreen(new GameScreen{ mMode });
+			ScreenManager::changeToScreen(new GameScreen{ gameMode_ });
 		}
 
 		if (IsKeyPressed(KEY_B))
 		{
 			Audio::play(res::SoundId::CLICK);
-			screenManager.ChangeToScreen(new TitleScreen{});
+			ScreenManager::changeToScreen(new TitleScreen{});
 		}
 
 		return;
 	}
 
-	++mFramecounter;
-	mEnemyPool->UpdateAll(this, delta);
-	mInputBox->Update(delta);
-	mPlayer->Update(delta);
+	EnemyPool::updateAll(this, delta);
+	inputBox_->Update(delta);
+	player_->Update(delta);
 
-	if (mFramecounter % 120 == 0)
+	spawnElapsed_ += delta;
+	if (spawnElapsed_ > spawnTimeout_)
 	{
-		mEnemyPool->Spawn(mLipsum.Next());
+		spawnElapsed_ = 0.0f;
+		EnemyPool::spawn(lipsum_.Next());
 	}
 }
 
-void GameScreen::Draw()
+void GameScreen::draw()
 {
-	DrawRectangle(0, 0, Viewport::kGameWidth, kScoreZone2, Fade(color::secondary, 0.1f));
-	DrawRectangle(0, 0, Viewport::kGameWidth, kScoreZone1, Fade(color::secondary, 0.2f));
+	const float delta = GetFrameTime();
 
-	mEnemyPool->DrawAll();
-	mInputBox->Draw(mFramecounter);
-	mPlayer->DrawHud();
+	DrawRectangle(0, 0, Viewport::kGameWidth, SCORE_ZONE_2, Fade(color::secondary, 0.1f));
+	DrawRectangle(0, 0, Viewport::kGameWidth, SCORE_ZONE_1, Fade(color::secondary, 0.2f));
 
-	if (mIsPaused)
+	EnemyPool::drawAll();
+	inputBox_->Draw(delta);
+	player_->DrawHud();
+
+	if (isPaused_)
 	{
 		DrawRectangle(0, 0, Viewport::kGameWidth, Viewport::kGameHeight, Fade(color::black, 0.75f));
 		DrawRectangle(0, 200, Viewport::kGameWidth, 32, color::black);
@@ -109,14 +100,14 @@ void GameScreen::Draw()
 	}
 }
 
-void GameScreen::Unload()
+void GameScreen::unload()
 {
-	delete mPlayer;
-	delete mEnemyPool;
-	delete mInputBox;
+	EnemyPool::close();
+	delete player_;
+	delete inputBox_;
 }
 
-float GameScreen::GetDifficultyModifier() const
+float GameScreen::getDifficultyModifier() const
 {
-	return mDifficultyModifier;
+	return difficultyModifier_;
 }

@@ -2,7 +2,6 @@
 #include "colors.h"
 #include "resources.h"
 #include "screen.h"
-#include "screen_title.h"
 #include "utils.h"
 #include "viewport.h"
 #include <raylib.h>
@@ -12,8 +11,8 @@
 #endif
 
 static Viewport *viewport;
-static void UpdateDrawFrame();
-static bool ShouldClose();
+static void updateDrawFrame();
+static bool shouldClose();
 
 int main()
 {
@@ -28,36 +27,36 @@ int main()
 	SetExitKey(0);
 	SetTextLineSpacing(16);
 
-	screenManager.ChangeToScreen(new TitleScreen{});
+	ScreenManager::init();
 
 #ifdef __EMSCRIPTEN__
 	emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
 #else
 	SetTargetFPS(60);
 
-	while (!ShouldClose())
+	while (!shouldClose())
 	{
-		UpdateDrawFrame();
+		updateDrawFrame();
 	}
 #endif
 
 	Audio::close();
-	screenManager.Unload();
+	ScreenManager::close();
 	res::UnloadResources();
 
 	delete viewport;
 	return 0;
 }
 
-void UpdateDrawFrame()
+void updateDrawFrame()
 {
-	screenManager.Update();
+	ScreenManager::update();
 	Audio::update();
 
 	viewport->BeginDrawing();
 	{
 		ClearBackground(color::background);
-		screenManager.Draw();
+		ScreenManager::draw();
 	}
 	viewport->EndDrawing();
 
@@ -70,7 +69,9 @@ void UpdateDrawFrame()
 	EndDrawing();
 }
 
-bool ShouldClose()
+bool shouldClose()
 {
-	return WindowShouldClose() || ((screenManager.GetCurrent()->mName == "title_screen") && IsKeyPressed(KEY_ESCAPE));
+	const char* currentScreen = ScreenManager::getCurrent()->getName();
+	const bool escKeyPressed = (currentScreen == "title_screen") && IsKeyPressed(KEY_ESCAPE);
+	return WindowShouldClose() || escKeyPressed;
 }

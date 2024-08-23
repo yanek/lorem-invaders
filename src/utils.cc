@@ -19,8 +19,7 @@ std::vector<std::string> SplitString(const std::string &str, const std::string &
 
 void DrawDebugData()
 {
-	const int val = std::max(1, std::min(GetFPS(), 999));
-	const std::string fps = TextFormat("%02iFPS", val);
+	const std::string fps = TextFormat("%02iFPS", GetFPS());
 	const auto fntsize = static_cast<float>(res::font16.baseSize);
 	constexpr auto vpwidth = static_cast<float>(Viewport::kWindowWidth);
 	const float txtsize = MeasureTextEx(res::font16, fps.c_str(), fntsize, 0).x;

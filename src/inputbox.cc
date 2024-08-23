@@ -63,7 +63,7 @@ void InputBox::Update(const float delta)
 	}
 }
 
-void InputBox::Draw(const int framecount) const
+void InputBox::Draw(const float delta)
 {
 	const auto fntsize = static_cast<float>(res::font16.baseSize);
 	const float txtlen = MeasureTextEx(res::font16, mValue, fntsize, 0).x;
@@ -99,8 +99,10 @@ void InputBox::Draw(const int framecount) const
 	DrawTextEx(res::font16, mValue, Vector2{ txtpos.x, txtpos.y }, fntsize, 0, fgclr);
 	DrawRectangleRec(rect, flashColor);
 
-	if ((framecount / 20 % 2 == 0) && (mLetterCount < kMaxInputChars))
+	cursorBlinkElapsed_ += delta;
+	if (cursorBlinkElapsed_ > CURSOR_BLINK_TIME && (mLetterCount < kMaxInputChars))
 	{
+		cursorBlinkElapsed_ = 0.0f;
 		const int x = static_cast<int>(txtpos.x + txtlen);
 		const int y = static_cast<int>(txtpos.y);
 		DrawText("|", x, y, res::font16.baseSize, fgclr);

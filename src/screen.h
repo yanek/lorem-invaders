@@ -1,10 +1,6 @@
 #pragma once
 
-#include "inputbox.h"
-#include "lipsum.h"
-#include "player.h"
-#include <string>
-
+class EventBus;
 class EnemyPool;
 class TitleScreen;
 
@@ -12,14 +8,11 @@ class Screen
 {
 public:
 	virtual ~Screen() = default;
-	virtual void Init() = 0;
-	virtual void Update() = 0;
-	virtual void Draw() = 0;
-	virtual void Unload() = 0;
-	const std::string mName;
-
-protected:
-	explicit Screen(const std::string &name);
+	virtual void init() = 0;
+	virtual void update() = 0;
+	virtual void draw() = 0;
+	virtual void unload() = 0;
+	virtual const char *getName() const = 0;
 };
 
 enum class GameMode : int
@@ -32,14 +25,15 @@ enum class GameMode : int
 class ScreenManager
 {
 public:
-	void ChangeToScreen(Screen *newScreen);
-	void Update() const;
-	void Draw() const;
-	void Unload() const;
-	Screen *GetCurrent() const;
+	static void init();
+	static void close();
+	static void changeToScreen(Screen *newScreen);
+	static void update();
+	static void draw();
+	static Screen *getCurrent() { return current_; }
+	static EventBus *getEventBus() { return eventBus_; }
 
 private:
-	Screen *mCurrent{ nullptr };
+	static Screen *current_;
+	static EventBus *eventBus_;
 };
-
-extern ScreenManager screenManager;

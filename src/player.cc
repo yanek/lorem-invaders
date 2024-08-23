@@ -4,6 +4,7 @@
 #include "colors.h"
 #include "fx_flash.h"
 #include "fx_shake.h"
+#include "inputbox.h"
 #include "resources.h"
 #include "screen.h"
 #include "screen_game.h"
@@ -66,7 +67,7 @@ void Player::Damage()
 {
 	mHitpoints = std::max(mHitpoints - 1, 0);
 
-	InputBox *inputbox = static_cast<GameScreen *>(screenManager.GetCurrent())->GetInputBox();
+	InputBox *inputbox = static_cast<GameScreen *>(ScreenManager::getCurrent())->getInputBox();
 	inputbox->mFlash = new Flash(color::accent, 30);
 	inputbox->mShake = new Shake(4.0f, 100);
 	mShake = new Shake(2.0f, 100);
@@ -74,7 +75,7 @@ void Player::Damage()
 
 	if (IsDead())
 	{
-		screenManager.ChangeToScreen(new GameOverScreen{ mScore });
+		ScreenManager::changeToScreen(new GameOverScreen{ mScore });
 	}
 }
 
@@ -87,11 +88,11 @@ void Player::IncrementScore(const unsigned long baseValue, const float enemyVert
 {
 	float multiplier = 1.0f;
 
-	if (enemyVerticalPosition > GameScreen::kScoreZone1)
+	if (enemyVerticalPosition > GameScreen::SCORE_ZONE_1)
 	{
 		multiplier = 1.5f;
 	}
-	else if (enemyVerticalPosition < GameScreen::kScoreZone2)
+	else if (enemyVerticalPosition < GameScreen::SCORE_ZONE_2)
 	{
 		multiplier = 0.5f;
 	}

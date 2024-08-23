@@ -7,33 +7,28 @@
 #include "storage.h"
 #include "viewport.h"
 
-GameOverScreen::GameOverScreen(const unsigned long score)
-	: Screen("gameover_screen"), mScore(score)
-{
-}
-
-void GameOverScreen::Init()
+void GameOverScreen::init()
 {
 	Audio::play(res::SoundId::GAME_OVER);
 	const int hiscore = LoadStorageData(storage::StorageData::HISCORE);
-	if (mScore > hiscore)
+	if (score_ > hiscore)
 	{
-		SaveStorageData(storage::StorageData::HISCORE, mScore);
+		SaveStorageData(storage::StorageData::HISCORE, score_);
 	}
 }
 
-void GameOverScreen::Update()
+void GameOverScreen::update()
 {
 	if (IsKeyPressed(KEY_ENTER))
 	{
-		screenManager.ChangeToScreen(new TitleScreen);
+		ScreenManager::changeToScreen(new TitleScreen);
 	}
 }
 
-void GameOverScreen::Draw()
+void GameOverScreen::draw()
 {
 	const auto fntsize = static_cast<float>(res::font16.baseSize);
-	const auto score = TextFormat("SCORE: %010d", mScore);
+	const auto score = TextFormat("SCORE: %010d", score_);
 	const Vector2 scoresize = MeasureTextEx(res::font16, score, fntsize * 2, 0);
 	const float scoreposX = Viewport::kGameWidth / 2.0f - scoresize.x / 2.0f;
 	DrawTextEx(res::font16, score, Vector2{ scoreposX, 96 }, fntsize * 2, 0, color::primary);
@@ -49,6 +44,6 @@ void GameOverScreen::Draw()
 	DrawTextEx(res::font16, action, Vector2{ actionposX, 134 }, fntsize, 0, color::secondary);
 }
 
-void GameOverScreen::Unload()
+void GameOverScreen::unload()
 {
 }

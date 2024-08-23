@@ -1,5 +1,10 @@
 #pragma once
-#include "messages.h"
+#include "resources.h"
+
+struct PlaySoundMessage
+{
+	res::SoundId soundId;
+};
 
 class Audio
 {

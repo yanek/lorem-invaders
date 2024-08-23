@@ -1,43 +1,47 @@
 #include "screen.h"
 
-ScreenManager screenManager{};
+#include "event_dispatcher.h"
+#include "screen_title.h"
+#include <raylib.h>
 
-Screen::Screen(const std::string &name)
-	: mName(name)
+Screen *ScreenManager::current_ = nullptr;
+EventBus *ScreenManager::eventBus_ = nullptr;
+
+void ScreenManager::init()
 {
+	eventBus_ = new EventBus{};
+	changeToScreen(new TitleScreen{});
 }
 
-void ScreenManager::ChangeToScreen(Screen *newScreen)
+void ScreenManager::changeToScreen(Screen *newScreen)
 {
-	if (mCurrent != nullptr)
+	if (current_ != nullptr)
 	{
-		TraceLog(LOG_INFO, "Unloading screen %s", mCurrent->mName.c_str());
-		mCurrent->Unload();
-		delete mCurrent;
+		TraceLog(LOG_INFO, "Unloading screen %s", current_->getName());
+		current_->unload();
+		delete current_;
 	}
 
-	mCurrent = newScreen;
-	mCurrent->Init();
-	TraceLog(LOG_INFO, "Loading screen %s", mCurrent->mName.c_str());
+	current_ = newScreen;
+	current_->init();
+	TraceLog(LOG_INFO, "Loading screen %s", current_->getName());
 }
 
-void ScreenManager::Update() const
+void ScreenManager::update()
 {
-	mCurrent->Update();
+	current_->update();
 }
 
-void ScreenManager::Draw() const
+void ScreenManager::draw()
 {
-	mCurrent->Draw();
+	current_->draw();
 }
 
-void ScreenManager::Unload() const
+void ScreenManager::close()
 {
-	mCurrent->Unload();
-	delete mCurrent;
-}
-
-Screen *ScreenManager::GetCurrent() const
-{
-	return mCurrent;
+	current_->unload();
+	delete current_;
+	current_ = nullptr;
+	delete eventBus_;
+	eventBus_ = nullptr;
 }

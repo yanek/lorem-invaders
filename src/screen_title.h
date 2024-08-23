@@ -6,12 +6,13 @@ class TitleScreen final : public Screen
 {
 public:
 	TitleScreen();
-	void Init() override;
-	void Update() override;
-	void Draw() override;
-	void Unload() override;
+	void init() override;
+	void update() override;
+	void draw() override;
+	void unload() override;
+	const char *getName() const override { return "title_screen"; }
 
 private:
-	GameMode mMode{ GameMode::LOREM };
-	int mHiscore;
+	GameMode mode_{ GameMode::LOREM };
+	int hiscore_;
 };

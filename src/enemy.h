@@ -4,6 +4,8 @@
 #include <iostream>
 #include <raylib.h>
 
+class Shake;
+
 class Enemy final
 {
 public:

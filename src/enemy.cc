@@ -1,12 +1,13 @@
 #include "enemy.h"
-#include "colors.h"
 
 #include "audio.h"
+#include "colors.h"
+#include "event_dispatcher.h"
 #include "inputbox.h"
+#include "player.h"
 #include "resources.h"
 #include "viewport.h"
 #include <raylib.h>
-#include <vector>
 
 void Enemy::Despawn()
 {
@@ -52,8 +53,8 @@ void Enemy::Update(const GameScreen *screen, const float delta)
 		return;
 	}
 
-	InputBox *inputBox = screen->GetInputBox();
-	Player *player = screen->GetPlayer();
+	InputBox *inputBox = screen->getInputBox();
+	Player *player = screen->getPlayer();
 
 	mPosition.x += mVelocity.x * delta;
 	mPosition.y += mVelocity.y * delta;
@@ -67,6 +68,7 @@ void Enemy::Update(const GameScreen *screen, const float delta)
 		player->IncrementScore(mValue.length() * 10, mPosition.y);
 		mIsDying = true;
 		mShake = new Shake(2, 100);
+		ScreenManager::getEventBus()->fire(EnemyKilledEvent(mValue.length(), mPosition.y));
 		Audio::play(res::SoundId::HIT);
 	}
 

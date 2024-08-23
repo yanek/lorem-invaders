@@ -9,37 +9,36 @@
 #include <raylib.h>
 
 TitleScreen::TitleScreen()
-	: Screen("title_screen")
 {
-	mMode = static_cast<GameMode>(LoadStorageData(storage::StorageData::MODE));
-	mHiscore = LoadStorageData(storage::StorageData::HISCORE);
+	mode_ = (GameMode)LoadStorageData(storage::StorageData::MODE);
+	hiscore_ = LoadStorageData(storage::StorageData::HISCORE);
 }
 
-void TitleScreen::Init()
+void TitleScreen::init()
 {
 }
 
-void TitleScreen::Update()
+void TitleScreen::update()
 {
 	if (IsKeyPressed(KEY_ENTER))
 	{
 		Audio::play(res::SoundId::CLICK);
-		screenManager.ChangeToScreen(new GameScreen{ mMode });
+		ScreenManager::changeToScreen(new GameScreen{ mode_ });
 	}
 
 	if (IsKeyPressed(KEY_M))
 	{
 		Audio::play(res::SoundId::CLICK);
-		mMode = static_cast<GameMode>((static_cast<int>(mMode) + 1) % static_cast<int>(GameMode::MODE_COUNT));
-		SaveStorageData(storage::StorageData::MODE, static_cast<int>(mMode));
+		mode_ = static_cast<GameMode>(((int)mode_ + 1) % (int)GameMode::MODE_COUNT);
+		SaveStorageData(storage::StorageData::MODE, (int)mode_);
 	}
 }
 
-void TitleScreen::Unload()
+void TitleScreen::unload()
 {
 }
 
-void TitleScreen::Draw()
+void TitleScreen::draw()
 {
 	const auto fntsize = static_cast<float>(res::font16.baseSize);
 	constexpr float halfwidth = Viewport::kGameWidth / 2.0f;
@@ -61,12 +60,12 @@ void TitleScreen::Draw()
 	const Vector2 hiscoresize = MeasureTextEx(res::font16, hiscorelabel, fntsize, 0);
 	DrawTextEx(res::font16, hiscorelabel, Vector2{ halfwidth - hiscoresize.x / 2.0f, 400 }, fntsize, 0, color::secondary);
 
-	const auto hiscoreval = TextFormat("%d", mHiscore);
+	const auto hiscoreval = TextFormat("%d", hiscore_);
 	const Vector2 hiscorevalsize = MeasureTextEx(res::font16, hiscoreval, fntsize, 0);
 	DrawTextEx(res::font16, hiscoreval, Vector2{ halfwidth - hiscorevalsize.x / 2.0f, 416 }, fntsize, 0, color::primary);
 
 	std::string m;
-	switch (mMode)
+	switch (mode_)
 	{
 	case GameMode::ENGLISH:
 		m = "ENGLISH";
