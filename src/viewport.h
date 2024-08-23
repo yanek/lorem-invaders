@@ -6,19 +6,19 @@ class Viewport
 public:
 	Viewport();
 	~Viewport();
-	void InitRenderTexture();
-	void BeginDrawing() const;
-	void EndDrawing() const;
-	void DrawRenderTexture() const;
+	void initRenderTexture();
+	void beginDrawing() const;
+	void endDrawing() const;
+	void drawRenderTexture() const;
 
-	static constexpr int kGameWidth = 512;
-	static constexpr int kGameHeight = 448;
-	static constexpr int kWindowWidth = 1024;
-	static constexpr int kWindowHeight = 896;
+	static constexpr int GAME_WIDTH = 512;
+	static constexpr int GAME_HEIGHT = 448;
+	static constexpr int WINDOW_WIDTH = 1024;
+	static constexpr int WINDOW_HEIGHT = 896;
 
 private:
-	float mVirtualRatio = 0.0f;
-	RenderTexture2D mRenderTex = {};
-	Rectangle mSourceRec = {};
-	Rectangle mDestRec = {};
+	float virtualRatio_ = 0.0f;
+	RenderTexture2D renderTexture_ = {};
+	Rectangle sourceRect = {};
+	Rectangle destRect = {};
 };

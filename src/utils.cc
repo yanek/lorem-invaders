@@ -10,7 +10,7 @@
 std::vector<std::string> splitString(const std::string &str, const std::string &delim)
 {
 	// passing -1 as the submatch index parameter performs splitting
-	std::regex re(delim);
+	const std::regex re(delim);
 	std::sregex_token_iterator
 		first{ str.begin(), str.end(), re, -1 },
 		last;
@@ -21,7 +21,7 @@ void drawDebugData()
 {
 	const std::string fps = TextFormat("%02iFPS", GetFPS());
 	const auto fntsize = static_cast<float>(res::font16.baseSize);
-	constexpr auto vpwidth = static_cast<float>(Viewport::kWindowWidth);
+	constexpr auto vpwidth = static_cast<float>(Viewport::WINDOW_WIDTH);
 	const float txtsize = MeasureTextEx(res::font16, fps.c_str(), fntsize, 0).x;
 
 	const Vector2 pos{ vpwidth / 2 - txtsize / 2, 1 };

@@ -25,8 +25,8 @@ void GameScreen::init()
 {
 	constexpr Rectangle rect{
 		5,
-		Viewport::kGameHeight - 32 - 5,
-		Viewport::kGameWidth - 10,
+		Viewport::GAME_HEIGHT - 32 - 5,
+		Viewport::GAME_WIDTH - 10,
 		32
 	};
 
@@ -78,8 +78,8 @@ void GameScreen::draw()
 {
 	const float delta = GetFrameTime();
 
-	DrawRectangle(0, 0, Viewport::kGameWidth, SCORE_ZONE_2, Fade(color::secondary, 0.1f));
-	DrawRectangle(0, 0, Viewport::kGameWidth, SCORE_ZONE_1, Fade(color::secondary, 0.2f));
+	DrawRectangle(0, 0, Viewport::GAME_WIDTH, SCORE_ZONE_2, Fade(color::secondary, 0.1f));
+	DrawRectangle(0, 0, Viewport::GAME_WIDTH, SCORE_ZONE_1, Fade(color::secondary, 0.2f));
 
 	EnemyPool::drawAll();
 	inputBox_->draw(delta);
@@ -87,16 +87,16 @@ void GameScreen::draw()
 
 	if (isPaused_)
 	{
-		DrawRectangle(0, 0, Viewport::kGameWidth, Viewport::kGameHeight, Fade(color::black, 0.75f));
-		DrawRectangle(0, 200, Viewport::kGameWidth, 32, color::black);
+		DrawRectangle(0, 0, Viewport::GAME_WIDTH, Viewport::GAME_HEIGHT, Fade(color::black, 0.75f));
+		DrawRectangle(0, 200, Viewport::GAME_WIDTH, 32, color::black);
 
 		const auto paused = "PAUSE";
 		const float psize = MeasureTextEx(res::font16, paused, 16, 0).x;
 		const auto actions = "[Esc] Resume, [R] Restart, [B] Back to main menu";
 		const float asize = MeasureTextEx(res::font16, actions, 16, 0).x;
 
-		DrawTextEx(res::font16, paused, Vector2{ Viewport::kGameWidth / 2.0f - psize / 2.0f, 209 }, res::font16.baseSize, 0, color::white);
-		DrawTextEx(res::font16, actions, Vector2{ Viewport::kGameWidth / 2.0f - asize / 2.0f, 240 }, res::font16.baseSize, 0, color::secondary);
+		DrawTextEx(res::font16, paused, Vector2{ Viewport::GAME_WIDTH / 2.0f - psize / 2.0f, 209 }, res::font16.baseSize, 0, color::white);
+		DrawTextEx(res::font16, actions, Vector2{ Viewport::GAME_WIDTH / 2.0f - asize / 2.0f, 240 }, res::font16.baseSize, 0, color::secondary);
 	}
 }
 

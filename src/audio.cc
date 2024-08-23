@@ -37,7 +37,7 @@ void Audio::update()
 	if (head_ == tail_) return;
 
 	TraceLog(LOG_TRACE, "Playing sound: %d", pending_[head_].soundId);
-	const Sound sound = GetSound(pending_[head_].soundId);
+	const Sound sound = getSound(pending_[head_].soundId);
 	PlaySound(sound);
 
 	head_ = (head_ + 1) % MAX_PENDING;

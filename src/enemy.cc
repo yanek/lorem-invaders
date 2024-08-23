@@ -9,70 +9,69 @@
 #include "viewport.h"
 #include <raylib.h>
 
-void Enemy::Despawn()
+void Enemy::despawn()
 {
-	mActive = false;
-	mIsDying = false;
-	mHighlightOffset = 0;
-	mAlpha = 255;
-	mPosition = Vector2{ 0, 0 };
-	mVelocity = Vector2{ 0, 0 };
+	isActive_ = false;
+	isDying_ = false;
+	highlightOffset_ = 0;
+	position_ = Vector2{ 0, 0 };
+	velocity_ = Vector2{ 0, 0 };
 }
 
-void Enemy::Draw() const
+void Enemy::draw() const
 {
 	const auto fntsize = static_cast<float>(res::font16.baseSize);
 
-	Vector2 pos = mPosition;
-	if (mShake != nullptr)
+	Vector2 pos = position_;
+	if (shake_ != nullptr)
 	{
-		pos.x += mShake->mOffset.x;
-		pos.y += mShake->mOffset.y;
+		pos.x += shake_->getOffset().x;
+		pos.y += shake_->getOffset().y;
 	}
 
-	DrawTextEx(res::font16, mValue.c_str(), pos, fntsize, 0, color::primary);
-	DrawTextEx(res::font16, mValue.substr(0, mHighlightOffset).c_str(), pos, fntsize, 0, color::accent);
+	DrawTextEx(res::font16, value_.c_str(), pos, fntsize, 0, color::primary);
+	DrawTextEx(res::font16, value_.substr(0, highlightOffset_).c_str(), pos, fntsize, 0, color::accent);
 }
 
-void Enemy::Update(const GameScreen *screen, const float delta)
+void Enemy::update(const GameScreen *screen, const float delta)
 {
 	// If the entity is shaking, it must be dying.
-	if (mShake != nullptr)
+	if (shake_ != nullptr)
 	{
-		mShake->Update(delta);
-		if (mShake->ShouldDie())
+		shake_->update(delta);
+		if (shake_->shouldDie())
 		{
-			delete mShake;
-			mShake = nullptr;
-			Despawn(); // Despawn the entity after the shake animation.
+			delete shake_;
+			shake_ = nullptr;
+			despawn(); // Despawn the entity after the shake animation.
 		}
 	}
 
-	if (mIsDying)
+	if (isDying_)
 	{
 		return;
 	}
 
 	InputBox *inputBox = screen->getInputBox();
 
-	mPosition.x += mVelocity.x * delta;
-	mPosition.y += mVelocity.y * delta;
+	position_.x += velocity_.x * delta;
+	position_.y += velocity_.y * delta;
 
-	const int matchval = inputBox->getMatch(mValue);
-	mHighlightOffset = matchval;
+	const int matchval = inputBox->getMatch(value_);
+	highlightOffset_ = matchval;
 
-	if (matchval >= mValue.length())
+	if (matchval >= value_.length())
 	{
 		inputBox->clear();
-		mIsDying = true;
-		mShake = new Shake(2, 100);
+		isDying_ = true;
+		shake_ = new Shake(2, 100);
 		Audio::play(res::SoundId::HIT);
-		ScreenManager::getEventBus()->fire(EnemyKilledEvent(mValue.length(), mPosition.y));
+		ScreenManager::getEventBus()->fire(EnemyKilledEvent(value_.length(), position_.y));
 	}
 
-	if (mPosition.y > Viewport::kGameHeight - 32)
+	if (position_.y > Viewport::GAME_HEIGHT - 32)
 	{
-		Despawn();
+		despawn();
 		ScreenManager::getEventBus()->fire(PlayerHurtEvent{});
 	}
 }

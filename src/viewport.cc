@@ -5,48 +5,48 @@
 
 Viewport::Viewport()
 {
-	InitWindow(kWindowWidth, kWindowHeight, "Lorem Invader");
+	InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Lorem Invader");
 }
 
 Viewport::~Viewport()
 {
-	UnloadRenderTexture(mRenderTex);
+	UnloadRenderTexture(renderTexture_);
 	CloseWindow();
 }
 
-void Viewport::InitRenderTexture()
+void Viewport::initRenderTexture()
 {
-	mRenderTex = LoadRenderTexture(kGameWidth, kGameHeight);
-	mVirtualRatio = static_cast<float>(kWindowWidth) / static_cast<float>(kGameWidth);
+	renderTexture_ = LoadRenderTexture(GAME_WIDTH, GAME_HEIGHT);
+	virtualRatio_ = static_cast<float>(WINDOW_WIDTH) / static_cast<float>(GAME_WIDTH);
 
-	const float srcw = static_cast<float>(mRenderTex.texture.width);
-	const float srch = static_cast<float>(-mRenderTex.texture.height);
-	mSourceRec = Rectangle{ 0.0f, 0.0f, srcw, srch };
+	const float srcw = static_cast<float>(renderTexture_.texture.width);
+	const float srch = static_cast<float>(-renderTexture_.texture.height);
+	sourceRect = Rectangle{ 0.0f, 0.0f, srcw, srch };
 
-	const float scale = std::min(GetScreenWidth() / kGameWidth, GetScreenHeight() / kGameHeight);
-	const float dstw = static_cast<float>(kGameWidth) * scale;
-	const float dsth = static_cast<float>(kGameHeight) * scale;
+	const float scale = std::min(GetScreenWidth() / GAME_WIDTH, GetScreenHeight() / GAME_HEIGHT);
+	const float dstw = static_cast<float>(GAME_WIDTH) * scale;
+	const float dsth = static_cast<float>(GAME_HEIGHT) * scale;
 
-	this->mDestRec = Rectangle{
-		(GetScreenWidth() - (static_cast<float>(kGameWidth) * scale)) * 0.5f,
-		(GetScreenHeight() - (static_cast<float>(kGameHeight) * scale)) * 0.5f,
+	this->destRect = Rectangle{
+		(GetScreenWidth() - (static_cast<float>(GAME_WIDTH) * scale)) * 0.5f,
+		(GetScreenHeight() - (static_cast<float>(GAME_HEIGHT) * scale)) * 0.5f,
 		dstw,
 		dsth
 	};
 }
 
-void Viewport::BeginDrawing() const
+void Viewport::beginDrawing() const
 {
-	BeginTextureMode(mRenderTex);
+	BeginTextureMode(renderTexture_);
 }
 
-void Viewport::EndDrawing() const
+void Viewport::endDrawing() const
 {
 	EndTextureMode();
 }
 
-void Viewport::DrawRenderTexture() const
+void Viewport::drawRenderTexture() const
 {
 	constexpr Vector2 origin{ 0.0f, 0.0f };
-	DrawTexturePro(mRenderTex.texture, mSourceRec, mDestRec, origin, 0.0f, WHITE);
+	DrawTexturePro(renderTexture_.texture, sourceRect, destRect, origin, 0.0f, WHITE);
 }

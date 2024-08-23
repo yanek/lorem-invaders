@@ -18,7 +18,7 @@ void InputBox::update(const float delta)
 			value_[letterCount_] = static_cast<unsigned char>(key);
 			value_[letterCount_ + 1] = '\0';
 			letterCount_++;
-		};
+		}
 
 		key = GetCharPressed();
 	}
@@ -39,8 +39,8 @@ void InputBox::update(const float delta)
 
 	if (flashPtr_ != nullptr)
 	{
-		flashPtr_->Update(delta);
-		if (flashPtr_->ShouldDie())
+		flashPtr_->update(delta);
+		if (flashPtr_->shouldDie())
 		{
 			delete flashPtr_;
 			flashPtr_ = nullptr;
@@ -49,8 +49,8 @@ void InputBox::update(const float delta)
 
 	if (shakePtr_ != nullptr)
 	{
-		shakePtr_->Update(delta);
-		if (shakePtr_->ShouldDie())
+		shakePtr_->update(delta);
+		if (shakePtr_->shouldDie())
 		{
 			delete shakePtr_;
 			shakePtr_ = nullptr;
@@ -64,7 +64,7 @@ void InputBox::draw(const float delta)
 	const float txtlen = MeasureTextEx(res::font16, value_, fntsize, 0).x;
 
 	const Vector2 txtpos = {
-		Viewport::kGameWidth / 2.0f - txtlen / 2.0f,
+		Viewport::GAME_WIDTH / 2.0f - txtlen / 2.0f,
 		rect_.y + 8.0f,
 	};
 
@@ -80,13 +80,13 @@ void InputBox::draw(const float delta)
 
 	if (shakePtr_ != nullptr)
 	{
-		rect.x += shakePtr_->mOffset.x;
-		rect.y += shakePtr_->mOffset.y;
-	};
+		rect.x += shakePtr_->getOffset().x;
+		rect.y += shakePtr_->getOffset().y;
+	}
 
 	const Color flashColor =
 		flashPtr_ != nullptr
-			? flashPtr_->mColor
+			? flashPtr_->color_
 			: color::transparent;
 
 	DrawRectangleRec(rect, bgclr);

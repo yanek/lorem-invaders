@@ -12,7 +12,7 @@ class InputBox final : EventListener
 {
 public:
 	explicit InputBox(const Rectangle rect)
-		: rect_(rect) { EVENT_SUBSCRIBE };
+		: rect_(rect) { EVENT_SUBSCRIBE }
 	~InputBox() override { EVENT_UNSUBSCRIBE }
 
 	void update(float delta);

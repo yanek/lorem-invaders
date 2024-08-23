@@ -21,9 +21,9 @@ public:
 	float getDifficultyModifier() const;
 	Player *getPlayer() const;
 	InputBox *getInputBox() const;
-	const char *getName() const override { return "game_screen"; };
+	const char *getName() const override { return "game_screen"; }
 
-	static constexpr unsigned int SCORE_ZONE_1 = Viewport::kGameHeight / 3 + 32;
+	static constexpr unsigned int SCORE_ZONE_1 = Viewport::GAME_HEIGHT / 3 + 32;
 	static constexpr unsigned int SCORE_ZONE_2 = SCORE_ZONE_1 + SCORE_ZONE_1 - 32;
 
 private:

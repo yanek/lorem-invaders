@@ -2,7 +2,6 @@
 
 #include "audio.h"
 #include "colors.h"
-#include "fx_flash.h"
 #include "fx_shake.h"
 #include "inputbox.h"
 #include "resources.h"
@@ -20,8 +19,8 @@ void Player::update(const float delta)
 {
 	if (shake_ != nullptr)
 	{
-		shake_->Update(delta);
-		if (shake_->ShouldDie())
+		shake_->update(delta);
+		if (shake_->shouldDie())
 		{
 			delete shake_;
 			shake_ = nullptr;
@@ -34,7 +33,7 @@ void Player::draw() const
 	constexpr int size = 16;
 	constexpr int gap = 4;
 
-	DrawRectangle(0, 0, Viewport::kGameWidth, size + gap * 2, color::black);
+	DrawRectangle(0, 0, Viewport::GAME_WIDTH, size + gap * 2, color::black);
 
 	for (int i = 0; i < maxHitpoints_; i++)
 	{
@@ -43,8 +42,8 @@ void Player::draw() const
 
 		if (shake_ != nullptr)
 		{
-			dest.x += shake_->mOffset.x;
-			dest.y += shake_->mOffset.y;
+			dest.x += shake_->getOffset().x;
+			dest.y += shake_->getOffset().y;
 		}
 
 		DrawTexturePro(res::textureHeart, src, dest, { 0, 0 }, 0, WHITE);
@@ -58,9 +57,9 @@ void Player::draw() const
 	for (int i = 0; i < 10 - score.length(); i++)
 		scorePadding += "0";
 
-	DrawTextEx(res::font16, scorePadding.c_str(), { Viewport::kGameWidth - 90 - gap, gap + 2 }, size, 0, color::background);
-	DrawTextEx(res::font16, score.c_str(), { Viewport::kGameWidth - scoreDimensions.x - gap, gap + 2 }, size, 0, color::primary);
-	DrawTextEx(res::font16, "SCORE", { Viewport::kGameWidth - gap - 140, gap + 2 }, size, 0, color::secondary);
+	DrawTextEx(res::font16, scorePadding.c_str(), { Viewport::GAME_WIDTH - 90 - gap, gap + 2 }, size, 0, color::background);
+	DrawTextEx(res::font16, score.c_str(), { Viewport::GAME_WIDTH - scoreDimensions.x - gap, gap + 2 }, size, 0, color::primary);
+	DrawTextEx(res::font16, "SCORE", { Viewport::GAME_WIDTH - gap - 140, gap + 2 }, size, 0, color::secondary);
 }
 
 void Player::damage()

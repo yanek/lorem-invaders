@@ -8,21 +8,20 @@ class Shake;
 
 class Enemy final
 {
-public:
-	void Update(const GameScreen *screen, float delta);
-	void Draw() const;
-	void Despawn();
+	friend class EnemyPool;
 
-	Vector2 mPosition = { 0, 0 };
-	Vector2 mVelocity = { 0, 0 };
-	bool mActive = false;
+public:
+	void update(const GameScreen *screen, float delta);
+	void draw() const;
+	void despawn();
 
 private:
-	size_t mId = 0;
-	std::string mValue;
-	size_t mHighlightOffset;
-	unsigned char mAlpha = 255;
-	bool mIsDying = false;
-	Shake *mShake;
-	friend class EnemyPool;
+	size_t id_ = 0;
+	Vector2 position_ = { 0, 0 };
+	Vector2 velocity_ = { 0, 0 };
+	std::string value_;
+	size_t highlightOffset_;
+	bool isActive_ = false;
+	bool isDying_ = false;
+	Shake *shake_;
 };

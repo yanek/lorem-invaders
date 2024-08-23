@@ -16,9 +16,9 @@ namespace res
 	extern Sound soundPause;
 	extern Sound soundGameOver;
 
-	void LoadResources();
-	void UnloadResources();
-	const Sound &GetSound(SoundId id);
+	void loadResources();
+	void unloadResources();
+	const Sound &getSound(SoundId id);
 
 	enum class SoundId : unsigned char
 	{

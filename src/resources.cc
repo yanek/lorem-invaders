@@ -13,7 +13,7 @@ Sound res::soundHurt;
 Sound res::soundPause;
 Sound res::soundGameOver;
 
-void res::LoadResources()
+void res::loadResources()
 {
 	font16 = LoadFont("resources/ibm-16.fnt");
 	textureHeart = LoadTexture("resources/heart.png");
@@ -27,7 +27,7 @@ void res::LoadResources()
 	soundGameOver = LoadSound("resources/gameover.wav");
 }
 
-void res::UnloadResources()
+void res::unloadResources()
 {
 	UnloadFont(font16);
 	UnloadFileText(lipsum);
@@ -41,7 +41,7 @@ void res::UnloadResources()
 	UnloadSound(soundGameOver);
 }
 
-const Sound &res::GetSound(const SoundId id)
+const Sound &res::getSound(const SoundId id)
 {
 	switch (id)
 	{

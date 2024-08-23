@@ -4,11 +4,11 @@ class FxBase
 {
 public:
 	virtual ~FxBase() = default;
-	virtual void Update(float delta) = 0;
-	bool ShouldDie() const;
+	virtual void update(float delta) = 0;
+	bool shouldDie() const;
 
 protected:
 	explicit FxBase(int durationMilliseconds);
-	float mDuration = 0;
-	float mElapsed = 0;
+	float duration_ = 0;
+	float elapsed_ = 0;
 };

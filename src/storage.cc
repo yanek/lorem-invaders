@@ -4,7 +4,7 @@
 
 const std::string storageFile = "save.dat";
 
-bool storage::SaveStorageData(StorageData pos, const int value)
+bool storage::saveStorageData(StorageData pos, const int value)
 {
 	bool success = false;
 	int dataSize = 0;
@@ -71,7 +71,7 @@ bool storage::SaveStorageData(StorageData pos, const int value)
 	return success;
 }
 
-int storage::LoadStorageData(StorageData pos)
+int storage::loadStorageData(StorageData pos)
 {
 	int value = 0;
 	int dataSize = 0;

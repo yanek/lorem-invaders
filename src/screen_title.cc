@@ -10,8 +10,8 @@
 
 TitleScreen::TitleScreen()
 {
-	mode_ = (GameMode)LoadStorageData(storage::StorageData::MODE);
-	hiscore_ = LoadStorageData(storage::StorageData::HISCORE);
+	mode_ = (GameMode)loadStorageData(storage::StorageData::MODE);
+	hiscore_ = loadStorageData(storage::StorageData::HISCORE);
 }
 
 void TitleScreen::init()
@@ -30,7 +30,7 @@ void TitleScreen::update()
 	{
 		Audio::play(res::SoundId::CLICK);
 		mode_ = static_cast<GameMode>(((int)mode_ + 1) % (int)GameMode::MODE_COUNT);
-		SaveStorageData(storage::StorageData::MODE, (int)mode_);
+		saveStorageData(storage::StorageData::MODE, (int)mode_);
 	}
 }
 
@@ -41,7 +41,7 @@ void TitleScreen::unload()
 void TitleScreen::draw()
 {
 	const auto fntsize = static_cast<float>(res::font16.baseSize);
-	constexpr float halfwidth = Viewport::kGameWidth / 2.0f;
+	constexpr float halfwidth = Viewport::GAME_WIDTH / 2.0f;
 
 	const Texture2D *banner = &res::textureBanner;
 	DrawTexture(*banner, halfwidth - banner->width / 2.0f, 32, color::white);
@@ -76,6 +76,6 @@ void TitleScreen::draw()
 
 	const auto mode = TextFormat("- %s MODE - ", m.c_str());
 	const Vector2 modesize = MeasureTextEx(res::font16, mode, fntsize, 0);
-	const float modeposX = Viewport::kGameWidth / 2.0f - modesize.x / 2.0f;
+	const float modeposX = Viewport::GAME_WIDTH / 2.0f - modesize.x / 2.0f;
 	DrawTextEx(res::font16, mode, Vector2{ modeposX, 264 }, fntsize, 0, color::primary);
 }

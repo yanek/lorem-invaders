@@ -5,7 +5,7 @@
 class GameOverScreen final : public Screen
 {
 public:
-	explicit GameOverScreen(const unsigned long score) : score_{ score } {};
+	explicit GameOverScreen(const unsigned long score) : score_{ score } {}
 	void init() override;
 	void update() override;
 	void draw() override;

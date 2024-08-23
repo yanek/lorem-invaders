@@ -8,6 +8,6 @@ namespace storage
 		HISCORE = 1,
 	};
 
-	bool SaveStorageData(StorageData pos, int value);
-	int LoadStorageData(StorageData pos);
+	bool saveStorageData(StorageData pos, int value);
+	int loadStorageData(StorageData pos);
 }

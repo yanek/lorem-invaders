@@ -20,9 +20,9 @@ int main()
 	TraceLog(LOG_TRACE, "Starting game");
 	viewport = new Viewport{};
 	Audio::init();
-	res::LoadResources();
+	res::loadResources();
 
-	viewport->InitRenderTexture();
+	viewport->initRenderTexture();
 
 	SetExitKey(0);
 	SetTextLineSpacing(16);
@@ -42,7 +42,7 @@ int main()
 
 	Audio::close();
 	ScreenManager::close();
-	res::UnloadResources();
+	res::unloadResources();
 
 	delete viewport;
 	return 0;
@@ -53,17 +53,17 @@ void updateDrawFrame()
 	ScreenManager::update();
 	Audio::update();
 
-	viewport->BeginDrawing();
+	viewport->beginDrawing();
 	{
 		ClearBackground(color::background);
 		ScreenManager::draw();
 	}
-	viewport->EndDrawing();
+	viewport->endDrawing();
 
 	BeginDrawing();
 	{
 		ClearBackground(color::black);
-		viewport->DrawRenderTexture();
+		viewport->drawRenderTexture();
 		drawDebugData();
 	}
 	EndDrawing();

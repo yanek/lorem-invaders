@@ -5,11 +5,11 @@
 #include "fx_flash.h"
 
 Flash::Flash(const Color color, const int milliseconds)
-	: FxBase(milliseconds), mColor(color)
+	: FxBase(milliseconds), color_(color)
 {
 }
 
-void Flash::Update(const float delta)
+void Flash::update(const float delta)
 {
-	mElapsed += delta;
+	elapsed_ += delta;
 }
