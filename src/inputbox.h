@@ -17,7 +17,6 @@ public:
 
 	void update(float delta);
 	void draw(float delta);
-	int getMatch(const std::string &value) const;
 	void clear();
 	void notify(const Event &event) override;
 

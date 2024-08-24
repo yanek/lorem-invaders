@@ -1,31 +1,41 @@
 #pragma once
 
+#include "screen.h"
+#include <cstdint>
 #include <raylib.h>
+#include <string>
 
-namespace res
+enum class GameMode;
+
+enum class SoundId : uint8_t
 {
-	enum class SoundId : unsigned char;
-	extern Font font16;
-	extern Texture2D textureHeart;
-	extern Texture2D textureBanner;
-	extern char *lipsum;
-	extern char *english;
-	extern Sound soundClick;
-	extern Sound soundHit;
-	extern Sound soundHurt;
-	extern Sound soundPause;
-	extern Sound soundGameOver;
+	CLICK = 0,
+	HIT,
+	HURT,
+	PAUSE,
+	GAME_OVER,
+	NUM_SOUNDS,
+};
 
-	void loadResources();
-	void unloadResources();
-	const Sound &getSound(SoundId id);
+enum class TextureId : uint8_t
+{
+	HEART = 0,
+	BANNER,
+	NUM_TEXTURES,
+};
 
-	enum class SoundId : unsigned char
-	{
-		CLICK = 0,
-		HIT,
-		HURT,
-		PAUSE,
-		GAME_OVER,
-	};
-}
+class Resources
+{
+public:
+	static void unloadResources();
+	static const Font *getFont();
+	static const std::string *getLipsum(GameMode mode);
+	static const Sound *getSound(SoundId id);
+	static const Texture2D *getTexture(TextureId id);
+
+private:
+	static Font *font_;
+	static std::string *lipsum_[(int)GameMode::NUM_MODES];
+	static Texture2D *textures_[(int)TextureId::NUM_TEXTURES];
+	static Sound *sounds_[(int)SoundId::NUM_SOUNDS];
+};

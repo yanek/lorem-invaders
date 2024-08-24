@@ -22,8 +22,6 @@ public:
 	void draw() override;
 	void unload() override;
 	float getDifficultyModifier() const;
-	Player *getPlayer() const;
-	InputBox *getInputBox() const;
 	const char *getName() const override { return "game_screen"; }
 	void notify(const Event &event) override;
 
@@ -37,6 +35,6 @@ private:
 	InputBox *inputBox_{ nullptr };
 	Lipsum lipsum_;
 	GameMode gameMode_;
-	float spawnTimeout_ = 1.5f;
+	float spawnTimeout_ = 2.0f;
 	float spawnElapsed_ = 0.0f;
 };

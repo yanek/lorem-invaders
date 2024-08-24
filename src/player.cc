@@ -46,27 +46,29 @@ void Player::draw() const
 			dest.y += shake_->getOffset().y;
 		}
 
-		DrawTexturePro(res::textureHeart, src, dest, { 0, 0 }, 0, WHITE);
+		const Texture2D *tex = Resources::getTexture(TextureId::HEART);
+		DrawTexturePro(*tex, src, dest, { 0, 0 }, 0, WHITE);
 	}
 
-	const int fntsize = res::font16.baseSize;
+	const Font* font = Resources::getFont();
+	const int fntsize = font->baseSize;
 	const std::string score = TextFormat("%lu", score_);
-	const Vector2 scoreDimensions = MeasureTextEx(res::font16, score.c_str(), fntsize, 0);
+	const Vector2 scoreDimensions = MeasureTextEx(*font, score.c_str(), fntsize, 0);
 
 	std::string scorePadding;
 	for (int i = 0; i < 10 - score.length(); i++)
 		scorePadding += "0";
 
-	DrawTextEx(res::font16, scorePadding.c_str(), { Viewport::GAME_WIDTH - 90 - gap, gap + 2 }, size, 0, color::background);
-	DrawTextEx(res::font16, score.c_str(), { Viewport::GAME_WIDTH - scoreDimensions.x - gap, gap + 2 }, size, 0, color::primary);
-	DrawTextEx(res::font16, "SCORE", { Viewport::GAME_WIDTH - gap - 140, gap + 2 }, size, 0, color::secondary);
+	DrawTextEx(*font, scorePadding.c_str(), { Viewport::GAME_WIDTH - 90 - gap, gap + 2 }, size, 0, color::background);
+	DrawTextEx(*font, score.c_str(), { Viewport::GAME_WIDTH - scoreDimensions.x - gap, gap + 2 }, size, 0, color::primary);
+	DrawTextEx(*font, "SCORE", { Viewport::GAME_WIDTH - gap - 140, gap + 2 }, size, 0, color::secondary);
 }
 
 void Player::damage()
 {
 	hitpoints_ = std::max(hitpoints_ - 1, 0);
 	shake_ = new Shake(2.0f, 100);
-	Audio::play(res::SoundId::HURT);
+	Audio::play(SoundId::HURT);
 
 	if (isDead())
 	{

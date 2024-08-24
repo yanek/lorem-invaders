@@ -18,7 +18,7 @@ void Audio::close()
 	CloseAudioDevice();
 }
 
-void Audio::play(const res::SoundId id)
+void Audio::play(const SoundId id)
 {
 	// Check if the sound is already pending
 	// If it is, don't add it again
@@ -37,8 +37,8 @@ void Audio::update()
 	if (head_ == tail_) return;
 
 	TraceLog(LOG_TRACE, "Playing sound: %d", pending_[head_].soundId);
-	const Sound sound = getSound(pending_[head_].soundId);
-	PlaySound(sound);
+	const Sound *sound = Resources::getSound(pending_[head_].soundId);
+	PlaySound(*sound);
 
 	head_ = (head_ + 1) % MAX_PENDING;
 }

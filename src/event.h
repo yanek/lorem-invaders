@@ -4,8 +4,10 @@ enum class EventType
 {
 	None = 0,
 	ApplicationExit,
+	InputUpdated,
 	EnemyKilled,
 	PlayerHurt,
+	PlayerHealed,
 };
 
 /* clang-format off */
@@ -28,6 +30,16 @@ public:
 	EVENT_CLASS_TYPE(ApplicationExit)
 };
 
+class InputUpdatedEvent final : public Event
+{
+public:
+	explicit InputUpdatedEvent(const char *value)
+		: value(value) {}
+
+	EVENT_CLASS_TYPE(InputUpdated);
+	const char *value;
+};
+
 class EnemyKilledEvent final : public Event
 {
 public:
@@ -44,4 +56,10 @@ class PlayerHurtEvent final : public Event
 {
 public:
 	EVENT_CLASS_TYPE(PlayerHurt);
+};
+
+class PlayerHealedEvent final : public Event
+{
+public:
+	EVENT_CLASS_TYPE(PlayerHealed);
 };

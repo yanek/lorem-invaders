@@ -20,7 +20,6 @@ int main()
 	TraceLog(LOG_TRACE, "Starting game");
 	viewport = new Viewport{};
 	Audio::init();
-	res::loadResources();
 
 	viewport->initRenderTexture();
 
@@ -42,7 +41,7 @@ int main()
 
 	Audio::close();
 	ScreenManager::close();
-	res::unloadResources();
+	Resources::unloadResources();
 
 	delete viewport;
 	return 0;

@@ -11,16 +11,6 @@
 #include "viewport.h"
 #include <raylib.h>
 
-Player *GameScreen::getPlayer() const
-{
-	return player_;
-}
-
-InputBox *GameScreen::getInputBox() const
-{
-	return inputBox_;
-}
-
 void GameScreen::init()
 {
 	constexpr Rectangle rect{
@@ -42,20 +32,20 @@ void GameScreen::update()
 	if (IsKeyPressed(KEY_ESCAPE))
 	{
 		isPaused_ = !isPaused_;
-		Audio::play(res::SoundId::PAUSE);
+		Audio::play(SoundId::PAUSE);
 	}
 
 	if (isPaused_)
 	{
 		if (IsKeyPressed(KEY_R))
 		{
-			Audio::play(res::SoundId::CLICK);
+			Audio::play(SoundId::CLICK);
 			ScreenManager::changeToScreen(new GameScreen{ gameMode_ });
 		}
 
 		if (IsKeyPressed(KEY_B))
 		{
-			Audio::play(res::SoundId::CLICK);
+			Audio::play(SoundId::CLICK);
 			ScreenManager::changeToScreen(new TitleScreen{});
 		}
 
@@ -90,13 +80,14 @@ void GameScreen::draw()
 		DrawRectangle(0, 0, Viewport::GAME_WIDTH, Viewport::GAME_HEIGHT, Fade(color::black, 0.75f));
 		DrawRectangle(0, 200, Viewport::GAME_WIDTH, 32, color::black);
 
+		const Font *font = Resources::getFont();
 		const auto paused = "PAUSE";
-		const float psize = MeasureTextEx(res::font16, paused, 16, 0).x;
+		const float psize = MeasureTextEx(*font, paused, font->baseSize, 0).x;
 		const auto actions = "[Esc] Resume, [R] Restart, [B] Back to main menu";
-		const float asize = MeasureTextEx(res::font16, actions, 16, 0).x;
+		const float asize = MeasureTextEx(*font, actions, font->baseSize, 0).x;
 
-		DrawTextEx(res::font16, paused, Vector2{ Viewport::GAME_WIDTH / 2.0f - psize / 2.0f, 209 }, res::font16.baseSize, 0, color::white);
-		DrawTextEx(res::font16, actions, Vector2{ Viewport::GAME_WIDTH / 2.0f - asize / 2.0f, 240 }, res::font16.baseSize, 0, color::secondary);
+		DrawTextEx(*font, paused, Vector2{ Viewport::GAME_WIDTH / 2.0f - psize / 2.0f, 209 }, font->baseSize, 0, color::white);
+		DrawTextEx(*font, actions, Vector2{ Viewport::GAME_WIDTH / 2.0f - asize / 2.0f, 240 }, font->baseSize, 0, color::secondary);
 	}
 }
 

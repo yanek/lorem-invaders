@@ -3,7 +3,7 @@
 
 struct PlaySoundMessage
 {
-	res::SoundId soundId;
+	SoundId soundId;
 };
 
 class Audio
@@ -11,7 +11,7 @@ class Audio
 public:
 	static void init();
 	static void close();
-	static void play(res::SoundId id);
+	static void play(SoundId id);
 	static void update();
 
 private:

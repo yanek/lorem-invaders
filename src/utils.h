@@ -2,8 +2,8 @@
 #include <string>
 #include <vector>
 
-#define E_BAIL(val, msg) TraceLog(LOG_ERROR, msg); return val;
-#define E_PANIC(msg) TraceLog(LOG_FATAL, msg); exit(1);
+#define E_BAIL(val, ...) TraceLog(LOG_ERROR, __VA_ARGS__); return val;
+#define E_PANIC(...) TraceLog(LOG_FATAL, __VA_ARGS__); exit(1);
 
 using String = std::string;
 

@@ -20,13 +20,14 @@ std::vector<std::string> splitString(const std::string &str, const std::string &
 void drawDebugData()
 {
 	const std::string fps = TextFormat("%02iFPS", GetFPS());
-	const auto fntsize = static_cast<float>(res::font16.baseSize);
-	constexpr auto vpwidth = static_cast<float>(Viewport::WINDOW_WIDTH);
-	const float txtsize = MeasureTextEx(res::font16, fps.c_str(), fntsize, 0).x;
+	const Font* font = Resources::getFont();
+	const auto fntsize = (float)font->baseSize;
+	constexpr auto vpwidth = (float)Viewport::WINDOW_WIDTH;
+	const float txtsize = MeasureTextEx(*font, fps.c_str(), fntsize, 0).x;
 
 	const Vector2 pos{ vpwidth / 2 - txtsize / 2, 1 };
 	const Rectangle rect{ pos.x - 1, pos.y, txtsize + 1, fntsize };
 
 	DrawRectangleRec(rect, Fade(color::primary, 0.9f));
-	DrawTextEx(res::font16, fps.c_str(), pos, fntsize, 0, color::background);
+	DrawTextEx(*font, fps.c_str(), pos, fntsize, 0, color::background);
 }

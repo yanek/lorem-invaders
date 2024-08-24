@@ -43,7 +43,8 @@ Enemy *EnemyPool::spawn(const std::string &value)
 	int patternId = GetRandomValue(0, (int)EnemyPattern::NUM_PATTERNS - 1);
 	const auto pattern = (EnemyPattern)patternId;
 
-	const float txtsize = MeasureTextEx(res::font16, value.c_str(), res::font16.baseSize, 0).x;
+	const Font *font = Resources::getFont();
+	const float txtsize = MeasureTextEx(*font, value.c_str(), font->baseSize, 0).x;
 	float posx = 0.0f;
 	float posy = 0.0f;
 
@@ -66,15 +67,17 @@ Enemy *EnemyPool::spawn(const std::string &value)
 		break;
 	case EnemyPattern::DIAGONAL_LEFT:
 		posx = Viewport::GAME_WIDTH - txtsize;
-		velocity = Vector2{ -40, 100 };
+		velocity = Vector2{ -80, 100 };
 		break;
 	case EnemyPattern::DIAGONAL_RIGHT:
 		posx = 0.0f;
-		velocity = Vector2{ 40, 100 };
+		velocity = Vector2{ 80, 100 };
 		break;
 	case EnemyPattern::BONUS:
 		posx = 0.0f;
-		velocity = Vector2{ 50, 0 };
+		posy = 64.0f;
+		velocity = Vector2{ 160, 0 };
+		break;
 	default:
 		velocity = Vector2{ 0, 50 };
 	}
@@ -85,6 +88,7 @@ Enemy *EnemyPool::spawn(const std::string &value)
 	enemy->velocity_ = velocity;
 	enemy->value_ = value;
 	enemy->isActive_ = true;
+	enemy->pattern_ = pattern;
 
 	return enemy;
 }

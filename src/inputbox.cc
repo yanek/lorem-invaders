@@ -9,6 +9,7 @@
 
 void InputBox::update(const float delta)
 {
+	const EventBus *bus = ScreenManager::getEventBus();
 	int key = GetCharPressed();
 
 	while (key > 0)
@@ -18,6 +19,7 @@ void InputBox::update(const float delta)
 			value_[letterCount_] = static_cast<unsigned char>(key);
 			value_[letterCount_ + 1] = '\0';
 			letterCount_++;
+			bus->fire(InputUpdatedEvent{ value_ });
 		}
 
 		key = GetCharPressed();
@@ -29,12 +31,14 @@ void InputBox::update(const float delta)
 		if (letterCount_ < 0)
 			letterCount_ = 0;
 		value_[letterCount_] = '\0';
+		bus->fire(InputUpdatedEvent{ value_ });
 	}
 
 	if (IsKeyPressed(KEY_ENTER))
 	{
 		letterCount_ = 0;
 		value_[0] = '\0';
+		bus->fire(InputUpdatedEvent{ value_ });
 	}
 
 	if (flashPtr_ != nullptr)
@@ -60,8 +64,9 @@ void InputBox::update(const float delta)
 
 void InputBox::draw(const float delta)
 {
-	const auto fntsize = static_cast<float>(res::font16.baseSize);
-	const float txtlen = MeasureTextEx(res::font16, value_, fntsize, 0).x;
+	const Font* font = Resources::getFont();
+	const auto fntsize = (float)font->baseSize;
+	const float txtlen = MeasureTextEx(*font, value_, fntsize, 0).x;
 
 	const Vector2 txtpos = {
 		Viewport::GAME_WIDTH / 2.0f - txtlen / 2.0f,
@@ -91,7 +96,7 @@ void InputBox::draw(const float delta)
 
 	DrawRectangleRec(rect, bgclr);
 	DrawRectangleLinesEx(rect, 2, fgclr);
-	DrawTextEx(res::font16, value_, Vector2{ txtpos.x, txtpos.y }, fntsize, 0, fgclr);
+	DrawTextEx(*font, value_, Vector2{ txtpos.x, txtpos.y }, fntsize, 0, fgclr);
 	DrawRectangleRec(rect, flashColor);
 
 	cursorBlinkElapsed_ += delta;
@@ -99,27 +104,13 @@ void InputBox::draw(const float delta)
 	{
 		const int x = (int)(txtpos.x + txtlen);
 		const int y = (int)(txtpos.y);
-		DrawText("|", x, y, res::font16.baseSize, fgclr);
+		DrawText("|", x, y, fntsize, fgclr);
 	}
 
 	if (cursorBlinkElapsed_ > CURSOR_BLINK_TIME * 2.0f)
 	{
 		cursorBlinkElapsed_ = 0.0f;
 	}
-}
-
-int InputBox::getMatch(const std::string &value) const
-{
-	int matchCount = 0;
-	for (size_t i = 0; i < value.length() && i < letterCount_; ++i)
-	{
-		if (value[i] == value_[i])
-			matchCount++;
-		else
-			return 0;
-	}
-
-	return matchCount;
 }
 
 void InputBox::clear()
@@ -130,10 +121,14 @@ void InputBox::clear()
 
 void InputBox::notify(const Event &event)
 {
-	TraceLog(LOG_DEBUG, "NOTIFY: %s", event.getName());
 	if (event.getEventType() == EventType::PlayerHurt)
 	{
 		flashPtr_ = new Flash(color::accent, 30);
 		shakePtr_ = new Shake(4.0f, 100);
+	}
+
+	if (event.getEventType() == EventType::EnemyKilled)
+	{
+		clear();
 	}
 }

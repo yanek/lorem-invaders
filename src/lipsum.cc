@@ -5,17 +5,7 @@
 
 Lipsum::Lipsum(const GameMode mode)
 {
-	switch (mode)
-	{
-	case GameMode::LOREM:
-		words_ = splitString(res::lipsum, "\n");
-		break;
-	case GameMode::ENGLISH:
-		words_ = splitString(res::english, "\n");
-		break;
-	default:
-		E_PANIC("Invalid game mode");
-	}
+	words_ = splitString(*Resources::getLipsum(mode), "\n");
 }
 
 std::string Lipsum::next()
