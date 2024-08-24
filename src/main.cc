@@ -17,15 +17,14 @@ static bool shouldClose();
 int main()
 {
 	SetTraceLogLevel(LOG_TRACE);
-	TraceLog(LOG_TRACE, "Starting game");
-	viewport = new Viewport{};
-	Audio::init();
-
-	viewport->initRenderTexture();
-
 	SetExitKey(0);
 	SetTextLineSpacing(16);
 
+	viewport = new Viewport{};
+	viewport->initRenderTexture();
+
+	Audio::init();
+	Resources::preload();
 	ScreenManager::init();
 
 #ifdef __EMSCRIPTEN__
@@ -39,9 +38,9 @@ int main()
 	}
 #endif
 
-	Audio::close();
 	ScreenManager::close();
-	Resources::unloadResources();
+	Resources::unload();
+	Audio::close();
 
 	delete viewport;
 	return 0;

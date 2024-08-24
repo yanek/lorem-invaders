@@ -7,7 +7,20 @@ Sound *Resources::sounds_[(int)SoundId::NUM_SOUNDS] = { nullptr };
 std::string *Resources::lipsum_[(int)GameMode::NUM_MODES] = { nullptr };
 Font *Resources::font_ = nullptr;
 
-void Resources::unloadResources()
+void Resources::preload()
+{
+	font_ = new Font(LoadFont("resources/ibm-16.fnt"));
+	textures_[(int)TextureId::HEART] = new Texture2D(LoadTexture("resources/heart.png"));
+	textures_[(int)TextureId::BANNER] = new Texture2D(LoadTexture("resources/banner.png"));
+	sounds_[(int)SoundId::CLICK] = new Sound(LoadSound("resources/click.wav"));
+	sounds_[(int)SoundId::HIT] = new Sound(LoadSound("resources/hit.wav"));
+	sounds_[(int)SoundId::HURT] = new Sound(LoadSound("resources/hurt.wav"));
+	sounds_[(int)SoundId::PAUSE] = new Sound(LoadSound("resources/pause.wav"));
+	sounds_[(int)SoundId::GAME_OVER] = new Sound(LoadSound("resources/gameover.wav"));
+	TraceLog(LOG_INFO, "Finished preloading assets");
+}
+
+void Resources::unload()
 {
 	for (int i = 0; i < (int)SoundId::NUM_SOUNDS; i++)
 	{

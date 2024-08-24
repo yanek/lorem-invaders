@@ -27,7 +27,8 @@ enum class TextureId : uint8_t
 class Resources
 {
 public:
-	static void unloadResources();
+	static void preload();
+	static void unload();
 	static const Font *getFont();
 	static const std::string *getLipsum(GameMode mode);
 	static const Sound *getSound(SoundId id);
