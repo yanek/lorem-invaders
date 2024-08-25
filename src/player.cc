@@ -5,8 +5,8 @@
 #include "fx_shake.h"
 #include "inputbox.h"
 #include "resources.h"
+#include "score_zone.h"
 #include "screen.h"
-#include "screen_game.h"
 #include "screen_gameover.h"
 #include "viewport.h"
 #include <algorithm>
@@ -15,7 +15,7 @@
 
 class InputBox;
 
-void Player::update(const float delta)
+void Player::update(const f32 delta)
 {
 	if (shake_ != nullptr)
 	{
@@ -28,16 +28,16 @@ void Player::update(const float delta)
 	}
 }
 
-void Player::draw(const float delta) const
+void Player::draw(const f32 delta) const
 {
-	constexpr int SIZE = 16;
-	constexpr int GAP  = 4;
+	constexpr i32 SIZE = 16;
+	constexpr i32 GAP  = 4;
 
 	DrawRectangle(0, 0, Viewport::GAME_WIDTH, SIZE + GAP * 2, color::black);
 
 	for (int i = 0; i < maxHitpoints_; i++)
 	{
-		Rectangle dest      = { static_cast<float>(GAP + i * (SIZE + GAP)), GAP, SIZE, SIZE };
+		Rectangle dest      = { (f32)(GAP + i * (SIZE + GAP)), GAP, SIZE, SIZE };
 		const Rectangle src = i < hitpoints_ ? Rectangle{ 16, 0, SIZE, SIZE } : Rectangle{ 0, 0, SIZE, SIZE };
 
 		if (shake_ != nullptr)
@@ -51,12 +51,12 @@ void Player::draw(const float delta) const
 	}
 
 	const Font *font              = Resources::getFont();
-	const int fntsize             = font->baseSize;
-	const std::string score       = TextFormat("%lu", score_);
+	const i32 fntsize             = font->baseSize;
+	const String score            = TextFormat("%lu", score_);
 	const Vector2 scoreDimensions = MeasureTextEx(*font, score.c_str(), fntsize, 0);
 
-	std::string scorePadding;
-	for (int i = 0; i < 10 - score.length(); i++)
+	String scorePadding;
+	for (i32 i = 0; i < 10 - score.length(); i++)
 		scorePadding += "0";
 
 	DrawTextEx(*font, scorePadding.c_str(), { Viewport::GAME_WIDTH - 90 - GAP, GAP + 2 }, SIZE, 0, color::background);
@@ -81,17 +81,16 @@ void Player::notify(const Event &event)
 {
 	if (event.getEventType() == EventType::EnemyKilled)
 	{
-		const auto ev = (const EnemyKilledEvent &)event;
+		const auto ev     = (const EnemyKilledEvent &)event;
+		const f32 score   = ev.letterCount * 10;
+		f32 posMultiplier = 1.0f;
 
-		const float score        = ev.letterCount * 10;
-		float positionMultiplier = 1.0f;
+		if (ev.verticalPosition > ScoreZone::ZONE_2)
+			posMultiplier = 1.5f;
+		else if (ev.verticalPosition < ScoreZone::ZONE_1)
+			posMultiplier = 0.5f;
 
-		if (ev.verticalPosition > GameScreen::SCORE_ZONE_1)
-			positionMultiplier = 1.5f;
-		else if (ev.verticalPosition < GameScreen::SCORE_ZONE_2)
-			positionMultiplier = 0.5f;
-
-		score_ += (unsigned long)(score * positionMultiplier);
+		score_ += (u64)(score * posMultiplier);
 	}
 
 	if (event.getEventType() == EventType::PlayerHurt)

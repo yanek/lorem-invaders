@@ -1,5 +1,6 @@
 #pragma once
 #include "resources.h"
+#include "utils.h"
 
 struct PlaySoundMessage
 {
@@ -15,8 +16,8 @@ public:
 	static void update();
 
 private:
-	static constexpr int MAX_PENDING = 16;
+	static constexpr u8 MAX_PENDING = 16;
 	static PlaySoundMessage pending_[MAX_PENDING];
-	static int head_;
-	static int tail_;
+	static u8 head_;
+	static u8 tail_;
 };

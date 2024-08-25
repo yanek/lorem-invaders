@@ -6,6 +6,8 @@
 #include "screen_title.h"
 #include "utils.h"
 #include "viewport.h"
+
+#include <algorithm>
 #include <cassert>
 #include <raylib.h>
 
@@ -60,6 +62,16 @@ void Screen::clearEntities()
 	TraceLog(LOG_DEBUG, "Cleared %d entities", count);
 }
 
+void Screen::sortRendered_()
+{
+	if (!isRenderableListDirty_) return;
+	auto cnd = [](const auto a, const auto b) {
+		return a->getLayer() < b->getLayer();
+	};
+	std::sort(renderables_.begin(), renderables_.end(), cnd);
+	isRenderableListDirty_ = false;
+}
+
 void ScreenManager::init(Viewport *viewport)
 {
 	viewport_ = viewport;
@@ -92,7 +104,7 @@ void ScreenManager::update()
 		return;
 	}
 
-	float delta = GetFrameTime();
+	f32 delta = GetFrameTime();
 	if (current_->isPaused_) delta = 0.0f;
 
 	for (const auto entity : current_->entities_)
@@ -102,17 +114,16 @@ void ScreenManager::update()
 	}
 	current_->update(delta);
 
+	current_->sortRendered_();
+
 	// Draw to render texture
 	viewport_->beginDrawing();
 	{
 		ClearBackground(color::background);
-		for (const auto entity : current_->entities_)
+		for (const auto entity : current_->renderables_)
 		{
 			if (!entity->isActive()) continue;
-			if (const auto e = dynamic_cast<RenderedEntity *>(entity))
-			{
-				e->draw(delta);
-			}
+			entity->draw(delta);
 		}
 		current_->draw(delta);
 	}

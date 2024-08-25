@@ -7,13 +7,13 @@
 
 void EnemyPool::init()
 {
-	for (int i = 0; i < MAX_POOLED; ++i)
+	for (u8 i = 0; i < MAX_POOLED; ++i)
 	{
 		pool_[i] = getScreen()->createEntity<Enemy>();
 	}
 }
 
-Enemy *EnemyPool::spawn(const std::string &value) const
+Enemy *EnemyPool::spawn(const String &value) const
 {
 	int id = -1;
 
@@ -29,15 +29,15 @@ Enemy *EnemyPool::spawn(const std::string &value) const
 
 	assert(id != -1);
 
-	int patternId      = GetRandomValue(0, (int)EnemyPattern::NUM_PATTERNS - 1);
+	int patternId      = GetRandomValue(0, (u8)EnemyPattern::NUM_PATTERNS - 1);
 	const auto pattern = (EnemyPattern)patternId;
 
-	const Font *font    = Resources::getFont();
-	const float txtsize = MeasureTextEx(*font, value.c_str(), font->baseSize, 0).x;
-	float posx          = 0.0f;
-	float posy          = 0.0f;
+	const Font *font  = Resources::getFont();
+	const f32 txtsize = MeasureTextEx(*font, value.c_str(), font->baseSize, 0).x;
+	f32 posx          = 0.0f;
+	f32 posy          = 0.0f;
 
-	Vector2 velocity = {};
+	Vector2 velocity;
 	switch (pattern)
 	{
 	case EnemyPattern::SLOW:
@@ -84,12 +84,12 @@ Enemy *EnemyPool::spawn(const std::string &value) const
 	return enemy;
 }
 
-Enemy *EnemyPool::getEnemy(const int id) const
+Enemy *EnemyPool::getEnemy(const i32 id) const
 {
 	return pool_[id];
 }
 
-void EnemyPool::update(const float delta)
+void EnemyPool::update(const f32 delta)
 {
 	for (auto *entity : pool_)
 	{

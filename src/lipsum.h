@@ -1,16 +1,17 @@
 #pragma once
 
+#include "utils.h"
 #include <string>
 #include <vector>
 
-enum class GameMode;
+enum class GameMode : u8;
 
 class Lipsum
 {
 public:
 	explicit Lipsum(GameMode mode);
-	std::string next();
+	String next();
 
 private:
-	std::vector<std::string> words_;
+	std::vector<String> words_;
 };

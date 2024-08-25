@@ -1,13 +1,12 @@
 #pragma once
 
 #include "screen.h"
-#include <cstdint>
+#include "utils.h"
 #include <raylib.h>
-#include <string>
 
-enum class GameMode;
+enum class GameMode : u8;
 
-enum class SoundId : uint8_t
+enum class SoundId : u8
 {
 	CLICK = 0,
 	HIT,
@@ -17,7 +16,7 @@ enum class SoundId : uint8_t
 	NUM_SOUNDS,
 };
 
-enum class TextureId : uint8_t
+enum class TextureId : u8
 {
 	HEART = 0,
 	BANNER,
@@ -30,13 +29,13 @@ public:
 	static void preload();
 	static void unload();
 	static const Font *getFont();
-	static const std::string *getLipsum(GameMode mode);
+	static const String *getLipsum(GameMode mode);
 	static const Sound *getSound(SoundId id);
 	static const Texture2D *getTexture(TextureId id);
 
 private:
 	static Font *font_;
-	static std::string *lipsum_[(int)GameMode::NUM_MODES];
-	static Texture2D *textures_[(int)TextureId::NUM_TEXTURES];
-	static Sound *sounds_[(int)SoundId::NUM_SOUNDS];
+	static String *lipsum_[(u8)GameMode::NUM_MODES];
+	static Texture2D *textures_[(u8)TextureId::NUM_TEXTURES];
+	static Sound *sounds_[(u8)SoundId::NUM_SOUNDS];
 };

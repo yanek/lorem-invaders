@@ -18,7 +18,7 @@ void Enemy::despawn()
 	velocity_ = Vector2{ 0, 0 };
 }
 
-void Enemy::draw(const float delta) const
+void Enemy::draw(const f32 delta) const
 {
 	const Font *font = Resources::getFont();
 	const auto fntsize = (float)font->baseSize;
@@ -35,7 +35,7 @@ void Enemy::draw(const float delta) const
 	DrawTextEx(*font, value_.substr(0, highlightOffset_).c_str(), pos, fntsize, 0, color::accent);
 }
 
-void Enemy::update(const float delta)
+void Enemy::update(const f32 delta)
 {
 	// If the entity is shaking, it must be dying.
 	if (shake_ != nullptr)
@@ -78,7 +78,7 @@ void Enemy::onInputUpdate(const InputUpdatedEvent &event)
 
 	// Check if the input matches the value of the enemy.
 	// If it does, increment the match count.
-	for (int i = 0; (i < value_.length()) && (i < strlen(event.value)); ++i)
+	for (i32 i = 0; (i < value_.length()) && (i < strlen(event.value)); ++i)
 	{
 		if (event.value[i] == value_[i])
 		{

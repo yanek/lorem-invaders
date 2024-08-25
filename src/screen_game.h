@@ -4,7 +4,6 @@
 #include "event_listener.h"
 #include "lipsum.h"
 #include "screen.h"
-#include "viewport.h"
 
 class Player;
 class EnemyPool;
@@ -18,21 +17,18 @@ public:
 	~GameScreen() override{ EVENT_UNSUBSCRIBE };
 
 	void init() override;
-	void update(float delta) override;
-	void draw(float delta) override;
+	void update(f32 delta) override;
+	void draw(f32 delta) override;
 	void unload() override;
 	float getDifficultyModifier() const;
 	const char *getName() const override { return "GameScreen"; }
 	void notify(const Event &event) override;
 
-	static constexpr unsigned int SCORE_ZONE_1 = Viewport::GAME_HEIGHT / 3 + 32;
-	static constexpr unsigned int SCORE_ZONE_2 = SCORE_ZONE_1 + SCORE_ZONE_1 - 32;
-
 private:
-	float difficultyModifier_ = 1.0f;
+	f32 difficultyModifier_ = 1.0f;
 	Lipsum lipsum_;
 	GameMode gameMode_;
 	EnemyPool *enemyPool_ = nullptr;
-	float spawnTimeout_   = 2.0f;
-	float spawnElapsed_   = 0.0f;
+	f32 spawnTimeout_     = 2.0f;
+	f32 spawnElapsed_     = 0.0f;
 };

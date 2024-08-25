@@ -8,18 +8,18 @@
 #include "viewport.h"
 #include <raylib.h>
 
-void InputBox::update(const float delta)
+void InputBox::update(const f32 delta)
 {
 	if (getScreen()->isPaused()) return;
 
 	const EventBus *bus = ScreenManager::getEventBus();
-	int key = GetCharPressed();
+	i32 key             = GetCharPressed();
 
 	while (key > 0)
 	{
 		if ((key >= 32) && (key <= 125) && (letterCount_ < MAX_INPUT_CHARS))
 		{
-			value_[letterCount_] = static_cast<unsigned char>(key);
+			value_[letterCount_]     = (unsigned char)key;
 			value_[letterCount_ + 1] = '\0';
 			letterCount_++;
 			bus->fire(InputUpdatedEvent{ value_ });
@@ -40,7 +40,7 @@ void InputBox::update(const float delta)
 	if (IsKeyPressed(KEY_ENTER))
 	{
 		letterCount_ = 0;
-		value_[0] = '\0';
+		value_[0]    = '\0';
 		bus->fire(InputUpdatedEvent{ value_ });
 	}
 
@@ -71,11 +71,11 @@ void InputBox::update(const float delta)
 	}
 }
 
-void InputBox::draw(const float delta) const
+void InputBox::draw(const f32 delta) const
 {
-	const Font *font = Resources::getFont();
-	const auto fntsize = (float)font->baseSize;
-	const float txtlen = MeasureTextEx(*font, value_, fntsize, 0).x;
+	const Font *font   = Resources::getFont();
+	const auto fntsize = (f32)font->baseSize;
+	const f32 txtlen   = MeasureTextEx(*font, value_, fntsize, 0).x;
 
 	const Vector2 txtpos = {
 		Viewport::GAME_WIDTH / 2.0f - txtlen / 2.0f,
@@ -110,15 +110,15 @@ void InputBox::draw(const float delta) const
 
 	if (cursorBlinkElapsed_ > CURSOR_BLINK_TIME && (letterCount_ < MAX_INPUT_CHARS))
 	{
-		const int x = (int)(txtpos.x + txtlen);
-		const int y = (int)(txtpos.y);
+		const i32 x = (i32)(txtpos.x + txtlen);
+		const i32 y = (i32)txtpos.y;
 		DrawText("|", x, y, fntsize, fgclr);
 	}
 }
 
 void InputBox::clear()
 {
-	value_[0] = '\0';
+	value_[0]    = '\0';
 	letterCount_ = 0;
 }
 

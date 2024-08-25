@@ -6,11 +6,11 @@
 class Shake final : public FxBase
 {
 public:
-	Shake(float magnitude, int milliseconds);
-	void update(float delta) override;
+	Shake(f32 magnitude, i32 milliseconds);
+	void update(f32 delta) override;
 	Vector2 getOffset() const { return offset_; }
 
 private:
-	float magnitude_ = 0;
+	f32 magnitude_ = 0;
 	Vector2 offset_;
 };

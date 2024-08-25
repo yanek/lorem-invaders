@@ -7,12 +7,21 @@
 #include "inputbox.h"
 #include "player.h"
 #include "resources.h"
+#include "score_zone.h"
 #include "screen_title.h"
 #include "viewport.h"
 #include <raylib.h>
 
 void GameScreen::init()
 {
+	ScoreZone *zone1 = createEntity<ScoreZone>();
+	zone1->setHeight(ScoreZone::ZONE_2);
+	zone1->setAlpha(0.2f);
+
+	ScoreZone *zone2 = createEntity<ScoreZone>();
+	zone2->setHeight(ScoreZone::ZONE_1);
+	zone2->setAlpha(0.1f);
+
 	enemyPool_ = createEntity<EnemyPool>();
 	createEntity<Player>();
 
@@ -25,7 +34,7 @@ void GameScreen::init()
 	enemyPool_->init();
 }
 
-void GameScreen::update(const float delta)
+void GameScreen::update(const f32 delta)
 {
 	if (IsKeyPressed(KEY_ESCAPE))
 	{
@@ -58,10 +67,8 @@ void GameScreen::update(const float delta)
 	}
 }
 
-void GameScreen::draw(const float delta)
+void GameScreen::draw(const f32 delta)
 {
-	DrawRectangle(0, 0, Viewport::GAME_WIDTH, SCORE_ZONE_2, Fade(color::secondary, 0.1f));
-	DrawRectangle(0, 0, Viewport::GAME_WIDTH, SCORE_ZONE_1, Fade(color::secondary, 0.2f));
 
 	if (isPaused())
 	{
@@ -70,9 +77,9 @@ void GameScreen::draw(const float delta)
 
 		const Font *font   = Resources::getFont();
 		const auto paused  = "PAUSE";
-		const float psize  = MeasureTextEx(*font, paused, font->baseSize, 0).x;
+		const f32 psize    = MeasureTextEx(*font, paused, font->baseSize, 0).x;
 		const auto actions = "[Esc] Resume, [R] Restart, [B] Back to main menu";
-		const float asize  = MeasureTextEx(*font, actions, font->baseSize, 0).x;
+		const f32 asize    = MeasureTextEx(*font, actions, font->baseSize, 0).x;
 
 		DrawTextEx(*font, paused, Vector2{ Viewport::GAME_WIDTH / 2.0f - psize / 2.0f, 209 }, font->baseSize, 0, color::white);
 		DrawTextEx(*font, actions, Vector2{ Viewport::GAME_WIDTH / 2.0f - asize / 2.0f, 240 }, font->baseSize, 0, color::secondary);

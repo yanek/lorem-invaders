@@ -4,16 +4,16 @@
 
 const std::string storageFile = "save.dat";
 
-bool storage::saveStorageData(StorageData pos, const int value)
+bool storage::saveStorageData(StorageData pos, const u64 value)
 {
-	bool success = false;
-	int dataSize = 0;
+	bool success            = false;
+	int dataSize            = 0;
 	unsigned char *fileData = LoadFileData(storageFile.c_str(), &dataSize);
-	const int position = static_cast<int>(pos);
+	const int position      = static_cast<int>(pos);
 
 	if (fileData != nullptr)
 	{
-		unsigned int newDataSize = 0;
+		unsigned int newDataSize   = 0;
 		unsigned char *newFileData = nullptr;
 		if (dataSize <= (position * sizeof(int)))
 		{
@@ -25,7 +25,7 @@ bool storage::saveStorageData(StorageData pos, const int value)
 			{
 				// RL_REALLOC succeeded
 				const auto dataPtr = reinterpret_cast<int *>(newFileData);
-				dataPtr[position] = value;
+				dataPtr[position]  = value;
 			}
 			else
 			{
@@ -45,7 +45,7 @@ bool storage::saveStorageData(StorageData pos, const int value)
 
 			// Replace value on selected position
 			const auto dataPtr = reinterpret_cast<int *>(newFileData);
-			dataPtr[position] = value;
+			dataPtr[position]  = value;
 		}
 
 		success = SaveFileData(storageFile.c_str(), newFileData, newDataSize);
@@ -57,10 +57,10 @@ bool storage::saveStorageData(StorageData pos, const int value)
 	{
 		TraceLog(LOG_INFO, "FILEIO: [%s] File created successfully", storageFile.c_str());
 
-		dataSize = (position + 1) * sizeof(int);
-		fileData = static_cast<unsigned char *>(RL_MALLOC(dataSize));
+		dataSize           = (position + 1) * sizeof(int);
+		fileData           = static_cast<unsigned char *>(RL_MALLOC(dataSize));
 		const auto dataPtr = reinterpret_cast<int *>(fileData);
-		dataPtr[position] = value;
+		dataPtr[position]  = value;
 
 		success = SaveFileData(storageFile.c_str(), fileData, dataSize);
 		UnloadFileData(fileData);
@@ -71,12 +71,12 @@ bool storage::saveStorageData(StorageData pos, const int value)
 	return success;
 }
 
-int storage::loadStorageData(StorageData pos)
+u64 storage::loadStorageData(StorageData pos)
 {
-	int value = 0;
-	int dataSize = 0;
+	u64 value               = 0;
+	i32 dataSize            = 0;
 	unsigned char *fileData = LoadFileData(storageFile.c_str(), &dataSize);
-	const int position = static_cast<int>(pos);
+	const int position      = static_cast<int>(pos);
 
 	if (fileData != nullptr)
 	{
@@ -85,7 +85,7 @@ int storage::loadStorageData(StorageData pos)
 		else
 		{
 			const int *dataPtr = reinterpret_cast<int *>(fileData);
-			value = dataPtr[position];
+			value              = dataPtr[position];
 		}
 
 		UnloadFileData(fileData);

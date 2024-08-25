@@ -5,13 +5,15 @@
 class GameOverScreen final : public Screen
 {
 public:
-	explicit GameOverScreen(const unsigned long score) : score_{ score } {}
+	explicit GameOverScreen(const u64 score)
+		: score_{ score } {}
+
 	void init() override;
-	void update(float delta) override;
-	void draw(float delta) override;
+	void update(f32 delta) override;
+	void draw(f32 delta) override;
 	void unload() override;
 	const char *getName() const override { return "GameOverScreen"; }
 
 private:
-	unsigned long score_;
+	u64 score_;
 };
