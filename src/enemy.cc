@@ -18,9 +18,9 @@ void Enemy::despawn()
 	velocity_ = Vector2{ 0, 0 };
 }
 
-void Enemy::draw() const
+void Enemy::draw(const float delta) const
 {
-	const Font* font = Resources::getFont();
+	const Font *font = Resources::getFont();
 	const auto fntsize = (float)font->baseSize;
 
 	Vector2 pos = position_;
@@ -35,7 +35,7 @@ void Enemy::draw() const
 	DrawTextEx(*font, value_.substr(0, highlightOffset_).c_str(), pos, fntsize, 0, color::accent);
 }
 
-void Enemy::update(const GameScreen *screen, const float delta)
+void Enemy::update(const float delta)
 {
 	// If the entity is shaking, it must be dying.
 	if (shake_ != nullptr)

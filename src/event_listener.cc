@@ -2,7 +2,6 @@
 
 #include "event_bus.h"
 #include <cassert>
-#include <raylib.h>
 
 EventListener::~EventListener()
 {

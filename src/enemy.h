@@ -1,17 +1,17 @@
 #pragma once
 
 #include "enemy_pool.h"
+#include "entity.h"
 #include "event_bus.h"
 #include "event_listener.h"
 #include "screen.h"
-
 #include <iostream>
 #include <raylib.h>
 
 enum class EnemyPattern;
 class Shake;
 
-class Enemy final : EventListener
+class Enemy final : public RenderedEntity, EventListener
 {
 	friend class EnemyPool;
 
@@ -19,10 +19,12 @@ public:
 	Enemy() { EVENT_SUBSCRIBE }
 	~Enemy() override { EVENT_UNSUBSCRIBE }
 
-	void update(const GameScreen *screen, float delta);
-	void draw() const;
+	void update(float delta) override;
+	void draw(float delta) const override;
 	void despawn();
 	void notify(const Event &event) override;
+	const char *getName() const override { return "Enemy"; }
+	bool isActive() const override { return isActive_; }
 
 private:
 	void onInputUpdate(const InputUpdatedEvent &event);

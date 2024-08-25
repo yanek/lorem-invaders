@@ -19,6 +19,7 @@ void EventBus::unsubscribe(EventListener *subscriber)
 
 void EventBus::fire(const Event &event) const
 {
+	TraceLog(LOG_TRACE, "Firing event: %s", event.getName());
 	for (EventListener *subscriber : subscribers_)
 	{
 		subscriber->notify(event);

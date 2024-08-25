@@ -1,7 +1,9 @@
 #pragma once
 
+#include "entity.h"
 #include <string>
 
+class Screen;
 class GameScreen;
 class Enemy;
 
@@ -16,17 +18,16 @@ enum class EnemyPattern : int
 	NUM_PATTERNS
 };
 
-class EnemyPool
+class EnemyPool final : public Entity
 {
 public:
-	static void init();
-	static void close();
-	static Enemy *spawn(const std::string &value);
-	static Enemy *getEnemy(int id);
-	static void updateAll(const GameScreen *screen, float delta);
-	static void drawAll();
+	void init();
+	Enemy *spawn(const std::string &value) const;
+	Enemy *getEnemy(int id) const;
+	void update(float delta) override;
+	const char *getName() const override { return "EnemyPool"; }
 
 private:
 	static constexpr int MAX_POOLED = 16;
-	static Enemy *pool_[MAX_POOLED];
+	Enemy *pool_[MAX_POOLED]        = {};
 };

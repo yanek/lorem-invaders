@@ -26,7 +26,7 @@ BraceWrapping:
   SplitEmptyRecord: true
   SplitEmptyNamespace: true
 PointerAlignment: Right
-AlignConsecutiveAssignments: false
+AlignConsecutiveAssignments: Consecutive
 AlignTrailingComments: true
 AccessModifierOffset: -4
 FixNamespaceComments: false

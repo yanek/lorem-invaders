@@ -2,7 +2,6 @@
 #include "colors.h"
 #include "resources.h"
 #include "viewport.h"
-
 #include <raylib.h>
 #include <regex>
 #include <string>
@@ -20,7 +19,7 @@ std::vector<std::string> splitString(const std::string &str, const std::string &
 void drawDebugData()
 {
 	const std::string fps = TextFormat("%02iFPS", GetFPS());
-	const Font* font = Resources::getFont();
+	const Font *font = Resources::getFont();
 	const auto fntsize = (float)font->baseSize;
 	constexpr auto vpwidth = (float)Viewport::WINDOW_WIDTH;
 	const float txtsize = MeasureTextEx(*font, fps.c_str(), fntsize, 0).x;

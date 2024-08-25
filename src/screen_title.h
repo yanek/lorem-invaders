@@ -7,10 +7,10 @@ class TitleScreen final : public Screen
 public:
 	TitleScreen();
 	void init() override;
-	void update() override;
-	void draw() override;
+	void update(float delta) override;
+	void draw(float delta) override;
 	void unload() override;
-	const char *getName() const override { return "title_screen"; }
+	const char *getName() const override { return "TitleScreen"; }
 
 private:
 	static constexpr float BANNER_STARTPOS = -150.0f;

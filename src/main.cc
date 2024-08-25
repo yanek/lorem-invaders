@@ -1,5 +1,4 @@
 #include "audio.h"
-#include "colors.h"
 #include "resources.h"
 #include "screen.h"
 #include "utils.h"
@@ -16,26 +15,22 @@ static bool shouldClose();
 
 int main()
 {
+	viewport = new Viewport{};
+	viewport->initRenderTexture();
+
 	SetTraceLogLevel(LOG_TRACE);
 	SetExitKey(0);
 	SetTextLineSpacing(16);
 
-	viewport = new Viewport{};
-	viewport->initRenderTexture();
-
 	Audio::init();
 	Resources::preload();
-	ScreenManager::init();
+	ScreenManager::init(viewport);
 
 #ifdef __EMSCRIPTEN__
 	emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
 #else
 	SetTargetFPS(60);
-
-	while (!shouldClose())
-	{
-		updateDrawFrame();
-	}
+	while (!shouldClose()) updateDrawFrame();
 #endif
 
 	ScreenManager::close();
@@ -50,27 +45,12 @@ void updateDrawFrame()
 {
 	ScreenManager::update();
 	Audio::update();
-
-	viewport->beginDrawing();
-	{
-		ClearBackground(color::background);
-		ScreenManager::draw();
-	}
-	viewport->endDrawing();
-
-	BeginDrawing();
-	{
-		ClearBackground(color::black);
-		viewport->drawRenderTexture();
-		drawDebugData();
-	}
-	EndDrawing();
 }
 
 bool shouldClose()
 {
 	const Screen *currentScreen = ScreenManager::getCurrent();
 	if (currentScreen == nullptr) return false;
-	const bool escKeyPressed = (strcmp(currentScreen->getName(), "title_screen") == 0) && IsKeyPressed(KEY_ESCAPE);
+	const bool escKeyPressed = (strcmp(currentScreen->getName(), "TitleScreen") == 0) && IsKeyPressed(KEY_ESCAPE);
 	return WindowShouldClose() || escKeyPressed;
 }

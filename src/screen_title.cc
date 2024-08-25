@@ -19,12 +19,16 @@ void TitleScreen::init()
 {
 }
 
-void TitleScreen::update()
+void TitleScreen::unload()
+{
+}
+
+void TitleScreen::update(const float delta)
 {
 	if (bannerPosition_ < BANNER_ENDPOS)
 	{
 		bannerPosition_ = EaseBounceOut(animTime_, BANNER_STARTPOS, BANNER_ENDPOS - BANNER_STARTPOS, 3.0f);
-		animTime_ += GetFrameTime();
+		animTime_ += delta;
 	}
 
 	if (IsKeyPressed(KEY_ENTER))
@@ -41,11 +45,7 @@ void TitleScreen::update()
 	}
 }
 
-void TitleScreen::unload()
-{
-}
-
-void TitleScreen::draw()
+void TitleScreen::draw(const float delta)
 {
 	const Font *font = Resources::getFont();
 	const auto fntsize = (float)font->baseSize;

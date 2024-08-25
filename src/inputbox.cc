@@ -1,4 +1,5 @@
 #include "inputbox.h"
+
 #include "colors.h"
 #include "fx_base.h"
 #include "fx_flash.h"
@@ -9,6 +10,8 @@
 
 void InputBox::update(const float delta)
 {
+	if (getScreen()->isPaused()) return;
+
 	const EventBus *bus = ScreenManager::getEventBus();
 	int key = GetCharPressed();
 
@@ -60,11 +63,17 @@ void InputBox::update(const float delta)
 			shakePtr_ = nullptr;
 		}
 	}
+
+	cursorBlinkElapsed_ += delta;
+	if (cursorBlinkElapsed_ > CURSOR_BLINK_TIME * 2.0f)
+	{
+		cursorBlinkElapsed_ = 0.0f;
+	}
 }
 
-void InputBox::draw(const float delta)
+void InputBox::draw(const float delta) const
 {
-	const Font* font = Resources::getFont();
+	const Font *font = Resources::getFont();
 	const auto fntsize = (float)font->baseSize;
 	const float txtlen = MeasureTextEx(*font, value_, fntsize, 0).x;
 
@@ -99,17 +108,11 @@ void InputBox::draw(const float delta)
 	DrawTextEx(*font, value_, Vector2{ txtpos.x, txtpos.y }, fntsize, 0, fgclr);
 	DrawRectangleRec(rect, flashColor);
 
-	cursorBlinkElapsed_ += delta;
 	if (cursorBlinkElapsed_ > CURSOR_BLINK_TIME && (letterCount_ < MAX_INPUT_CHARS))
 	{
 		const int x = (int)(txtpos.x + txtlen);
 		const int y = (int)(txtpos.y);
 		DrawText("|", x, y, fntsize, fgclr);
-	}
-
-	if (cursorBlinkElapsed_ > CURSOR_BLINK_TIME * 2.0f)
-	{
-		cursorBlinkElapsed_ = 0.0f;
 	}
 }
 

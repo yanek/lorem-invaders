@@ -17,7 +17,7 @@ void GameOverScreen::init()
 	}
 }
 
-void GameOverScreen::update()
+void GameOverScreen::update(const float delta)
 {
 	if (IsKeyPressed(KEY_ENTER))
 	{
@@ -25,7 +25,7 @@ void GameOverScreen::update()
 	}
 }
 
-void GameOverScreen::draw()
+void GameOverScreen::draw(const float delta)
 {
 	const Font *font = Resources::getFont();
 	const auto fntsize = (float)font->baseSize;

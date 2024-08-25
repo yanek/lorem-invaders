@@ -29,15 +29,16 @@ void Audio::play(const SoundId id)
 
 	assert((tail_ + 1) % MAX_PENDING != head_);
 	pending_[tail_].soundId = id;
-	tail_ = (tail_ + 1) % MAX_PENDING;
+	tail_                   = (tail_ + 1) % MAX_PENDING;
 }
 
 void Audio::update()
 {
 	if (head_ == tail_) return;
 
-	TraceLog(LOG_TRACE, "Playing sound: %d", pending_[head_].soundId);
-	const Sound *sound = Resources::getSound(pending_[head_].soundId);
+	SoundId soundId    = pending_[head_].soundId;
+	const Sound *sound = Resources::getSound(soundId);
+	TraceLog(LOG_DEBUG, "Playing sound: %d (0x%X)", (int)soundId, sound);
 	PlaySound(*sound);
 
 	head_ = (head_ + 1) % MAX_PENDING;

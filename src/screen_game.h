@@ -18,23 +18,21 @@ public:
 	~GameScreen() override{ EVENT_UNSUBSCRIBE };
 
 	void init() override;
-	void update() override;
-	void draw() override;
+	void update(float delta) override;
+	void draw(float delta) override;
 	void unload() override;
 	float getDifficultyModifier() const;
-	const char *getName() const override { return "game_screen"; }
+	const char *getName() const override { return "GameScreen"; }
 	void notify(const Event &event) override;
 
 	static constexpr unsigned int SCORE_ZONE_1 = Viewport::GAME_HEIGHT / 3 + 32;
 	static constexpr unsigned int SCORE_ZONE_2 = SCORE_ZONE_1 + SCORE_ZONE_1 - 32;
 
 private:
-	bool isPaused_ = false;
 	float difficultyModifier_ = 1.0f;
-	Player *player_{ nullptr };
-	InputBox *inputBox_{ nullptr };
 	Lipsum lipsum_;
 	GameMode gameMode_;
-	float spawnTimeout_ = 2.0f;
-	float spawnElapsed_ = 0.0f;
+	EnemyPool *enemyPool_ = nullptr;
+	float spawnTimeout_   = 2.0f;
+	float spawnElapsed_   = 0.0f;
 };
