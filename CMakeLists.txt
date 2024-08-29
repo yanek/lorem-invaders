@@ -21,7 +21,7 @@ add_custom_command(
         DEPENDS ${PROJECT_NAME})
 
 #set(raylib_VERBOSE 1)
-target_link_libraries(${PROJECT_NAME} raylib)
+target_link_libraries(${PROJECT_NAME} PUBLIC raylib)
 
 # Web Configurations
 if (EMSCRIPTEN)

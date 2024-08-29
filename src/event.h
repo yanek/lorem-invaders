@@ -43,13 +43,13 @@ public:
 class EnemyKilledEvent final : public Event
 {
 public:
-	EnemyKilledEvent(const unsigned int letterCount, const float verticalPosition)
+	EnemyKilledEvent(const u32 letterCount, const f32 verticalPosition)
 		: letterCount(letterCount),
 		  verticalPosition(verticalPosition) {}
 
 	EVENT_CLASS_TYPE(EnemyKilled)
-	const unsigned int letterCount;
-	const float verticalPosition;
+	const u32 letterCount;
+	const f32 verticalPosition;
 };
 
 class PlayerHurtEvent final : public Event

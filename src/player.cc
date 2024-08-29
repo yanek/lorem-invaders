@@ -35,7 +35,7 @@ void Player::draw(const f32 delta) const
 
 	DrawRectangle(0, 0, Viewport::GAME_WIDTH, SIZE + GAP * 2, color::black);
 
-	for (int i = 0; i < maxHitpoints_; i++)
+	for (i32 i = 0; i < maxHitpoints_; i++)
 	{
 		Rectangle dest      = { (f32)(GAP + i * (SIZE + GAP)), GAP, SIZE, SIZE };
 		const Rectangle src = i < hitpoints_ ? Rectangle{ 16, 0, SIZE, SIZE } : Rectangle{ 0, 0, SIZE, SIZE };
@@ -82,8 +82,8 @@ void Player::notify(const Event &event)
 	if (event.getEventType() == EventType::EnemyKilled)
 	{
 		const auto ev     = (const EnemyKilledEvent &)event;
-		const f32 score   = ev.letterCount * 10;
-		f32 posMultiplier = 1.0f;
+		const u32 score   = ev.letterCount * 10;
+		f64 posMultiplier = 1.0f;
 
 		if (ev.verticalPosition > ScoreZone::ZONE_2)
 			posMultiplier = 1.5f;

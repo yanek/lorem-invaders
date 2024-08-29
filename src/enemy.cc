@@ -21,7 +21,7 @@ void Enemy::despawn()
 void Enemy::draw(const f32 delta) const
 {
 	const Font *font = Resources::getFont();
-	const auto fntsize = (float)font->baseSize;
+	const auto fntsize = (f32)font->baseSize;
 
 	Vector2 pos = position_;
 	if (shake_ != nullptr)
@@ -74,7 +74,7 @@ void Enemy::notify(const Event &event)
 
 void Enemy::onInputUpdate(const InputUpdatedEvent &event)
 {
-	int matchCount = 0;
+	i32 matchCount = 0;
 
 	// Check if the input matches the value of the enemy.
 	// If it does, increment the match count.

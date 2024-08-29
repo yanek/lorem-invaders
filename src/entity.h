@@ -21,7 +21,7 @@ private:
 class RenderedEntity : public Entity
 {
 public:
-	virtual void draw(float delta) const = 0;
+	virtual void draw(f32 delta) const = 0;
 	virtual u8 getLayer() const { return LAYER_DEFAULT; }
 
 	static constexpr u8 LAYER_BACKGROUND = 0;

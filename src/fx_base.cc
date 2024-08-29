@@ -1,7 +1,7 @@
 #include "fx_base.h"
 
-FxBase::FxBase(const int durationMilliseconds)
-	: duration_(durationMilliseconds / 1000.0f)
+FxBase::FxBase(const i32 durationMilliseconds)
+	: duration_((f32)durationMilliseconds / 1000.0f)
 {
 }
 

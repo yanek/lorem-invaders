@@ -8,7 +8,7 @@ class ScoreZone final : public RenderedEntity
 {
 public:
 	const char *getName() const override { return "ScoreZone"; }
-	void draw(float delta) const override;
+	void draw(f32 delta) const override;
 	u8 getLayer() const override { return LAYER_BACKGROUND; }
 	void setHeight(const i16 height) { height_ = height; }
 	void setAlpha(const f32 alpha) { alpha_ = alpha; }
@@ -18,5 +18,5 @@ public:
 
 private:
 	u16 height_  = 0;
-	float alpha_ = 1;
+	f32 alpha_ = 1.0f;
 };

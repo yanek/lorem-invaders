@@ -12,8 +12,6 @@ enum class EnemyPattern : u8
 	SLOW = 0,
 	FAST,
 	FASTER,
-	DIAGONAL_LEFT,
-	DIAGONAL_RIGHT,
 	BONUS,
 	NUM_PATTERNS
 };

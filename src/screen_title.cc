@@ -40,12 +40,12 @@ void TitleScreen::update(const f32 delta)
 	if (IsKeyPressed(KEY_M))
 	{
 		Audio::play(SoundId::CLICK);
-		mode_ = (GameMode)(((i32)mode_ + 1) % (int)GameMode::NUM_MODES);
-		saveStorageData(storage::StorageData::MODE, (int)mode_);
+		mode_ = (GameMode)(((u8)mode_ + 1) % (u8)GameMode::NUM_MODES);
+		saveStorageData(storage::StorageData::MODE, (u8)mode_);
 	}
 }
 
-void TitleScreen::draw(const float delta)
+void TitleScreen::draw(const f32 delta)
 {
 	const Font *font              = Resources::getFont();
 	const f32 fntsize             = (f32)font->baseSize;

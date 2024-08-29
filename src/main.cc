@@ -13,7 +13,7 @@ static Viewport *viewport;
 static void updateDrawFrame();
 static bool shouldClose();
 
-int main()
+i32 main()
 {
 	viewport = new Viewport{};
 	viewport->initRenderTexture();
@@ -27,7 +27,7 @@ int main()
 	ScreenManager::init(viewport);
 
 #ifdef __EMSCRIPTEN__
-	emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
+	emscripten_set_main_loop(UpdateDrawFrame, 0, 1);
 #else
 	SetTargetFPS(60);
 	while (!shouldClose()) updateDrawFrame();

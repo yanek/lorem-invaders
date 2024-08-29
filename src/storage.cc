@@ -9,16 +9,16 @@ bool storage::saveStorageData(StorageData pos, const u64 value)
 	bool success            = false;
 	int dataSize            = 0;
 	unsigned char *fileData = LoadFileData(storageFile.c_str(), &dataSize);
-	const int position      = static_cast<int>(pos);
+	const i32 position      = (i32)pos;
 
 	if (fileData != nullptr)
 	{
-		unsigned int newDataSize   = 0;
+		u32 newDataSize   = 0;
 		unsigned char *newFileData = nullptr;
-		if (dataSize <= (position * sizeof(int)))
+		if (dataSize <= (position * sizeof(i32)))
 		{
 			// Increase data size up to position and store value
-			newDataSize = (position + 1) * sizeof(int);
+			newDataSize = (position + 1) * sizeof(i32);
 			newFileData = static_cast<unsigned char *>(RL_REALLOC(fileData, newDataSize));
 
 			if (newFileData != nullptr)
@@ -57,7 +57,7 @@ bool storage::saveStorageData(StorageData pos, const u64 value)
 	{
 		TraceLog(LOG_INFO, "FILEIO: [%s] File created successfully", storageFile.c_str());
 
-		dataSize           = (position + 1) * sizeof(int);
+		dataSize           = (position + 1) * sizeof(i32);
 		fileData           = static_cast<unsigned char *>(RL_MALLOC(dataSize));
 		const auto dataPtr = reinterpret_cast<int *>(fileData);
 		dataPtr[position]  = value;
