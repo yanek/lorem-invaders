@@ -5,25 +5,28 @@
 #include "enemy_pool.h"
 #include "event_listener.h"
 #include "inputbox.h"
+#include "raymath.h"
 #include "resources.h"
 #include "viewport.h"
 #include <raylib.h>
 
+static Rectangle calculateBounds(const Vector2 &position, const char *value);
+
 void Enemy::despawn()
 {
-	isActive_ = false;
-	isDying_ = false;
+	isActive_        = false;
+	isDying_         = false;
 	highlightOffset_ = 0;
-	position_ = Vector2{ 0, 0 };
-	velocity_ = Vector2{ 0, 0 };
+	position_        = Vector2{ 0, 0 };
+	velocity_        = Vector2{ 0, 0 };
 }
 
 void Enemy::draw(const f32 delta) const
 {
-	const Font *font = Resources::getFont();
+	const Font *font   = Resources::getFont();
 	const auto fntsize = (f32)font->baseSize;
 
-	Vector2 pos = position_;
+	Vector2 pos = { bounds_.x, bounds_.y };
 	if (shake_ != nullptr)
 	{
 		pos.x += shake_->getOffset().x;
@@ -33,6 +36,11 @@ void Enemy::draw(const f32 delta) const
 	const Color enemyColor = pattern_ != EnemyPattern::BONUS ? color::primary : color::secondary;
 	DrawTextEx(*font, value_.c_str(), pos, fntsize, 0, enemyColor);
 	DrawTextEx(*font, value_.substr(0, highlightOffset_).c_str(), pos, fntsize, 0, color::accent);
+
+#ifdef DEBUG_DRAW_ENABLED
+	DrawPixel((int)position_.x, (int)position_.y, MAGENTA);
+	DrawRectangleLinesEx(bounds_, 1, SKYBLUE);
+#endif
 }
 
 void Enemy::update(const f32 delta)
@@ -53,7 +61,9 @@ void Enemy::update(const f32 delta)
 
 	position_.x += velocity_.x * delta;
 	position_.y += velocity_.y * delta;
+	bounds_ = calculateBounds(position_, value_.c_str());
 
+	// Check if the enemy is out of bounds.
 	if (position_.y > Viewport::GAME_HEIGHT - 32 || position_.x < 0 || position_.x > Viewport::GAME_WIDTH)
 	{
 		despawn();
@@ -96,8 +106,18 @@ void Enemy::onInputUpdate(const InputUpdatedEvent &event)
 	if (matchCount >= value_.length())
 	{
 		isDying_ = true;
-		shake_ = new Shake(2, 100);
+		shake_   = new Shake(2, 100);
 		Audio::play(SoundId::HIT);
 		ScreenManager::getEventBus()->fire(EnemyKilledEvent(value_.length(), position_.y));
 	}
+}
+
+Rectangle calculateBounds(const Vector2 &position, const char *value)
+{
+	const Font *fnt       = Resources::getFont();
+	const auto fntsize    = (f32)fnt->baseSize;
+	const Vector2 txtsize = MeasureTextEx(*fnt, value, fntsize, 0);
+	const Vector2 hlfsize = Vector2Scale(txtsize, 0.5f);
+	const Vector2 pos     = Vector2Subtract(position, hlfsize);
+	return { pos.x, pos.y, txtsize.x, txtsize.y };
 }

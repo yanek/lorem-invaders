@@ -13,8 +13,8 @@ enum class EnemyPattern : u8
     SLOW = 0,
     FAST,
     FASTER,
-    // DOUBLE,
-    // TRIPLE,
+    DOUBLE,
+    TRIPLE,
     BONUS,
     NUM_PATTERNS
 };

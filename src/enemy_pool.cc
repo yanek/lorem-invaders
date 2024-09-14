@@ -5,6 +5,11 @@
 #include "resources.h"
 #include "viewport.h"
 
+static constexpr i32 COLUMN_COUNT = 5;
+static constexpr i32 COLUMN_WIDTH = Viewport::GAME_WIDTH / COLUMN_COUNT;
+
+static i32 getColumn(i32 columnIndex);
+
 void EnemyPool::init()
 {
 	for (Enemy * &i : pool_)
@@ -30,9 +35,9 @@ void EnemyPool::spawn(Lipsum &lipsum) const
 		txtsize = (i32)MeasureTextEx(*font, value.c_str(), (f32)font->baseSize, 0).x;
 		spawnDatas.emplace_back(
 			SpawnData{
-				Vector2{ (float)GetRandomValue(0, Viewport::GAME_WIDTH - txtsize), 0 }, // position
-				Vector2{ 0, 60 },                                                       // velocity
-				std::move(value)                                                        // value
+				Vector2{ (f32)getColumn(3), 0 }, // position
+				Vector2{ 0.0f, 40.0f },             // velocity
+				std::move(value)                    // value
 			});
 		break;
 	case EnemyPattern::FAST:
@@ -40,9 +45,9 @@ void EnemyPool::spawn(Lipsum &lipsum) const
 		txtsize = (i32)MeasureTextEx(*font, value.c_str(), (f32)font->baseSize, 0).x;
 		spawnDatas.emplace_back(
 			SpawnData{
-				Vector2{ (float)GetRandomValue(0.0f, Viewport::GAME_WIDTH - txtsize), 0.0f }, // position
-				Vector2{ 0.0f, 80.0f },                                                       // velocity
-				std::move(value)                                                              // value
+				Vector2{ (f32)getColumn(3), 0.0f }, // position
+				Vector2{ 0.0f, 50.0f },                // velocity
+				std::move(value)                       // value
 			});
 		break;
 	case EnemyPattern::FASTER:
@@ -50,9 +55,48 @@ void EnemyPool::spawn(Lipsum &lipsum) const
 		txtsize = (i32)MeasureTextEx(*font, value.c_str(), (f32)font->baseSize, 0).x;
 		spawnDatas.emplace_back(
 			SpawnData{
-				Vector2{ (float)GetRandomValue(0, Viewport::GAME_WIDTH - txtsize), 0 }, // position
-				Vector2{ 0.0f, 100.0f },                                                // velocity
-				std::move(value)                                                        // value
+				Vector2{ (f32)getColumn(3), 0 }, // position
+				Vector2{ 0.0f, 60.0f },             // velocity
+				std::move(value)                    // value
+			});
+		break;
+	case EnemyPattern::DOUBLE:
+		value = lipsum.next();
+		spawnDatas.emplace_back(
+			SpawnData{
+				Vector2{ (f32)getColumn(2), 0 }, // position
+				Vector2{ 0.0f, 40.0f },             // velocity
+				std::move(value)                    // value
+			});
+		value = lipsum.next();
+		spawnDatas.emplace_back(
+			SpawnData{
+				Vector2{ (f32)getColumn(4), 0 }, // position
+				Vector2{ 0.0f, 40.0f },                    // velocity
+				std::move(value)                           // value
+			});
+		break;
+	case EnemyPattern::TRIPLE:
+		value = lipsum.next();
+		spawnDatas.emplace_back(
+			SpawnData{
+				Vector2{ (f32)getColumn(1), 0 }, // position
+				Vector2{ 0.0f, 20.0f },             // velocity
+				std::move(value)                    // value
+			});
+		value = lipsum.next();
+		spawnDatas.emplace_back(
+			SpawnData{
+				Vector2{ (f32)getColumn(3), 0 }, // position
+				Vector2{ 0.0f, 20.0f },             // velocity
+				std::move(value)                    // value
+			});
+		value = lipsum.next();
+		spawnDatas.emplace_back(
+			SpawnData{
+				Vector2{ (f32)getColumn(5), 0 }, // position
+				Vector2{ 0.0f, 20.0f },             // velocity
+				std::move(value)                    // value
 			});
 		break;
 	case EnemyPattern::BONUS:
@@ -111,4 +155,9 @@ void EnemyPool::update(const f32 delta)
 		if (entity == nullptr) continue;
 		if (entity->isActive_) entity->update(delta);
 	}
+}
+
+static i32 getColumn(const i32 columnIndex)
+{
+	return (COLUMN_WIDTH * columnIndex) - COLUMN_WIDTH / 2;
 }
