@@ -5,10 +5,13 @@
 #include "resources.h"
 #include "viewport.h"
 
-static constexpr i32 COLUMN_COUNT = 5;
-static constexpr i32 COLUMN_WIDTH = Viewport::GAME_WIDTH / COLUMN_COUNT;
+#include <queue>
 
-static i32 getColumn(i32 columnIndex);
+static constexpr i32 COLUMN_COUNT = 5;
+static constexpr f32 COLUMN_WIDTH = (f32)Viewport::GAME_WIDTH / COLUMN_COUNT;
+
+static f32 getColumn(i32 columnIndex);
+static f32 getRandomColumn();
 
 void EnemyPool::init()
 {
@@ -20,99 +23,74 @@ void EnemyPool::init()
 
 void EnemyPool::spawn(Lipsum &lipsum) const
 {
+	std::queue<SpawnData> spawnDatas;
 	i32 patternId      = GetRandomValue(0, (u8)EnemyPattern::NUM_PATTERNS - 1);
 	const auto pattern = (EnemyPattern)patternId;
-	const Font *font   = Resources::getFont();
-
-	std::vector<SpawnData> spawnDatas;
-	String value;
-	i32 txtsize;
 
 	switch (pattern)
 	{
 	case EnemyPattern::SLOW:
-		value = lipsum.next();
-		txtsize = (i32)MeasureTextEx(*font, value.c_str(), (f32)font->baseSize, 0).x;
-		spawnDatas.emplace_back(
-			SpawnData{
-				Vector2{ (f32)getColumn(3), 0 }, // position
-				Vector2{ 0.0f, 40.0f },             // velocity
-				std::move(value)                    // value
-			});
+		spawnDatas.emplace(
+			Vector2{ getRandomColumn(), 0 }, // position
+			Vector2{ 0.0f, 40.0f },          // velocity
+			lipsum.next()                    // value
+			);
 		break;
 	case EnemyPattern::FAST:
-		value = lipsum.next();
-		txtsize = (i32)MeasureTextEx(*font, value.c_str(), (f32)font->baseSize, 0).x;
-		spawnDatas.emplace_back(
-			SpawnData{
-				Vector2{ (f32)getColumn(3), 0.0f }, // position
-				Vector2{ 0.0f, 50.0f },                // velocity
-				std::move(value)                       // value
-			});
+		spawnDatas.emplace(
+			Vector2{ getRandomColumn(), 0 }, // position
+			Vector2{ 0.0f, 50.0f },          // velocity
+			lipsum.next()                    // value
+			);
 		break;
 	case EnemyPattern::FASTER:
-		value = lipsum.next();
-		txtsize = (i32)MeasureTextEx(*font, value.c_str(), (f32)font->baseSize, 0).x;
-		spawnDatas.emplace_back(
-			SpawnData{
-				Vector2{ (f32)getColumn(3), 0 }, // position
-				Vector2{ 0.0f, 60.0f },             // velocity
-				std::move(value)                    // value
-			});
+		spawnDatas.emplace(
+			Vector2{ getRandomColumn(), 0 }, // position
+			Vector2{ 0.0f, 60.0f },          // velocity
+			lipsum.next()                    // value
+			);
 		break;
 	case EnemyPattern::DOUBLE:
-		value = lipsum.next();
-		spawnDatas.emplace_back(
-			SpawnData{
-				Vector2{ (f32)getColumn(2), 0 }, // position
-				Vector2{ 0.0f, 40.0f },             // velocity
-				std::move(value)                    // value
-			});
-		value = lipsum.next();
-		spawnDatas.emplace_back(
-			SpawnData{
-				Vector2{ (f32)getColumn(4), 0 }, // position
-				Vector2{ 0.0f, 40.0f },                    // velocity
-				std::move(value)                           // value
-			});
+		spawnDatas.emplace(
+			Vector2{ getColumn(2), 0 }, // position
+			Vector2{ 0.0f, 40.0f },     // velocity
+			lipsum.next()               // value
+			);
+		spawnDatas.emplace(
+			Vector2{ getColumn(4), 0 }, // position
+			Vector2{ 0.0f, 40.0f },     // velocity
+			lipsum.next()               // value
+			);
 		break;
 	case EnemyPattern::TRIPLE:
-		value = lipsum.next();
-		spawnDatas.emplace_back(
-			SpawnData{
-				Vector2{ (f32)getColumn(1), 0 }, // position
-				Vector2{ 0.0f, 20.0f },             // velocity
-				std::move(value)                    // value
-			});
-		value = lipsum.next();
-		spawnDatas.emplace_back(
-			SpawnData{
-				Vector2{ (f32)getColumn(3), 0 }, // position
-				Vector2{ 0.0f, 20.0f },             // velocity
-				std::move(value)                    // value
-			});
-		value = lipsum.next();
-		spawnDatas.emplace_back(
-			SpawnData{
-				Vector2{ (f32)getColumn(5), 0 }, // position
-				Vector2{ 0.0f, 20.0f },             // velocity
-				std::move(value)                    // value
-			});
+		spawnDatas.emplace(
+			Vector2{ getColumn(1), 0 }, // position
+			Vector2{ 0.0f, 20.0f },     // velocity
+			lipsum.next()               // value
+			);
+		spawnDatas.emplace(
+			Vector2{ getColumn(3), 0 }, // position
+			Vector2{ 0.0f, 20.0f },     // velocity
+			lipsum.next()               // value
+			);
+		spawnDatas.emplace(
+			Vector2{ getColumn(5), 0 }, // position
+			Vector2{ 0.0f, 20.0f },     // velocity
+			lipsum.next()               // value
+			);
 		break;
 	case EnemyPattern::BONUS:
-		value = lipsum.next();
-		spawnDatas.emplace_back(
-			SpawnData{
-				Vector2{ 0.0f, 64.0f }, // position
-				Vector2{ 80.0f, 0.0f }, // velocity
-				std::move(value)        // value
-			});
+		spawnDatas.emplace(
+			Vector2{ 0, 100 },      // position
+			Vector2{ 80.0f, 0.0f }, // velocity
+			lipsum.next()           // value
+			);
 		break;
 	default:
 		break;
 	}
 
-	for (SpawnData &data : spawnDatas)
+	while (!spawnDatas.empty())
 	{
 		i32 id = -1;
 
@@ -124,22 +102,27 @@ void EnemyPool::spawn(Lipsum &lipsum) const
 				id = j;
 				break;
 			}
-
-			TraceLog(LOG_WARNING, "No pooled enemy available to spawn.");
 		}
 
 		// Skip if no inactive enemy was found
-		if (id < 0) continue;
+		if (id < 0)
+		{
+			TraceLog(LOG_WARNING, "No pooled enemy available to spawn.");
+			spawnDatas.pop();
+			continue;
+		};
 
-		Enemy *enemy     = pool_[id];
-		enemy->id_       = id;
-		enemy->position_ = data.position;
-		enemy->velocity_ = data.velocity;
-		enemy->value_    = std::move(data.value);
-		enemy->isActive_ = true;
-		enemy->pattern_  = pattern;
+		const SpawnData &data = spawnDatas.front();
+		Enemy *enemy          = pool_[id];
+		enemy->id_            = id;
+		enemy->position_      = data.position;
+		enemy->velocity_      = data.velocity;
+		enemy->value_         = data.value;
+		enemy->isActive_      = true;
+		enemy->pattern_       = pattern;
+		spawnDatas.pop();
 
-		TraceLog(LOG_DEBUG, "Creating enemy: '%s' (0x%X)", enemy->value_.c_str(), enemy);
+		TraceLog(LOG_DEBUG, "Creating enemy: '%s' {%d,%d} (0x%X)", enemy->value_.c_str(), enemy->position_.x, enemy->position_.y, enemy);
 	}
 }
 
@@ -157,7 +140,13 @@ void EnemyPool::update(const f32 delta)
 	}
 }
 
-static i32 getColumn(const i32 columnIndex)
+static f32 getColumn(const i32 columnIndex)
 {
-	return (COLUMN_WIDTH * columnIndex) - COLUMN_WIDTH / 2;
+	const i32 idx = ((columnIndex - 1) % COLUMN_COUNT) + 1;
+	return (COLUMN_WIDTH * (f32)idx) - (COLUMN_WIDTH / 2);
+}
+
+static f32 getRandomColumn()
+{
+	return getColumn(GetRandomValue(1, COLUMN_COUNT));
 }

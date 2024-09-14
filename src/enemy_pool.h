@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 #include "entity.h"
 #include "utils.h"
 
@@ -21,6 +23,11 @@ enum class EnemyPattern : u8
 
 struct SpawnData final
 {
+    SpawnData(const Vector2 position, const Vector2 velocity, String value)
+        : position(position), velocity(velocity), value(std::move(value))
+    {
+    }
+
     Vector2 position;
     Vector2 velocity;
     String value;
