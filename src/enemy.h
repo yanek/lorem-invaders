@@ -33,7 +33,7 @@ private:
 	usize id_              = 0;
 	Vector2 position_      = { 0, 0 };
 	Vector2 velocity_      = { 0, 0 };
-	String value_          = "";
+	String value_;
 	usize highlightOffset_ = 0;
 	bool isActive_         = false;
 	bool isDying_          = false;

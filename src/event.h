@@ -1,5 +1,7 @@
 #pragma once
 
+#include "utils.h"
+
 enum class EventType
 {
 	None = 0,

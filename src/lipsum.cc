@@ -10,6 +10,6 @@ Lipsum::Lipsum(const GameMode mode)
 
 std::string Lipsum::next()
 {
-	const usize i = GetRandomValue(0, words_.size() - 1);
+	const usize i = GetRandomValue(0, (i32)words_.size() - 1);
 	return words_[i];
 }

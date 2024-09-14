@@ -63,7 +63,7 @@ void GameScreen::update(const f32 delta)
 	if (spawnElapsed_ > spawnTimeout_)
 	{
 		spawnElapsed_ = 0.0f;
-		enemyPool_->spawn(lipsum_.next());
+		enemyPool_->spawn(lipsum_);
 	}
 }
 
