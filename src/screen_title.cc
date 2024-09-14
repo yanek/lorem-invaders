@@ -27,7 +27,7 @@ void TitleScreen::update(const f32 delta)
 {
 	if (bannerPosition_ < BANNER_ENDPOS)
 	{
-		bannerPosition_ = EaseBounceOut(animTime_, BANNER_STARTPOS, BANNER_ENDPOS - BANNER_STARTPOS, 3.0f);
+		bannerPosition_ = (i32)EaseBounceOut(animTime_, BANNER_STARTPOS, BANNER_ENDPOS - BANNER_STARTPOS, 3.0f);
 		animTime_ += delta;
 	}
 
@@ -49,14 +49,14 @@ void TitleScreen::draw(const f32 delta)
 {
 	const Font *font              = Resources::getFont();
 	const f32 fntsize             = (f32)font->baseSize;
-	constexpr f32 HALF_GAME_WIDTH = Viewport::GAME_WIDTH / 2.0f;
+	constexpr f32 HALF_GAME_WIDTH = Viewport::GAME_WIDTH * 0.5f;
 
 	const Texture2D *banner = Resources::getTexture(TextureId::BANNER);
-	DrawTexture(*banner, HALF_GAME_WIDTH - banner->width / 2.0f, bannerPosition_, color::white);
+	DrawTexture(*banner, (i32)HALF_GAME_WIDTH - banner->width / 2, bannerPosition_, color::white);
 
-	const auto ver        = "v0.5.0";
+	const char *ver       = TextFormat("v%d.%d.%d", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
 	const Vector2 versize = MeasureTextEx(*font, ver, fntsize, 0);
-	DrawRectangle(355, 162, versize.x, versize.y, color::background);
+	DrawRectangle(355, 162, (i32)versize.x, (i32)versize.y, color::background);
 	DrawTextEx(*font, ver, Vector2{ 355, 162 }, fntsize, 0, color::accent);
 
 	const auto action        = "* Press [ENTER] to start\n* Press [M] to change mode";
@@ -72,7 +72,7 @@ void TitleScreen::draw(const f32 delta)
 	const Vector2 hiscorevalsize = MeasureTextEx(*font, hiscoreval, fntsize, 0);
 	DrawTextEx(*font, hiscoreval, Vector2{ HALF_GAME_WIDTH - hiscorevalsize.x / 2.0f, 416 }, fntsize, 0, color::primary);
 
-	std::string m;
+	String m;
 	switch (mode_)
 	{
 	case GameMode::ENGLISH:
