@@ -18,7 +18,19 @@ enum class EnemyPattern : unsigned char
 	DOUBLE,
 	TRIPLE,
 	BONUS,
-	NUM_PATTERNS
+	NUM_PATTERNS,
+	INVALID = 255
+};
+
+struct WeightedPattern
+{
+	WeightedPattern() = default;
+	explicit WeightedPattern(const EnemyPattern pattern, const int weight, const float difficultyMultiplier)
+		: pattern(pattern), weight(weight), difficultyMultiplier(difficultyMultiplier) {}
+
+	EnemyPattern pattern;
+	int weight;
+	float difficultyMultiplier;
 };
 
 struct SpawnData final
@@ -42,5 +54,5 @@ public:
 
 private:
 	static constexpr unsigned char MAX_POOLED = 16;
-	Enemy *pool_[MAX_POOLED]                  = {};
+	Enemy *pool_[MAX_POOLED]{ nullptr };
 };

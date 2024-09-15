@@ -4,7 +4,6 @@
 #include "lipsum.h"
 #include "resources.h"
 #include "viewport.h"
-
 #include <queue>
 
 static constexpr int COLUMN_COUNT   = 5;
@@ -12,6 +11,7 @@ static constexpr float COLUMN_WIDTH = (float)Viewport::GAME_WIDTH / COLUMN_COUNT
 
 static float getColumn(int columnIndex);
 static float getRandomColumn();
+static EnemyPattern pickRandomPattern();
 
 void EnemyPool::init()
 {
@@ -24,9 +24,8 @@ void EnemyPool::init()
 void EnemyPool::spawn(Lipsum &lipsum) const
 {
 	std::queue<SpawnData> spawnDatas;
-	int patternId      = GetRandomValue(0, (unsigned char)EnemyPattern::NUM_PATTERNS - 1);
-	const auto pattern = (EnemyPattern)patternId;
 
+	const EnemyPattern pattern = pickRandomPattern();
 	switch (pattern)
 	{
 	case EnemyPattern::SLOW:
@@ -149,4 +148,38 @@ static float getColumn(const int columnIndex)
 static float getRandomColumn()
 {
 	return getColumn(GetRandomValue(1, COLUMN_COUNT));
+}
+
+static EnemyPattern pickRandomPattern()
+{
+	// You probably don't want to instantiate this every time you call this function
+	// But for now, it's fine.
+	const WeightedPattern patterns[]{
+		WeightedPattern(EnemyPattern::SLOW, 100, 1.0f),
+		WeightedPattern(EnemyPattern::FAST, 40, 2.0f),
+		WeightedPattern(EnemyPattern::FASTER, 20, 1.5f),
+		WeightedPattern(EnemyPattern::DOUBLE, 10, 1.5f),
+		WeightedPattern(EnemyPattern::TRIPLE, 5, 1.2f),
+		WeightedPattern(EnemyPattern::BONUS, 1, 0.8f)
+	};
+
+	int totalWeight = 0;
+	for (const auto pattern : patterns)
+	{
+		totalWeight += pattern.weight;
+	}
+
+	int randomNum = GetRandomValue(1, totalWeight) - 1;
+	for (const auto pattern : patterns)
+	{
+		randomNum -= pattern.weight;
+		if (randomNum < 0)
+		{
+			TraceLog(LOG_TRACE, "Picked pattern: %d", pattern.pattern);
+			return pattern.pattern;
+		}
+	}
+
+	TraceLog(LOG_ERROR, "Failed to pick a pattern.");
+	return EnemyPattern::INVALID;
 }
