@@ -13,6 +13,15 @@ static float getColumn(int columnIndex);
 static float getRandomColumn();
 static EnemyPattern pickRandomPattern();
 
+static const WeightedPattern patterns[]{
+	WeightedPattern(EnemyPattern::SLOW, 100, 1.0f),
+	WeightedPattern(EnemyPattern::FAST, 40, 2.0f),
+	WeightedPattern(EnemyPattern::FASTER, 20, 1.5f),
+	WeightedPattern(EnemyPattern::DOUBLE, 10, 1.5f),
+	WeightedPattern(EnemyPattern::TRIPLE, 5, 1.2f),
+	WeightedPattern(EnemyPattern::BONUS, 1, 0.8f)
+};
+
 void EnemyPool::init()
 {
 	for (Enemy *&i : pool_)
@@ -152,17 +161,6 @@ static float getRandomColumn()
 
 static EnemyPattern pickRandomPattern()
 {
-	// You probably don't want to instantiate this every time you call this function
-	// But for now, it's fine.
-	const WeightedPattern patterns[]{
-		WeightedPattern(EnemyPattern::SLOW, 100, 1.0f),
-		WeightedPattern(EnemyPattern::FAST, 40, 2.0f),
-		WeightedPattern(EnemyPattern::FASTER, 20, 1.5f),
-		WeightedPattern(EnemyPattern::DOUBLE, 10, 1.5f),
-		WeightedPattern(EnemyPattern::TRIPLE, 5, 1.2f),
-		WeightedPattern(EnemyPattern::BONUS, 1, 0.8f)
-	};
-
 	int totalWeight = 0;
 	for (const auto pattern : patterns)
 	{

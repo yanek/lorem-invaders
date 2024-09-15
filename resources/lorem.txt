@@ -3,15 +3,11 @@ ipsum
 dolor
 sit
 amet
-consectetuer
-adipiscing
 elit
 Lobortis
 phasellus
 torquent
 sodales
-suspendisse
-adipiscing
 fames
 Ex
 nullam
@@ -29,9 +25,7 @@ suscipit
 fermentum
 sem
 arcu
-ullamcorper
 tortor
-Parturient
 sagittis
 euismod
 lobortis
@@ -51,7 +45,6 @@ tristique
 viverra
 porta
 etiam
-adipiscing
 donec
 sagittis
 dis
@@ -81,7 +74,6 @@ Placerat
 nam
 varius
 felis
-scelerisque
 id
 Justo
 convallis
@@ -156,7 +148,6 @@ suscipit
 est
 torquent
 ante
-Sollicitudin
 luctus
 lobortis
 metus
@@ -205,7 +196,6 @@ curabitur
 pharetra
 Porttitor
 dictumst
-suspendisse
 commodo
 proin
 arcu
@@ -222,7 +212,6 @@ in
 Dignissim
 non
 platea
-consectetur
 erat
 est
 Facilisi
@@ -241,7 +230,6 @@ auctor
 netus
 facilisi
 Lacinia
-scelerisque
 purus
 sapien
 nec
