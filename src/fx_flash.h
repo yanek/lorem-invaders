@@ -6,7 +6,7 @@
 class Flash final : public FxBase
 {
 public:
-	Flash(Color color, i32 milliseconds);
-	void update(f32 delta) override;
+	Flash(Color color, int milliseconds);
+	void update(float delta) override;
 	Color color_;
 };

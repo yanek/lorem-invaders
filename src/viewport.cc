@@ -17,19 +17,19 @@ Viewport::~Viewport()
 void Viewport::initRenderTexture()
 {
 	renderTexture_ = LoadRenderTexture(GAME_WIDTH, GAME_HEIGHT);
-	virtualRatio_  = (f32)WINDOW_WIDTH / (f32)GAME_WIDTH;
+	virtualRatio_  = (float)WINDOW_WIDTH / (float)GAME_WIDTH;
 
-	const f32 srcw = (f32)renderTexture_.texture.width;
-	const f32 srch = (f32)-renderTexture_.texture.height;
+	const auto srcw = (float)renderTexture_.texture.width;
+	const auto srch = (float)-renderTexture_.texture.height;
 	sourceRect       = Rectangle{ 0.0f, 0.0f, srcw, srch };
 
-	const f32 scale = std::min(GetScreenWidth() / GAME_WIDTH, GetScreenHeight() / GAME_HEIGHT);
-	const f32 dstw  = static_cast<float>(GAME_WIDTH) * scale;
-	const f32 dsth  = static_cast<float>(GAME_HEIGHT) * scale;
+	const float scale = std::min((float)GetScreenWidth() / GAME_WIDTH, (float)GetScreenHeight() / GAME_HEIGHT);
+	const float dstw  = static_cast<float>(GAME_WIDTH) * scale;
+	const float dsth  = static_cast<float>(GAME_HEIGHT) * scale;
 
 	this->destRect = Rectangle{
-		(GetScreenWidth() - ((f32)GAME_WIDTH * scale)) * 0.5f,
-		(GetScreenHeight() - ((f32)GAME_HEIGHT * scale)) * 0.5f,
+		((float)GetScreenWidth() - ((float)GAME_WIDTH * scale)) * 0.5f,
+		((float)GetScreenHeight() - ((float)GAME_HEIGHT * scale)) * 0.5f,
 		dstw,
 		dsth
 	};

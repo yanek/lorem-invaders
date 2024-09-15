@@ -21,10 +21,10 @@ void Enemy::despawn()
 	velocity_        = Vector2{ 0, 0 };
 }
 
-void Enemy::draw(const f32 delta) const
+void Enemy::draw(const float delta) const
 {
 	const Font *font   = Resources::getFont();
-	const auto fntsize = (f32)font->baseSize;
+	const auto fntsize = (float)font->baseSize;
 
 	Vector2 pos = { bounds_.x, bounds_.y };
 	if (shake_ != nullptr)
@@ -43,7 +43,7 @@ void Enemy::draw(const f32 delta) const
 #endif
 }
 
-void Enemy::update(const f32 delta)
+void Enemy::update(const float delta)
 {
 	// If the entity is shaking, it must be dying.
 	if (shake_ != nullptr)
@@ -84,11 +84,11 @@ void Enemy::notify(const Event &event)
 
 void Enemy::onInputUpdate(const InputUpdatedEvent &event)
 {
-	i32 matchCount = 0;
+	int matchCount = 0;
 
 	// Check if the input matches the value of the enemy.
 	// If it does, increment the match count.
-	for (i32 i = 0; (i < value_.length()) && (i < strlen(event.value)); ++i)
+	for (int i = 0; (i < value_.length()) && (i < strlen(event.value)); ++i)
 	{
 		if (event.value[i] == value_[i])
 		{
@@ -115,7 +115,7 @@ void Enemy::onInputUpdate(const InputUpdatedEvent &event)
 Rectangle calculateBounds(const Vector2 &position, const char *value)
 {
 	const Font *fnt       = Resources::getFont();
-	const auto fntsize    = (f32)fnt->baseSize;
+	const auto fntsize    = (float)fnt->baseSize;
 	const Vector2 txtsize = MeasureTextEx(*fnt, value, fntsize, 0);
 	const Vector2 hlfsize = Vector2Scale(txtsize, 0.5f);
 	const Vector2 pos     = Vector2Subtract(position, hlfsize);

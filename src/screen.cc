@@ -104,7 +104,7 @@ void ScreenManager::update()
 		return;
 	}
 
-	f32 delta = GetFrameTime();
+	float delta = GetFrameTime();
 	if (current_->isPaused_) delta = 0.0f;
 
 	for (const auto entity : current_->entities_)

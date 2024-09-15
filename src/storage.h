@@ -3,12 +3,12 @@
 
 namespace storage
 {
-	enum class StorageData : u8
+	enum class StorageData : unsigned char
 	{
 		MODE    = 0,
 		HISCORE = 1,
 	};
 
-	bool saveStorageData(StorageData pos, u64 value);
-	u64 loadStorageData(StorageData pos);
+	bool saveStorageData(StorageData pos, unsigned long value);
+	unsigned long loadStorageData(StorageData pos);
 }

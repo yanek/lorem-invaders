@@ -8,24 +8,24 @@
 #include "viewport.h"
 #include <raylib.h>
 
-void InputBox::update(const f32 delta)
+void InputBox::update(const float delta)
 {
 	if (getScreen()->isPaused()) return;
 
 	const EventBus *bus = ScreenManager::getEventBus();
-	i32 key             = GetCharPressed();
+	char key             = (char)GetCharPressed();
 
 	while (key > 0)
 	{
 		if ((key >= 32) && (key <= 125) && (letterCount_ < MAX_INPUT_CHARS))
 		{
-			value_[letterCount_]     = (unsigned char)key;
+			value_[letterCount_]     = key;
 			value_[letterCount_ + 1] = '\0';
 			letterCount_++;
 			bus->fire(InputUpdatedEvent{ value_ });
 		}
 
-		key = GetCharPressed();
+		key = (char)GetCharPressed();
 	}
 
 	if (IsKeyPressed(KEY_BACKSPACE) || IsKeyPressedRepeat(KEY_BACKSPACE))
@@ -71,11 +71,11 @@ void InputBox::update(const f32 delta)
 	}
 }
 
-void InputBox::draw(const f32 delta) const
+void InputBox::draw(const float delta) const
 {
 	const Font *font   = Resources::getFont();
-	const auto fntsize = (f32)font->baseSize;
-	const f32 txtlen   = MeasureTextEx(*font, value_, fntsize, 0).x;
+	const auto fntsize = (float)font->baseSize;
+	const float txtlen = MeasureTextEx(*font, value_, fntsize, 0).x;
 
 	const Vector2 txtpos = {
 		Viewport::GAME_WIDTH / 2.0f - txtlen / 2.0f,
@@ -110,9 +110,9 @@ void InputBox::draw(const f32 delta) const
 
 	if (cursorBlinkElapsed_ > CURSOR_BLINK_TIME && (letterCount_ < MAX_INPUT_CHARS))
 	{
-		const i32 x = (i32)(txtpos.x + txtlen);
-		const i32 y = (i32)txtpos.y;
-		DrawText("|", x, y, fntsize, fgclr);
+		const int x = (int)(txtpos.x + txtlen);
+		const int y = (int)txtpos.y;
+		DrawText("|", x, y, (int)fntsize, fgclr);
 	}
 }
 
@@ -127,7 +127,7 @@ void InputBox::notify(const Event &event)
 	if (event.getEventType() == EventType::PlayerHurt)
 	{
 		flashPtr_ = new Flash(color::accent, 30);
-		shakePtr_ = new Shake(4.0f, 100);
+		shakePtr_ = new Shake(4, 100);
 	}
 
 	if (event.getEventType() == EventType::EnemyKilled)

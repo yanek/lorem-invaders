@@ -1,9 +1,9 @@
 #include "audio.h"
 
-#include <assert.h>
+#include <cassert>
 
-u8 Audio::head_ = 0;
-u8 Audio::tail_ = 0;
+unsigned char Audio::head_ = 0;
+unsigned char Audio::tail_ = 0;
 PlaySoundMessage Audio::pending_[MAX_PENDING];
 
 void Audio::init()
@@ -22,7 +22,7 @@ void Audio::play(const SoundId id)
 {
 	// Check if the sound is already pending
 	// If it is, don't add it again
-	for (u8 i = head_; i != tail_; i = (i + 1) % MAX_PENDING)
+	for (unsigned char i = head_; i != tail_; i = (i + 1) % MAX_PENDING)
 	{
 		if (pending_[i].soundId == id) return;
 	}
@@ -38,7 +38,7 @@ void Audio::update()
 
 	SoundId soundId    = pending_[head_].soundId;
 	const Sound *sound = Resources::getSound(soundId);
-	TraceLog(LOG_DEBUG, "Playing sound: %d (0x%X)", (i32)soundId, sound);
+	TraceLog(LOG_DEBUG, "Playing sound: %d (0x%X)", (int)soundId, sound);
 	PlaySound(*sound);
 
 	head_ = (head_ + 1) % MAX_PENDING;

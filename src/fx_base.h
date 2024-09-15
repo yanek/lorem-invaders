@@ -6,11 +6,11 @@ class FxBase
 {
 public:
 	virtual ~FxBase()                = default;
-	virtual void update(f32 delta) = 0;
+	virtual void update(float delta) = 0;
 	bool shouldDie() const;
 
 protected:
-	explicit FxBase(i32 durationMilliseconds);
-	f32 duration_ = 0;
-	f32 elapsed_  = 0;
+	explicit FxBase(int durationMilliseconds);
+	float duration_ = 0;
+	float elapsed_  = 0;
 };

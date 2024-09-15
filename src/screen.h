@@ -10,7 +10,7 @@ class EventBus;
 class EnemyPool;
 class TitleScreen;
 
-enum class GameMode : u8
+enum class GameMode : unsigned char
 {
 	LOREM = 0,
 	ENGLISH,
@@ -24,8 +24,8 @@ class Screen
 public:
 	virtual ~Screen()   = default;
 	virtual void init() = 0;
-	virtual void update(f32 delta) {}
-	virtual void draw(f32 delta) {}
+	virtual void update(float delta) {}
+	virtual void draw(float delta) {}
 	virtual void unload() {}
 	virtual const char *getName() const = 0;
 	void destroyEntity(Entity *entity);

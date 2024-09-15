@@ -8,7 +8,7 @@
 #include "viewport.h"
 #include <raylib.h>
 
-void ScoreZone::draw(f32 delta) const
+void ScoreZone::draw(float delta) const
 {
-	DrawRectangle(0, 0, Viewport::GAME_WIDTH, height_, Fade(color::secondary, alpha_));
+	DrawRectangle(0, 0, Viewport::GAME_WIDTH, (float)height_, Fade(color::secondary, alpha_));
 }

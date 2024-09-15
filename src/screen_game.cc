@@ -34,7 +34,7 @@ void GameScreen::init()
 	enemyPool_->init();
 }
 
-void GameScreen::update(const f32 delta)
+void GameScreen::update(const float delta)
 {
 	if (IsKeyPressed(KEY_ESCAPE))
 	{
@@ -67,7 +67,7 @@ void GameScreen::update(const f32 delta)
 	}
 }
 
-void GameScreen::draw(const f32 delta)
+void GameScreen::draw(const float delta)
 {
 
 	if (isPaused())
@@ -76,11 +76,11 @@ void GameScreen::draw(const f32 delta)
 		DrawRectangle(0, 200, Viewport::GAME_WIDTH, 32, color::black);
 
 		const Font *font   = Resources::getFont();
-		const f32 fntsize  = (f32)font->baseSize;
+		const auto fntsize = (float)font->baseSize;
 		const auto paused  = "PAUSE";
-		const f32 psize    = MeasureTextEx(*font, paused, fntsize, 0).x;
+		const float psize  = MeasureTextEx(*font, paused, fntsize, 0).x;
 		const auto actions = "[Esc] Resume, [R] Restart, [B] Back to main menu";
-		const f32 asize    = MeasureTextEx(*font, actions, fntsize, 0).x;
+		const float asize  = MeasureTextEx(*font, actions, fntsize, 0).x;
 
 		Vector2 drawPos;
 		drawPos = Vector2{ Viewport::GAME_WIDTH / 2.0f - psize / 2.0f, 209 };
@@ -96,7 +96,7 @@ void GameScreen::unload()
 	enemyPool_ = nullptr;
 }
 
-u8 GameScreen::getDifficultyModifier() const
+unsigned char GameScreen::getDifficultyModifier() const
 {
 	return difficultyModifier_;
 }

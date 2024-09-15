@@ -2,21 +2,21 @@
 
 #include "utils.h"
 
-Texture2D *Resources::textures_[(u8)TextureId::NUM_TEXTURES] = { nullptr };
-Sound *Resources::sounds_[(u8)SoundId::NUM_SOUNDS]           = { nullptr };
-std::string *Resources::lipsum_[(u8)GameMode::NUM_MODES]     = { nullptr };
+Texture2D *Resources::textures_[(unsigned char)TextureId::NUM_TEXTURES] = { nullptr };
+Sound *Resources::sounds_[(unsigned char)SoundId::NUM_SOUNDS]           = { nullptr };
+std::string *Resources::lipsum_[(unsigned char)GameMode::NUM_MODES]     = { nullptr };
 Font *Resources::font_                                        = nullptr;
 
 void Resources::preload()
 {
 	font_                            = new Font(LoadFont("resources/ibm-16.fnt"));
-	textures_[(u8)TextureId::HEART]  = new Texture2D(LoadTexture("resources/heart.png"));
-	textures_[(u8)TextureId::BANNER] = new Texture2D(LoadTexture("resources/banner.png"));
-	sounds_[(u8)SoundId::CLICK]      = new Sound(LoadSound("resources/click.wav"));
-	sounds_[(u8)SoundId::HIT]        = new Sound(LoadSound("resources/hit.wav"));
-	sounds_[(u8)SoundId::HURT]       = new Sound(LoadSound("resources/hurt.wav"));
-	sounds_[(u8)SoundId::PAUSE]      = new Sound(LoadSound("resources/pause.wav"));
-	sounds_[(u8)SoundId::GAME_OVER]  = new Sound(LoadSound("resources/gameover.wav"));
+	textures_[(unsigned char)TextureId::HEART]  = new Texture2D(LoadTexture("resources/heart.png"));
+	textures_[(unsigned char)TextureId::BANNER] = new Texture2D(LoadTexture("resources/banner.png"));
+	sounds_[(unsigned char)SoundId::CLICK]      = new Sound(LoadSound("resources/click.wav"));
+	sounds_[(unsigned char)SoundId::HIT]        = new Sound(LoadSound("resources/hit.wav"));
+	sounds_[(unsigned char)SoundId::HURT]       = new Sound(LoadSound("resources/hurt.wav"));
+	sounds_[(unsigned char)SoundId::PAUSE]      = new Sound(LoadSound("resources/pause.wav"));
+	sounds_[(unsigned char)SoundId::GAME_OVER]  = new Sound(LoadSound("resources/gameover.wav"));
 	TraceLog(LOG_INFO, "Finished preloading assets");
 }
 
@@ -69,7 +69,7 @@ const Font *Resources::getFont()
 
 const String *Resources::getLipsum(GameMode mode)
 {
-	if (lipsum_[(u8)mode] == nullptr)
+	if (lipsum_[(unsigned char)mode] == nullptr)
 	{
 		const char *path;
 		switch (mode)
@@ -81,18 +81,18 @@ const String *Resources::getLipsum(GameMode mode)
 			path = "resources/lorem.txt";
 			break;
 		default:
-			E_BAIL(nullptr, "Dict not found for GameMode: %d", (u8)mode);
+			E_BAIL(nullptr, "Dict not found for GameMode: %d", (unsigned char)mode);
 		}
 
-		lipsum_[(u8)mode] = new std::string(LoadFileText(path));
+		lipsum_[(unsigned char)mode] = new std::string(LoadFileText(path));
 	}
 
-	return lipsum_[(u8)mode];
+	return lipsum_[(unsigned char)mode];
 }
 
 const Sound *Resources::getSound(SoundId id)
 {
-	if (sounds_[(u8)id] == nullptr)
+	if (sounds_[(unsigned char)id] == nullptr)
 	{
 		const char *path;
 		switch (id)
@@ -113,18 +113,18 @@ const Sound *Resources::getSound(SoundId id)
 			path = "resources/gameover.wav";
 			break;
 		default:
-			E_BAIL(nullptr, "Sound not found: %d", (u8)id);
+			E_BAIL(nullptr, "Sound not found: %d", (unsigned char)id);
 		}
 
-		sounds_[(u8)id] = new Sound(LoadSound(path));
+		sounds_[(unsigned char)id] = new Sound(LoadSound(path));
 	}
 
-	return sounds_[(u8)id];
+	return sounds_[(unsigned char)id];
 }
 
 const Texture2D *Resources::getTexture(TextureId id)
 {
-	if (textures_[(u8)id] == nullptr)
+	if (textures_[(unsigned char)id] == nullptr)
 	{
 		const char *path;
 		switch (id)
@@ -136,11 +136,11 @@ const Texture2D *Resources::getTexture(TextureId id)
 			path = "resources/banner.png";
 			break;
 		default:
-			E_BAIL(nullptr, "Texture not found: %d", (u8)id);
+			E_BAIL(nullptr, "Texture not found: %d", (unsigned char)id);
 		}
 
-		textures_[(u8)id] = new Texture2D(LoadTexture(path));
+		textures_[(unsigned char)id] = new Texture2D(LoadTexture(path));
 	}
 
-	return textures_[(u8)id];
+	return textures_[(unsigned char)id];
 }

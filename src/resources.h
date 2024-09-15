@@ -4,9 +4,9 @@
 #include "utils.h"
 #include <raylib.h>
 
-enum class GameMode : u8;
+enum class GameMode : unsigned char;
 
-enum class SoundId : u8
+enum class SoundId : unsigned char
 {
 	CLICK = 0,
 	HIT,
@@ -16,7 +16,7 @@ enum class SoundId : u8
 	NUM_SOUNDS,
 };
 
-enum class TextureId : u8
+enum class TextureId : unsigned char
 {
 	HEART = 0,
 	BANNER,
@@ -35,7 +35,7 @@ public:
 
 private:
 	static Font *font_;
-	static String *lipsum_[(u8)GameMode::NUM_MODES];
-	static Texture2D *textures_[(u8)TextureId::NUM_TEXTURES];
-	static Sound *sounds_[(u8)SoundId::NUM_SOUNDS];
+	static String *lipsum_[(unsigned char)GameMode::NUM_MODES];
+	static Texture2D *textures_[(unsigned char)TextureId::NUM_TEXTURES];
+	static Sound *sounds_[(unsigned char)SoundId::NUM_SOUNDS];
 };

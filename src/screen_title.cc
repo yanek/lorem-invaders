@@ -23,11 +23,11 @@ void TitleScreen::unload()
 {
 }
 
-void TitleScreen::update(const f32 delta)
+void TitleScreen::update(const float delta)
 {
 	if (bannerPosition_ < BANNER_ENDPOS)
 	{
-		bannerPosition_ = (i32)EaseBounceOut(animTime_, BANNER_STARTPOS, BANNER_ENDPOS - BANNER_STARTPOS, 3.0f);
+		bannerPosition_ = (int)EaseBounceOut(animTime_, BANNER_STARTPOS, BANNER_ENDPOS - BANNER_STARTPOS, 3.0f);
 		animTime_ += delta;
 	}
 
@@ -40,28 +40,28 @@ void TitleScreen::update(const f32 delta)
 	if (IsKeyPressed(KEY_M))
 	{
 		Audio::play(SoundId::CLICK);
-		mode_ = (GameMode)(((u8)mode_ + 1) % (u8)GameMode::NUM_MODES);
-		saveStorageData(storage::StorageData::MODE, (u8)mode_);
+		mode_ = (GameMode)(((unsigned char)mode_ + 1) % (unsigned char)GameMode::NUM_MODES);
+		saveStorageData(storage::StorageData::MODE, (unsigned char)mode_);
 	}
 }
 
-void TitleScreen::draw(const f32 delta)
+void TitleScreen::draw(const float delta)
 {
-	const Font *font              = Resources::getFont();
-	const f32 fntsize             = (f32)font->baseSize;
-	constexpr f32 HALF_GAME_WIDTH = Viewport::GAME_WIDTH * 0.5f;
+	const Font *font                = Resources::getFont();
+	const auto fntsize              = (float)font->baseSize;
+	constexpr float HALF_GAME_WIDTH = Viewport::GAME_WIDTH * 0.5f;
 
 	const Texture2D *banner = Resources::getTexture(TextureId::BANNER);
-	DrawTexture(*banner, (i32)HALF_GAME_WIDTH - banner->width / 2, bannerPosition_, color::white);
+	DrawTexture(*banner, (int)HALF_GAME_WIDTH - banner->width / 2, bannerPosition_, color::white);
 
 	const char *ver       = TextFormat("v%d.%d.%d", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
 	const Vector2 versize = MeasureTextEx(*font, ver, fntsize, 0);
-	DrawRectangle(355, 162, (i32)versize.x, (i32)versize.y, color::background);
+	DrawRectangle(355, 162, (int)versize.x, (int)versize.y, color::background);
 	DrawTextEx(*font, ver, Vector2{ 355, 162 }, fntsize, 0, color::accent);
 
 	const auto action        = "* Press [ENTER] to start\n* Press [M] to change mode";
 	const Vector2 actionsize = MeasureTextEx(*font, action, fntsize, 0);
-	const f32 actionposX     = HALF_GAME_WIDTH - actionsize.x / 2.0f;
+	const float actionposX   = HALF_GAME_WIDTH - actionsize.x / 2.0f;
 	DrawTextEx(*font, action, Vector2{ actionposX, 200 }, fntsize, 0, color::secondary);
 
 	const auto hiscorelabel   = "HI-SCORE";
@@ -84,6 +84,6 @@ void TitleScreen::draw(const f32 delta)
 
 	const char *mode       = TextFormat("- %s MODE - ", m.c_str());
 	const Vector2 modesize = MeasureTextEx(*font, mode, fntsize, 0);
-	const f32 modeposX     = Viewport::GAME_WIDTH / 2.0f - modesize.x / 2.0f;
+	const float modeposX   = Viewport::GAME_WIDTH / 2.0f - modesize.x / 2.0f;
 	DrawTextEx(*font, mode, Vector2{ modeposX, 264 }, fntsize, 0, color::primary);
 }

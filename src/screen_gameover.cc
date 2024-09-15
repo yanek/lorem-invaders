@@ -10,7 +10,7 @@
 void GameOverScreen::init()
 {
 	Audio::play(SoundId::GAME_OVER);
-	const u64 hiscore = loadStorageData(storage::StorageData::HISCORE);
+	const unsigned long hiscore = loadStorageData(storage::StorageData::HISCORE);
 
 	if (score_ > hiscore)
 	{
@@ -18,7 +18,7 @@ void GameOverScreen::init()
 	}
 }
 
-void GameOverScreen::update(const f32 delta)
+void GameOverScreen::update(const float delta)
 {
 	if (IsKeyPressed(KEY_ENTER))
 	{
@@ -26,23 +26,23 @@ void GameOverScreen::update(const f32 delta)
 	}
 }
 
-void GameOverScreen::draw(const f32 delta)
+void GameOverScreen::draw(const float delta)
 {
 	const Font *font        = Resources::getFont();
-	const f32 fntsize       = (f32)font->baseSize;
+	const auto fntsize      = (float)font->baseSize;
 	const char *score       = TextFormat("SCORE: %010d", score_);
 	const Vector2 scoresize = MeasureTextEx(*font, score, fntsize * 2, 0);
-	const f32 scoreposX   = Viewport::GAME_WIDTH / 2.0f - scoresize.x / 2.0f;
+	const float scoreposX   = Viewport::GAME_WIDTH / 2.0f - scoresize.x / 2.0f;
 	DrawTextEx(*font, score, Vector2{ scoreposX, 96 }, fntsize * 2, 0, color::primary);
 
 	const auto title        = "Game Over!";
 	const Vector2 titlesize = MeasureTextEx(*font, title, fntsize, 0);
-	const f32 titleposX     = Viewport::GAME_WIDTH / 2.0f - titlesize.x / 2.0f;
+	const float titleposX   = Viewport::GAME_WIDTH / 2.0f - titlesize.x / 2.0f;
 	DrawTextEx(*font, title, Vector2{ titleposX, 72 }, fntsize, 0, color::secondary);
 
 	const auto action        = "Press [ENTER] to return to title screen";
 	const Vector2 actionsize = MeasureTextEx(*font, action, fntsize, 0);
-	const f32 actionposX     = Viewport::GAME_WIDTH / 2.0f - actionsize.x / 2.0f;
+	const float actionposX   = Viewport::GAME_WIDTH / 2.0f - actionsize.x / 2.0f;
 	DrawTextEx(*font, action, Vector2{ actionposX, 134 }, fntsize, 0, color::secondary);
 }
 

@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-enum class GameMode : u8;
+enum class GameMode : unsigned char;
 
 class Lipsum
 {

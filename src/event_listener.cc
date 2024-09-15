@@ -2,6 +2,7 @@
 
 #include "event_bus.h"
 #include <cassert>
+#include <raylib.h>
 
 EventListener::~EventListener()
 {
@@ -13,7 +14,7 @@ EventListener::~EventListener()
 
 void EventListener::onSubscribe(EventBus *bus)
 {
-	assert(subscribedTo_ != nullptr);
+	assert(subscribedTo_ == nullptr);
 	subscribedTo_ = bus;
 }
 

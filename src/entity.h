@@ -9,7 +9,7 @@ class Entity
 
 public:
 	virtual ~Entity() = default;
-	virtual void update(f32 delta) {}
+	virtual void update(float delta) {}
 	virtual const char *getName() const = 0;
 	virtual bool isActive() const { return true; }
 	Screen *getScreen() const { return screen_; }
@@ -21,11 +21,11 @@ private:
 class RenderedEntity : public Entity
 {
 public:
-	virtual void draw(f32 delta) const = 0;
-	virtual u8 getLayer() const { return LAYER_DEFAULT; }
+	virtual void draw(float delta) const = 0;
+	virtual unsigned char getLayer() const { return LAYER_DEFAULT; }
 
-	static constexpr u8 LAYER_BACKGROUND = 0;
-	static constexpr u8 LAYER_DEFAULT    = 1;
-	static constexpr u8 LAYER_FOREGROUND = 2;
-	static constexpr u8 LAYER_GUI        = 3;
+	static constexpr unsigned char LAYER_BACKGROUND = 0;
+	static constexpr unsigned char LAYER_DEFAULT    = 1;
+	static constexpr unsigned char LAYER_FOREGROUND = 2;
+	static constexpr unsigned char LAYER_GUI        = 3;
 };

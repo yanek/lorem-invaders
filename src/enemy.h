@@ -9,7 +9,7 @@
 #include <iostream>
 #include <raylib.h>
 
-enum class EnemyPattern : u8;
+enum class EnemyPattern : unsigned char;
 class Shake;
 
 class Enemy final : public RenderedEntity, EventListener
@@ -20,8 +20,8 @@ public:
 	Enemy() { EVENT_SUBSCRIBE }
 	~Enemy() override { EVENT_UNSUBSCRIBE }
 
-	void update(f32 delta) override;
-	void draw(f32 delta) const override;
+	void update(float delta) override;
+	void draw(float delta) const override;
 	void despawn();
 	void notify(const Event &event) override;
 	const char *getName() const override { return "Enemy"; }
@@ -30,14 +30,14 @@ public:
 private:
 	void onInputUpdate(const InputUpdatedEvent &event);
 
-	usize id_              = 0;
-	Vector2 position_      = { 0, 0 };
-	Vector2 velocity_      = { 0, 0 };
-	Rectangle bounds_	   = { 0, 0, 0, 0 };
+	size_t id_        = 0;
+	Vector2 position_ = { 0, 0 };
+	Vector2 velocity_ = { 0, 0 };
+	Rectangle bounds_ = { 0, 0, 0, 0 };
 	String value_;
-	usize highlightOffset_ = 0;
-	bool isActive_         = false;
-	bool isDying_          = false;
-	EnemyPattern pattern_  = (EnemyPattern)0;
+	size_t highlightOffset_ = 0;
+	bool isActive_          = false;
+	bool isDying_           = false;
+	EnemyPattern pattern_   = (EnemyPattern)0;
 	Shake *shake_{ nullptr };
 };

@@ -15,5 +15,5 @@ private:
 	friend class EventBus;
 	void onSubscribe(EventBus *bus);
 	void onUnsubscribe(const EventBus *bus);
-	EventBus *subscribedTo_;
+	EventBus *subscribedTo_{nullptr};
 };

@@ -21,9 +21,9 @@ enum class EventType
 class Event
 {
 public:
-	virtual ~Event() = default;
+	virtual ~Event()                       = default;
 	virtual EventType getEventType() const = 0;
-	virtual const char *getName() const = 0;
+	virtual const char *getName() const    = 0;
 };
 
 class ApplicationExitEvent final : public Event
@@ -45,13 +45,12 @@ public:
 class EnemyKilledEvent final : public Event
 {
 public:
-	EnemyKilledEvent(const u32 letterCount, const f32 verticalPosition)
-		: letterCount(letterCount),
-		  verticalPosition(verticalPosition) {}
+	EnemyKilledEvent(const unsigned int letterCount, const float verticalPosition)
+		: letterCount(letterCount), verticalPosition(verticalPosition) {}
 
 	EVENT_CLASS_TYPE(EnemyKilled)
-	const u32 letterCount;
-	const f32 verticalPosition;
+	const unsigned int letterCount;
+	const float verticalPosition;
 };
 
 class PlayerHurtEvent final : public Event
