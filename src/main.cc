@@ -18,7 +18,12 @@ int main()
 	viewport = new Viewport{};
 	viewport->initRenderTexture();
 
-	SetTraceLogLevel(LOG_TRACE);
+#ifdef NDEBUG
+	SetTraceLogLevel(LOG_INFO);
+#else
+	SetTraceLogLevel(LOG_ALL);
+#endif
+
 	SetExitKey(0);
 	SetTextLineSpacing(16);
 
