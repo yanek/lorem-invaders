@@ -96,16 +96,11 @@ void GameScreen::unload()
 	enemyPool_ = nullptr;
 }
 
-unsigned char GameScreen::getDifficultyModifier() const
-{
-	return difficultyModifier_;
-}
-
 void GameScreen::notify(const Event &event)
 {
 	if (event.getEventType() == EventType::EnemyKilled)
 	{
-		difficultyModifier_ = std::min(difficultyModifier_ + 1, 255);
+		difficultyModifier_ = std::min(difficultyModifier_ + 0.01f, 10.0f);
 		TraceLog(LOG_DEBUG, "Difficulty modifier: %f", difficultyModifier_);
 	}
 }

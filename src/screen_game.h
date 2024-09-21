@@ -15,18 +15,18 @@ public:
 	explicit GameScreen(const GameMode mode)
 		: lipsum_{ mode }, gameMode_{ mode } { EVENT_SUBSCRIBE }
 
-	~GameScreen() override{ EVENT_UNSUBSCRIBE }
+	~GameScreen() override { EVENT_UNSUBSCRIBE }
 
 	void init() override;
 	void update(float delta) override;
 	void draw(float delta) override;
 	void unload() override;
-	unsigned char getDifficultyModifier() const;
+	float getDifficultyModifier() const { return difficultyModifier_; }
 	const char *getName() const override { return "GameScreen"; }
 	void notify(const Event &event) override;
 
 private:
-	unsigned char difficultyModifier_ = 0;
+	float difficultyModifier_ = 1.0f;
 	Lipsum lipsum_;
 	GameMode gameMode_;
 	EnemyPool *enemyPool_ = nullptr;

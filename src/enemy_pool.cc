@@ -2,7 +2,7 @@
 
 #include "enemy.h"
 #include "lipsum.h"
-#include "resources.h"
+#include "screen_game.h"
 #include "viewport.h"
 #include <queue>
 
@@ -11,7 +11,7 @@ static constexpr float COLUMN_WIDTH = (float)Viewport::GAME_WIDTH / COLUMN_COUNT
 
 static float getColumn(int columnIndex);
 static float getRandomColumn();
-static EnemyPattern pickRandomPattern();
+static EnemyPattern pickRandomPattern(float difficulty);
 
 static const WeightedPattern patterns[]{
 	WeightedPattern(EnemyPattern::SLOW, 100, 1.0f),
@@ -34,7 +34,10 @@ void EnemyPool::spawn(Lipsum &lipsum) const
 {
 	std::queue<SpawnData> spawnDatas;
 
-	const EnemyPattern pattern = pickRandomPattern();
+	const auto screen          = (GameScreen *)getScreen();
+	const float difficulty     = screen->getDifficultyModifier();
+	const EnemyPattern pattern = pickRandomPattern(difficulty);
+
 	switch (pattern)
 	{
 	case EnemyPattern::SLOW:
@@ -159,18 +162,19 @@ static float getRandomColumn()
 	return getColumn(GetRandomValue(1, COLUMN_COUNT));
 }
 
-static EnemyPattern pickRandomPattern()
+static EnemyPattern pickRandomPattern(const float difficulty)
 {
 	int totalWeight = 0;
+
 	for (const auto pattern : patterns)
 	{
-		totalWeight += pattern.weight;
+		totalWeight += (int)((float)pattern.weight * ((difficulty -1.0f) * pattern.difficultyMultiplier + 1.0f));
 	}
 
 	int randomNum = GetRandomValue(1, totalWeight) - 1;
 	for (const auto pattern : patterns)
 	{
-		randomNum -= pattern.weight;
+		randomNum -= (int)((float)pattern.weight * ((difficulty -1.0f) * pattern.difficultyMultiplier + 1.0f));
 		if (randomNum < 0)
 		{
 			TraceLog(LOG_TRACE, "Picked pattern: %d", pattern.pattern);
