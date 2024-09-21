@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.22)
-project(lorem_invader VERSION 0.4.2 LANGUAGES CXX)
+
+set(VERSION_MAJOR 0)
+set(VERSION_MINOR 6)
+set(VERSION_PATCH 0)
+
+project(lorem_invader VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH} LANGUAGES CXX)
 
 # Enable CMake to generate compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -11,6 +16,10 @@ add_executable(${PROJECT_NAME} src/main.cc)
 include_directories(lib/includes)
 add_subdirectory(lib/raylib)
 add_subdirectory(src)
+
+add_definitions(-DVERSION_MAJOR=${VERSION_MAJOR})
+add_definitions(-DVERSION_MINOR=${VERSION_MINOR})
+add_definitions(-DVERSION_PATCH=${VERSION_PATCH})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
