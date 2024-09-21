@@ -1,16 +1,31 @@
 #pragma once
 
-#include <stdbool.h>
-#include <stdio.h>
+#include "utils.h"
 
-typedef struct
+class Screen;
+class Entity
 {
-	size_t id;
-	bool isActive;
-} Entity;
+	friend class Screen;
 
-void InitEntities(void);
-size_t CreateEntity();
-void DestroyEntity(size_t id);
-Entity *GetEntity(size_t id);
-size_t GetEntityCount(void);
+public:
+	virtual ~Entity() = default;
+	virtual void update(float delta) {}
+	virtual const char *getName() const = 0;
+	virtual bool isActive() const { return true; }
+	Screen *getScreen() const { return screen_; }
+
+private:
+	mutable Screen *screen_ = nullptr;
+};
+
+class RenderedEntity : public Entity
+{
+public:
+	virtual void draw(float delta) const = 0;
+	virtual unsigned char getLayer() const { return LAYER_DEFAULT; }
+
+	static constexpr unsigned char LAYER_BACKGROUND = 0;
+	static constexpr unsigned char LAYER_DEFAULT    = 1;
+	static constexpr unsigned char LAYER_FOREGROUND = 2;
+	static constexpr unsigned char LAYER_GUI        = 3;
+};
