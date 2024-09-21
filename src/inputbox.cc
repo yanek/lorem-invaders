@@ -30,9 +30,7 @@ void InputBox::update(const float delta)
 
 	if (IsKeyPressed(KEY_BACKSPACE) || IsKeyPressedRepeat(KEY_BACKSPACE))
 	{
-		letterCount_--;
-		if (letterCount_ < 0)
-			letterCount_ = 0;
+		letterCount_ = std::max(0, letterCount_ - 1);
 		value_[letterCount_] = '\0';
 		bus->fire(InputUpdatedEvent{ value_ });
 	}
