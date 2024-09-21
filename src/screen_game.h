@@ -30,6 +30,6 @@ private:
 	Lipsum lipsum_;
 	GameMode gameMode_;
 	EnemyPool *enemyPool_ = nullptr;
-	float spawnTimeout_   = 2.0f;
+	float spawnTimeout_   = 1.0f;
 	float spawnElapsed_   = 0.0f;
 };

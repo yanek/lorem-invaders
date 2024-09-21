@@ -12,6 +12,8 @@
 #include "viewport.h"
 #include <raylib.h>
 
+static float mapRange(float value);
+
 void GameScreen::init()
 {
 	auto *zone1 = createEntity<ScoreZone>();
@@ -64,6 +66,8 @@ void GameScreen::update(const float delta)
 	{
 		spawnElapsed_ = 0.0f;
 		enemyPool_->spawn(lipsum_);
+		spawnTimeout_ = mapRange(difficultyModifier_);
+		TraceLog(LOG_DEBUG, "Spawn timeout: %f", spawnTimeout_);
 	}
 }
 
@@ -100,7 +104,16 @@ void GameScreen::notify(const Event &event)
 {
 	if (event.getEventType() == EventType::EnemyKilled)
 	{
-		difficultyModifier_ = std::min(difficultyModifier_ + 0.01f, 10.0f);
+		difficultyModifier_ = std::min(difficultyModifier_ + 0.05f, 10.0f);
 		TraceLog(LOG_DEBUG, "Difficulty modifier: %f", difficultyModifier_);
 	}
+}
+
+static float mapRange(float value)
+{
+	constexpr float IN_MIN  = 1.0f;
+	constexpr float IN_MAX  = 10.0f;
+	constexpr float OUT_MIN = 3.0f;
+	constexpr float OUT_MAX = 1.0f;
+	return OUT_MIN + (value - IN_MIN) * (OUT_MAX - OUT_MIN) / (IN_MAX - IN_MIN);
 }

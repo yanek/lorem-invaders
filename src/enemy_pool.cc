@@ -166,13 +166,13 @@ static EnemyPattern pickRandomPattern(const float difficulty)
 {
 	int totalWeight = 0;
 
-	for (const auto pattern : patterns)
+	for (const WeightedPattern pattern : patterns)
 	{
 		totalWeight += (int)((float)pattern.weight * ((difficulty -1.0f) * pattern.difficultyMultiplier + 1.0f));
 	}
 
 	int randomNum = GetRandomValue(1, totalWeight) - 1;
-	for (const auto pattern : patterns)
+	for (const WeightedPattern pattern : patterns)
 	{
 		randomNum -= (int)((float)pattern.weight * ((difficulty -1.0f) * pattern.difficultyMultiplier + 1.0f));
 		if (randomNum < 0)
