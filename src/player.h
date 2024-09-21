@@ -16,6 +16,7 @@ public:
 	void update(float delta) override;
 	void draw(float delta) const override;
 	void damage();
+	void heal();
 	bool isDead() const { return hitpoints_ == 0; }
 	void notify(const Event &event) override;
 	const char *getName() const override { return "Player"; }

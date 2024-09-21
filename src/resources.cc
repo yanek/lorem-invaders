@@ -15,6 +15,7 @@ void Resources::preload()
 	sounds_[(unsigned char)SoundId::CLICK]      = new Sound(LoadSound("resources/click.wav"));
 	sounds_[(unsigned char)SoundId::HIT]        = new Sound(LoadSound("resources/hit.wav"));
 	sounds_[(unsigned char)SoundId::HURT]       = new Sound(LoadSound("resources/hurt.wav"));
+	sounds_[(unsigned char)SoundId::HEAL]       = new Sound(LoadSound("resources/pause.wav")); // TODO: Make a proper heal sound
 	sounds_[(unsigned char)SoundId::PAUSE]      = new Sound(LoadSound("resources/pause.wav"));
 	sounds_[(unsigned char)SoundId::GAME_OVER]  = new Sound(LoadSound("resources/gameover.wav"));
 	TraceLog(LOG_INFO, "Finished preloading assets");

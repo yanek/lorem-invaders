@@ -77,6 +77,15 @@ void Player::damage()
 	}
 }
 
+void Player::heal()
+{
+	if (hitpoints_ >= maxHitpoints_)
+		return;
+	hitpoints_ = hitpoints_ + 1;
+	TraceLog(LOG_DEBUG, "Player (0x%X) healed! HP: %i/%i", this, hitpoints_, maxHitpoints_);
+	Audio::play(SoundId::HEAL);
+}
+
 void Player::notify(const Event &event)
 {
 	if (event.getEventType() == EventType::EnemyKilled)
@@ -96,5 +105,10 @@ void Player::notify(const Event &event)
 	if (event.getEventType() == EventType::PlayerHurt)
 	{
 		damage();
+	}
+
+	if (event.getEventType() == EventType::PlayerHealed)
+	{
+		heal();
 	}
 }

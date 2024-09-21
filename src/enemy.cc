@@ -109,6 +109,11 @@ void Enemy::onInputUpdate(const InputUpdatedEvent &event)
 		shake_   = new Shake(2, 100);
 		Audio::play(SoundId::HIT);
 		ScreenManager::getEventBus()->fire(EnemyKilledEvent(value_.length(), position_.y));
+
+		if (pattern_ == EnemyPattern::BONUS)
+		{
+			ScreenManager::getEventBus()->fire(PlayerHealedEvent{});
+		}
 	}
 }
 

@@ -11,6 +11,7 @@ enum class SoundId : unsigned char
 	CLICK = 0,
 	HIT,
 	HURT,
+	HEAL,
 	PAUSE,
 	GAME_OVER,
 	NUM_SOUNDS,

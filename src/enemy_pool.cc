@@ -19,7 +19,7 @@ static const WeightedPattern patterns[]{
 	WeightedPattern(EnemyPattern::FASTER, 20, 1.5f),
 	WeightedPattern(EnemyPattern::DOUBLE, 10, 1.5f),
 	WeightedPattern(EnemyPattern::TRIPLE, 5, 1.2f),
-	WeightedPattern(EnemyPattern::BONUS, 1, 0.8f)
+	WeightedPattern(EnemyPattern::BONUS, 5, 1.0f)
 };
 
 void EnemyPool::init()
